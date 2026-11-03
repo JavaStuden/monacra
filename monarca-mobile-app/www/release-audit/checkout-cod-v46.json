@@ -1,0 +1,80 @@
+{
+  "result": "PASS",
+  "version": "4.6",
+  "checks": [
+    {
+      "name": "All 14 products declare fulfillment; exactly two preorder demonstration products",
+      "result": "PASS"
+    },
+    {
+      "name": "One form combines address, delivery, payment and confirmation; no OTP or stepper",
+      "result": "PASS"
+    },
+    {
+      "name": "In-stock COD confirms with cash due, zero paid and no card transaction",
+      "result": "PASS"
+    },
+    {
+      "name": "Preorder/mixed COD blocked including forged submit 2",
+      "result": "PASS"
+    },
+    {
+      "name": "Preorder/mixed COD blocked including forged submit 1+2",
+      "result": "PASS"
+    },
+    {
+      "name": "COD eligibility considers selected items only; unchecked preorder remains in bag",
+      "result": "PASS"
+    },
+    {
+      "name": "Missing address is inline; invalid phone and blank required fields cannot confirm",
+      "result": "PASS"
+    },
+    {
+      "name": "Independent buy-now uses its own lines and leaves the shopping bag intact",
+      "result": "PASS"
+    },
+    {
+      "name": "visa confirms within one page without auth; PAN and CVV are never persisted",
+      "result": "PASS"
+    },
+    {
+      "name": "mastercard confirms within one page without auth; PAN and CVV are never persisted",
+      "result": "PASS"
+    },
+    {
+      "name": "Pending order retries same ID and immutable price/address snapshot; bag consumed once and coupon once",
+      "result": "PASS"
+    },
+    {
+      "name": "Legacy payment/auth links open unified form, with snapshot fulfillment controlling COD",
+      "result": "PASS"
+    },
+    {
+      "name": "COD cancellation and receipt never fabricate paid cash or refund",
+      "result": "PASS"
+    },
+    {
+      "name": "Delivery simulation leaves COD uncollected, and return completes without any refund record",
+      "result": "PASS"
+    },
+    {
+      "name": "Discounted COD shows nonzero merchandise value, consumes coupon at confirmation, and still offers zero cash refund",
+      "result": "PASS"
+    },
+    {
+      "name": "COD is validated again before committing; stale or forged live-cart fulfillment cannot enable preorder cash",
+      "result": "PASS"
+    },
+    {
+      "name": "Card cancellation retains the existing refund behavior; completed orders resist legacy decline actions",
+      "result": "PASS"
+    }
+  ],
+  "obsoleteAssertions": [
+    "address-step-v442: cart and buy-now must open an address step before checkout",
+    "address-step-v442: checkout -> payment -> payment-auth must be three separate screens",
+    "integration-v4-smoke: old card form plus OTP sequence; unified form now confirms directly"
+  ],
+  "limits": "Actual scripts and event bridge in a VM. No browser/layout assertions, real charges, SMS, shipping, or bank calls."
+}

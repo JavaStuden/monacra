@@ -1,0 +1,91 @@
+{
+  "version": "4.4.2",
+  "result": "PASS",
+  "passed": 8,
+  "failed": 0,
+  "total": 8,
+  "tests": [
+    {
+      "name": "Cart with saved addresses first opens explicit delivery selection before review",
+      "result": "PASS"
+    },
+    {
+      "name": "Cart without saved addresses requires a valid new address then returns to review",
+      "result": "PASS"
+    },
+    {
+      "name": "Buy now with saved addresses first opens delivery selection and keeps independent purchase lines",
+      "result": "PASS"
+    },
+    {
+      "name": "Buy now without saved addresses enters new delivery form and preserves direct purchase",
+      "result": "PASS"
+    },
+    {
+      "name": "Incomplete saved delivery address is sent to edit before review",
+      "result": "PASS"
+    },
+    {
+      "name": "Payment deep link cannot create an order from an incomplete delivery address",
+      "result": "PASS"
+    },
+    {
+      "name": "Existing pending payment retains its address, price and identity after another cart address selection",
+      "result": "PASS"
+    },
+    {
+      "name": "Normal account address book and add form do not display purchase stepper",
+      "result": "PASS"
+    }
+  ],
+  "limits": "Actual five production scripts evaluated in an isolated VM. No browser layout, real device, real payment, network or backend checks.",
+  "beforeFix": {
+    "result": "FAIL",
+    "passed": 3,
+    "failed": 5,
+    "total": 8,
+    "failures": [
+      "Saved cart address skipped the explicit delivery step",
+      "New checkout address form lacked the purchase stepper",
+      "Buy now skipped explicit saved delivery selection",
+      "Incomplete saved address could be selected for review",
+      "Whitespace street could create a payment snapshot"
+    ]
+  },
+  "regression": {
+    "finalFlow": {
+      "passed": 13,
+      "total": 13
+    },
+    "iraqLocalization": {
+      "passed": 8,
+      "total": 8
+    },
+    "coupon": {
+      "passed": 6,
+      "total": 6
+    },
+    "integration": {
+      "renderPasses": 218,
+      "unhandledActions": 0,
+      "unhandledRoutes": 0,
+      "errors": 0
+    },
+    "syntax": [
+      "app.js",
+      "checkout-v4.js"
+    ]
+  },
+  "fixtureChanges": "None. All existing business assertions retained.",
+  "changedFiles": [
+    {
+      "file": "app.js",
+      "sha256": "7ad6f74872b86a003c9b73ab8b2e62097756c363afe6c8860e0f8895334b2232"
+    },
+    {
+      "file": "checkout-v4.js",
+      "sha256": "0f362522cc9e33634d8992d83ba06542cd3516827b9a01dcb469a21b64fe24a5"
+    }
+  ],
+  "executedAt": "2026-10-19T14:10:19.933Z"
+}

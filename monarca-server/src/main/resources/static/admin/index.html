@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monarca Boutique · Admin Operations & Fulfillment Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --paper: #f8f6f2;
+            --white: #ffffff;
+            --ink: #302923;
+            --brown: #4f3930;
+            --brown-dark: #3a271f;
+            --accent: #98685a;
+            --muted: #827971;
+            --line: #e7e1d9;
+            --soft: #efebe4;
+            --green: #2d6a4f;
+            --green-bg: #e8f5e9;
+            --red: #a74439;
+            --red-bg: #ffebee;
+            --blue: #1d3557;
+            --blue-bg: #e0f2fe;
+            --gold: #c3a365;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Roboto, Arial, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        /* RTL Body and HTML Support */
+        html[dir="rtl"], html[dir="rtl"] body {
+            direction: rtl;
+            text-align: right;
+        }
+        html[dir="ltr"], html[dir="ltr"] body {
+            direction: ltr;
+            text-align: left;
+        }
+
+        /* Sidebar */
+        aside.sidebar {
+            width: 260px;
+            background: var(--brown);
+            color: var(--paper);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.06);
+            z-index: 20;
+        }
+        html[dir="rtl"] aside.sidebar {
+            box-shadow: -2px 0 10px rgba(0,0,0,0.06);
+        }
+        .sidebar-brand {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand-logo-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .brand-name {
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+        .brand-name small {
+            display: block;
+            font-size: 10px;
+            color: #d1c4b7;
+            letter-spacing: 1px;
+            font-weight: 400;
+            margin-top: 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 20px 0;
+            flex: 1;
+        }
+        .nav-item {
+            padding: 13px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 14px;
+            color: #e5ded7;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+            user-select: none;
+        }
+        .nav-item:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+        .nav-item.active {
+            background: rgba(255,255,255,0.14);
+            color: #fff;
+            border-left-color: var(--gold);
+            font-weight: 600;
+        }
+        /* RTL Sidebar Border Indicator */
+        html[dir="rtl"] .nav-item {
+            border-left: none;
+            border-right: 4px solid transparent;
+        }
+        html[dir="rtl"] .nav-item.active {
+            border-left: none;
+            border-right-color: var(--gold);
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 11px;
+            color: #bfaea0;
+            line-height: 1.8;
+        }
+
+        /* Main Content */
+        main.main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            min-width: 0;
+        }
+        header.top-header {
+            background: var(--white);
+            min-height: 64px;
+            border-bottom: 1px solid var(--line);
+            padding: 12px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .header-title h1 {
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--brown);
+        }
+        .header-tools {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .badge-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-decoration: none;
+            color: var(--brown);
+            background: var(--soft);
+            border: 1px solid var(--line);
+            transition: all 0.2s;
+        }
+        .badge-link:hover {
+            background: #e2dacd;
+        }
+
+        .content-body {
+            padding: 32px;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Cards & Metrics (Refactored to Flex to prevent ANY overlap) */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+        .metric-card {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            min-height: 120px;
+        }
+        .metric-card-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .metric-card .label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+        .metric-card .val {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--brown);
+            margin: 6px 0;
+            line-height: 1.2;
+            word-break: break-all;
+        }
+        .metric-card .sub {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+        .metric-card .icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--soft);
+            color: var(--accent);
+            display: grid;
+            place-items: center;
+            font-size: 19px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Section Panel */
+        .panel {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            padding: 24px;
+            margin-bottom: 28px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--line);
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--brown);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Data Tables */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        table.data-table th {
+            background: var(--soft);
+            color: var(--muted);
+            text-align: inherit;
+            padding: 12px 14px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--line);
+            white-space: nowrap;
+        }
+        table.data-table td {
+            padding: 14px;
+            border-bottom: 1px solid var(--line);
+            color: var(--ink);
+            vertical-align: middle;
+            text-align: inherit;
+        }
+        table.data-table tr:hover td {
+            background: #faf8f5;
+        }
+
+        /* Tags & Badges */
+        .tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .tag-iraq { background: #e8f5e9; color: #2e7d32; }
+        .tag-china { background: #fff3e0; color: #ef6c00; }
+        .tag-placed { background: #e0f2fe; color: #0284c7; }
+        .tag-preparing { background: #fef3c7; color: #d97706; }
+        .tag-shipped { background: #e0e7ff; color: #4338ca; }
+        .tag-delivered { background: #dcfce7; color: #15803d; }
+        .tag-cancelled { background: #fee2e2; color: #b91c1c; }
+        .tag-requested { background: #fef3c7; color: #d97706; }
+        .tag-approved { background: #dcfce7; color: #15803d; }
+        .tag-rejected { background: #fee2e2; color: #b91c1c; }
+        .tag-cod { background: #f3e8ff; color: #7e22ce; }
+        .tag-card { background: #ecfdf5; color: #047857; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: var(--brown);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--brown-dark);
+        }
+        .btn-secondary {
+            background: var(--soft);
+            color: var(--ink);
+            border-color: var(--line);
+        }
+        .btn-secondary:hover {
+            background: #e2dacd;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        /* Modal dialog */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(48, 41, 35, 0.45);
+            backdrop-filter: blur(4px);
+            display: none;
+            place-items: center;
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            display: grid;
+        }
+        .modal-box {
+            background: var(--white);
+            border-radius: 14px;
+            width: min(650px, 92vw);
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 28px;
+        }
+        .modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: var(--muted);
+            line-height: 1;
+            padding: 4px;
+        }
+
+        .form-row {
+            margin-bottom: 16px;
+        }
+        .form-row label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 9px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            font-size: 13px;
+            outline: none;
+            background: var(--white);
+            color: var(--ink);
+        }
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            aside.sidebar { width: 100%; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .content-body { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo-icon">M</div>
+            <div class="brand-name">
+                MONARCA
+                <small data-i18n="brand_sub">IRAQ DIGITAL BOUTIQUE</small>
+            </div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active" onclick="switchTab('dashboard')">
+                <i class="fa-solid fa-chart-pie"></i> <span data-i18n="nav_dashboard">Dashboard</span>
+            </li>
+            <li class="nav-item" onclick="switchTab('orders')">
+                <i class="fa-solid fa-box-open"></i> <span data-i18n="nav_orders">Orders</span>
+            </li>
+            <li class="nav-item" onclick="switchTab('products')">
+                <i class="fa-solid fa-shirt"></i> <span data-i18n="nav_products">Products</span>
+            </li>
+            <li class="nav-item" onclick="switchTab('returns')">
+                <i class="fa-solid fa-rotate-left"></i> <span data-i18n="nav_returns">Returns</span>
+            </li>
+            <li class="nav-item" onclick="switchTab('settings')">
+                <i class="fa-solid fa-sliders"></i> <span data-i18n="nav_settings">Settings</span>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            Monarca v4.7.0<br>
+            <span data-i18n="footer_line">Dual Sourcing Fulfillment · USD Pricing · Iraq Operations</span>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-area">
+        <header class="top-header">
+            <div class="header-title">
+                <h1 id="page-title">Operations Overview & Key Metrics</h1>
+            </div>
+            <div class="header-tools">
+                <div class="lang-switch-admin" style="display:inline-flex; border:1px solid var(--line); border-radius:20px; padding:2px; background:var(--soft);">
+                    <button type="button" id="admin-lang-en" class="btn-lang" onclick="switchAdminLang('en')" style="border:none; background:#fff; color:var(--brown); font-weight:700; border-radius:16px; padding:4px 12px; font-size:11px; cursor:pointer;">English</button>
+                    <button type="button" id="admin-lang-ar" class="btn-lang" onclick="switchAdminLang('ar')" style="border:none; background:transparent; color:var(--muted); font-weight:500; border-radius:16px; padding:4px 12px; font-size:11px; cursor:pointer;">العربية</button>
+                </div>
+                <a href="/swagger-ui/index.html" target="_blank" class="badge-link">
+                    <i class="fa-solid fa-code"></i> <span data-i18n="swagger">Swagger API Docs</span>
+                </a>
+                <a href="/h2-console" target="_blank" class="badge-link">
+                    <i class="fa-solid fa-database"></i> <span data-i18n="h2">H2 Database Console</span>
+                </a>
+                <button class="btn btn-secondary btn-sm" onclick="refreshCurrentTab()">
+                    <i class="fa-solid fa-arrows-rotate"></i> <span data-i18n="refresh">Refresh Data</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="content-body">
+            
+            <!-- Tab 1: Dashboard -->
+            <div id="tab-dashboard" class="tab-pane">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-card-content">
+                            <div class="label" data-i18n="metric_orders_lbl">Total Orders</div>
+                            <div class="val" id="metric-orders">0</div>
+                            <div class="sub" data-i18n="metric_orders_sub">Iraq In-Stock & China Pre-orders</div>
+                        </div>
+                        <div class="icon-box"><i class="fa-solid fa-cart-shopping"></i></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-card-content">
+                            <div class="label" data-i18n="metric_gmv_lbl">Total GMV</div>
+                            <div class="val" id="metric-gmv">$0.00</div>
+                            <div class="sub" data-i18n="metric_gmv_sub">Priced in USD</div>
+                        </div>
+                        <div class="icon-box"><i class="fa-solid fa-dollar-sign"></i></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-card-content">
+                            <div class="label" data-i18n="metric_pending_lbl">Pending Fulfillment</div>
+                            <div class="val" id="metric-pending">0</div>
+                            <div class="sub" data-i18n="metric_pending_sub">To Prepare / Outbound</div>
+                        </div>
+                        <div class="icon-box"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-card-content">
+                            <div class="label" data-i18n="metric_returns_lbl">Return Requests</div>
+                            <div class="val" id="metric-returns">0</div>
+                            <div class="sub" data-i18n="metric_returns_sub">Pending Review</div>
+                        </div>
+                        <div class="icon-box"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    </div>
+                </div>
+
+                <!-- Dual Sourcing Overview -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-earth-asia"></i> <span data-i18n="dual_source_title">Dual-Sourcing Logistics Status (v4.7.0 Matrix)</span></div>
+                    </div>
+                    <div class="grid-2">
+                        <div style="background:var(--soft); padding:20px; border-radius:10px; border:1px solid var(--line);">
+                            <h3 style="color:var(--green); margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-warehouse"></i> <span data-i18n="iraq_stock_title">Iraq In-Stock (Local Fulfillment)</span>
+                            </h3>
+                            <p style="font-size:13px; color:var(--muted); line-height:1.8;">
+                                • <span data-i18n="stat_catalog">Total Catalog:</span> <b id="stat-iraq-count">12</b> <span data-i18n="items_unit">Items</span><br>
+                                • <span data-i18n="stat_delivery">Delivery Timeline:</span> <b data-i18n="stat_iraq_eta">Estimated ~2 Days (Local Baghdad Hub & Express Delivery)</b><br>
+                                • <span data-i18n="stat_payment">Payment Options:</span> <b data-i18n="stat_iraq_pay">Cash on Delivery (COD) or Visa / Mastercard</b>
+                            </p>
+                        </div>
+                        <div style="background:var(--soft); padding:20px; border-radius:10px; border:1px solid var(--line);">
+                            <h3 style="color:#e65100; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-plane-departure"></i> <span data-i18n="china_preorder_title">China Pre-order (Cross-border Air Freight)</span>
+                            </h3>
+                            <p style="font-size:13px; color:var(--muted); line-height:1.8;">
+                                • <span data-i18n="stat_catalog">Total Catalog:</span> <b id="stat-china-count">2</b> <span data-i18n="items_unit">Items</span> <span data-i18n="china_items_hint">(Classic Heel ID:2, Wool Jacket ID:5)</span><br>
+                                • <span data-i18n="stat_delivery">Delivery Timeline:</span> <b data-i18n="stat_china_eta">Estimated 15–20 Days Dedicated Cross-Border Delivery</b><br>
+                                • <span data-i18n="stat_payment">Payment Options:</span> <b data-i18n="stat_china_pay">Prepaid Cards Only (Visa / Mastercard), Strict No-COD</b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders in Dashboard -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="recent_orders_title">Recent Orders</span></div>
+                        <button class="btn btn-secondary btn-sm" onclick="switchTab('orders')" data-i18n="view_all">View All</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="th_order_id">Order ID</th>
+                                    <th data-i18n="th_customer">Customer Info</th>
+                                    <th data-i18n="th_destination">Destination</th>
+                                    <th data-i18n="th_fulfillment">Fulfillment Source</th>
+                                    <th data-i18n="th_amount">Amount (USD)</th>
+                                    <th data-i18n="th_payment">Payment Method</th>
+                                    <th data-i18n="th_status">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dash-orders-table">
+                                <tr><td colspan="7" style="text-align:center; color:var(--muted);" data-i18n="loading">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Orders -->
+            <div id="tab-orders" class="tab-pane" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-boxes-stacked"></i> <span data-i18n="title_orders">Orders & Fulfillment Management</span></div>
+                        <div style="display:flex; gap:10px;">
+                            <select id="order-filter-status" class="form-control" style="width:200px;" onchange="loadOrders()">
+                                <option value="all" data-i18n="opt_all_status">All Statuses</option>
+                                <option value="placed" data-i18n="opt_placed">Placed (Confirmed)</option>
+                                <option value="preparing" data-i18n="opt_preparing">Preparing</option>
+                                <option value="shipped" data-i18n="opt_shipped">Shipped</option>
+                                <option value="delivered" data-i18n="opt_delivered">Delivered</option>
+                                <option value="cancelled" data-i18n="opt_cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="th_order_id">Order ID</th>
+                                    <th data-i18n="th_customer">Customer Name / Phone</th>
+                                    <th data-i18n="th_address">Address & Landmark</th>
+                                    <th data-i18n="th_eta">Fulfillment Route & ETA</th>
+                                    <th data-i18n="th_amount">Total Amount</th>
+                                    <th data-i18n="th_payment">Payment Channel</th>
+                                    <th data-i18n="th_status">Status</th>
+                                    <th data-i18n="th_actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Products -->
+            <div id="tab-products" class="tab-pane" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-tags"></i> <span data-i18n="title_products">Product Catalog & Sourcing Channels</span></div>
+                        <button class="btn btn-primary btn-sm" onclick="openNewProductModal()"><i class="fa-solid fa-plus"></i> <span data-i18n="btn_add_product">Add Product</span></button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="th_id">ID</th>
+                                    <th data-i18n="th_prod_name">Product Name</th>
+                                    <th data-i18n="th_category">Category</th>
+                                    <th data-i18n="th_fulfillment">Sourcing Channel</th>
+                                    <th data-i18n="th_price">Price (USD)</th>
+                                    <th data-i18n="th_old_price">List Price (USD)</th>
+                                    <th data-i18n="th_stock">Stock</th>
+                                    <th data-i18n="th_actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Returns -->
+            <div id="tab-returns" class="tab-pane" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-clipboard-question"></i> <span data-i18n="title_returns">Returns & Refunds Management</span></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="th_ret_id">Return ID</th>
+                                    <th data-i18n="th_order_id">Order ID</th>
+                                    <th data-i18n="th_item">Product Item</th>
+                                    <th data-i18n="th_specs_qty">Specs / Qty</th>
+                                    <th data-i18n="th_ret_reason">Return Reason</th>
+                                    <th data-i18n="th_refund_amt">Refund Amount</th>
+                                    <th data-i18n="th_status">Status</th>
+                                    <th data-i18n="th_actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="returns-table-body">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 5: Settings -->
+            <div id="tab-settings" class="tab-pane" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-sliders"></i> <span data-i18n="title_settings">Store Configuration & Business Rules</span></div>
+                    </div>
+                    <div style="max-width:640px;">
+                        <div class="form-row">
+                            <label data-i18n="lbl_whatsapp">Store Official WhatsApp Number</label>
+                            <input id="cfg-whatsapp" class="form-control" placeholder="+9647700000000" dir="ltr">
+                            <small style="color:var(--muted); font-size:11px;" data-i18n="hint_whatsapp">Used for direct customer support chat routing from the mobile app (Format: +964...)</small>
+                        </div>
+                        <div class="form-row">
+                            <label data-i18n="lbl_free_ship">Free Shipping Threshold (USD)</label>
+                            <input id="cfg-free-ship" class="form-control" type="number" step="0.01" value="75.00" dir="ltr">
+                            <small style="color:var(--muted); font-size:11px;" data-i18n="hint_free_ship">Cart subtotal threshold for free shipping (Default: $75.00)</small>
+                        </div>
+                        <div class="form-row">
+                            <label data-i18n="lbl_ship_fee">Standard Shipping Fee (USD)</label>
+                            <input id="cfg-ship-fee" class="form-control" type="number" step="0.01" value="4.00" dir="ltr">
+                            <small style="color:var(--muted); font-size:11px;" data-i18n="hint_ship_fee">Standard shipping fee applied when order subtotal is below the free shipping threshold (Default: $4.00)</small>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_save_settings">Save Settings</span></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Product Edit Modal -->
+    <div id="product-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3 id="modal-product-title" data-i18n="modal_prod_edit">Edit Product</h3>
+                <button class="modal-close" onclick="closeModal('product-modal')" aria-label="Close">&times;</button>
+            </div>
+            <form id="product-form" onsubmit="handleProductSubmit(event)">
+                <input type="hidden" id="prod-id">
+                <div class="form-row">
+                    <label data-i18n="lbl_prod_name_ar">Product Name (Arabic) *</label>
+                    <input id="prod-name" class="form-control" required placeholder="حقيبة جلد طبيعي">
+                </div>
+                <div class="form-row">
+                    <label data-i18n="lbl_prod_name_en">English Name</label>
+                    <input id="prod-en" class="form-control" placeholder="The everyday shoulder bag" dir="ltr">
+                </div>
+                <div class="grid-2">
+                    <div class="form-row">
+                        <label data-i18n="lbl_prod_cat">Primary Category *</label>
+                        <select id="prod-cat" class="form-control" required>
+                            <option value="clothes">Clothes</option>
+                            <option value="shoes">Shoes</option>
+                            <option value="bags">Bags</option>
+                            <option value="accessories">Accessories</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label data-i18n="lbl_prod_source">Fulfillment Channel (v4.7.0 Core) *</label>
+                        <select id="prod-source" class="form-control" required>
+                            <option value="iraq">Iraq In-Stock (~2 Days Delivery, COD & Card Allowed)</option>
+                            <option value="china">China Pre-order (15–20 Days Delivery, Prepaid Card Only, Strict No-COD)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-row">
+                        <label data-i18n="lbl_prod_price">Selling Price (USD) *</label>
+                        <input id="prod-price" class="form-control" type="number" step="0.01" required placeholder="350.00" dir="ltr">
+                    </div>
+                    <div class="form-row">
+                        <label data-i18n="lbl_prod_old_price">Original List Price (USD, Optional)</label>
+                        <input id="prod-old-price" class="form-control" type="number" step="0.01" placeholder="390.00" dir="ltr">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-row">
+                        <label data-i18n="lbl_prod_stock">Available Stock Quantity *</label>
+                        <input id="prod-stock" class="form-control" type="number" required placeholder="5" dir="ltr">
+                    </div>
+                    <div class="form-row">
+                        <label data-i18n="lbl_prod_badge">Badge Label (Optional)</label>
+                        <input id="prod-badge" class="form-control" placeholder="Best Seller / الأكثر طلباً">
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('product-modal')" data-i18n="modal_cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="modal_save">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div id="order-detail-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3 id="modal-order-head" data-i18n="modal_order_title">Order Details & Delivery Snapshot</h3>
+                <button class="modal-close" onclick="closeModal('order-detail-modal')" aria-label="Close">&times;</button>
+            </div>
+            <div id="order-modal-content">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/admin';
+
+        let currentTab = 'dashboard';
+        let allProducts = [];
+        let allOrders = [];
+        let adminLang = localStorage.getItem('monarca-admin-lang') || 'en';
+
+        const i18nDict = {
+            en: {
+                brand_sub: 'IRAQ DIGITAL BOUTIQUE',
+                footer_line: 'Dual Sourcing Fulfillment · USD Pricing · Iraq Operations',
+                nav_dashboard: 'Overview & Metrics',
+                nav_orders: 'Orders & Fulfillment',
+                nav_products: 'Products & Sourcing',
+                nav_returns: 'Returns & Refunds',
+                nav_settings: 'Store Settings',
+                title_dashboard: 'Operations Overview & Key Metrics',
+                title_orders: 'Orders & Fulfillment Management',
+                title_products: 'Product Catalog & Sourcing Channels',
+                title_returns: 'Returns & Refunds Management',
+                title_settings: 'Store Configuration & Business Rules',
+                swagger: 'Swagger API Docs',
+                h2: 'H2 Database Console',
+                refresh: 'Refresh Data',
+                
+                // Dashboard KPI
+                metric_orders_lbl: 'Total Orders',
+                metric_orders_sub: 'Iraq In-Stock & China Pre-orders',
+                metric_gmv_lbl: 'Total GMV',
+                metric_gmv_sub: 'Priced in USD',
+                metric_pending_lbl: 'Pending Fulfillment',
+                metric_pending_sub: 'To Prepare / Outbound',
+                metric_returns_lbl: 'Return Requests',
+                metric_returns_sub: 'Pending Review',
+
+                // Dual Sourcing
+                dual_source_title: 'Dual-Sourcing Logistics Status (v4.7.0 Matrix)',
+                iraq_stock_title: 'Iraq In-Stock (Local Fulfillment)',
+                stat_catalog: 'Total Catalog:',
+                items_unit: 'Items',
+                stat_delivery: 'Delivery Timeline:',
+                stat_iraq_eta: 'Estimated ~2 Days (Local Baghdad Hub & Express Delivery)',
+                stat_payment: 'Payment Options:',
+                stat_iraq_pay: 'Cash on Delivery (COD) or Visa / Mastercard',
+                china_preorder_title: 'China Pre-order (Cross-border Air Freight)',
+                china_items_hint: '(Classic Heel ID:2, Wool Jacket ID:5)',
+                stat_china_eta: 'Estimated 15–20 Days Dedicated Cross-Border Delivery',
+                stat_china_pay: 'Prepaid Cards Only (Visa / Mastercard), Strict No-COD',
+
+                // Tables & Lists
+                recent_orders_title: 'Recent Orders',
+                view_all: 'View All',
+                loading: 'Loading...',
+                th_order_id: 'Order ID',
+                th_customer: 'Customer Info',
+                th_destination: 'Destination',
+                th_fulfillment: 'Fulfillment Source',
+                th_amount: 'Amount (USD)',
+                th_payment: 'Payment Method',
+                th_status: 'Status',
+                th_actions: 'Actions',
+                th_address: 'Address & Landmark',
+                th_eta: 'Fulfillment Route & ETA',
+                th_id: 'ID',
+                th_prod_name: 'Product Name',
+                th_category: 'Category',
+                th_price: 'Price (USD)',
+                th_old_price: 'List Price (USD)',
+                th_stock: 'Stock',
+                th_ret_id: 'Return ID',
+                th_item: 'Product Item',
+                th_specs_qty: 'Specs / Qty',
+                th_ret_reason: 'Return Reason',
+                th_refund_amt: 'Refund Amount',
+
+                // Options & Buttons
+                opt_all_status: 'All Statuses',
+                opt_placed: 'Placed (Confirmed)',
+                opt_preparing: 'Preparing',
+                opt_shipped: 'Shipped',
+                opt_delivered: 'Delivered',
+                opt_cancelled: 'Cancelled',
+                btn_details: 'Details',
+                btn_start_prep: 'Start Prep',
+                btn_dispatch: 'Dispatch',
+                btn_mark_delivered: 'Mark Delivered',
+                btn_add_product: 'Add Product',
+                btn_edit: 'Edit',
+                btn_approve: 'Approve',
+                btn_reject: 'Reject',
+                st_processed: 'Processed',
+
+                // Settings
+                lbl_whatsapp: 'Store Official WhatsApp Number',
+                hint_whatsapp: 'Used for direct customer support chat routing from the mobile app (Format: +964...)',
+                lbl_free_ship: 'Free Shipping Threshold (USD)',
+                hint_free_ship: 'Cart subtotal threshold for free shipping (Default: $75.00)',
+                lbl_ship_fee: 'Standard Shipping Fee (USD)',
+                hint_ship_fee: 'Standard shipping fee applied when order subtotal is below the free shipping threshold (Default: $4.00)',
+                btn_save_settings: 'Save Settings',
+
+                // Modals
+                modal_order_title: 'Order Details & Delivery Snapshot',
+                modal_prod_add: 'Add New Product',
+                modal_prod_edit: 'Edit Product',
+                modal_save: 'Save Product',
+                modal_cancel: 'Cancel',
+                lbl_prod_name_ar: 'Product Name (Arabic) *',
+                lbl_prod_name_en: 'English Name',
+                lbl_prod_cat: 'Primary Category *',
+                lbl_prod_source: 'Fulfillment Channel (v4.7.0 Core) *',
+                lbl_prod_price: 'Selling Price (USD) *',
+                lbl_prod_old_price: 'Original List Price (USD, Optional)',
+                lbl_prod_stock: 'Available Stock Quantity *',
+                lbl_prod_badge: 'Badge Label (Optional)',
+
+                // Tags
+                tag_china: 'China Pre-order (15–20 Days)',
+                tag_iraq: 'Iraq In-Stock (~2 Days)',
+                tag_cod: 'Cash on Delivery (COD)',
+                tag_card: 'Card',
+                st_placed: 'Placed',
+                st_preparing: 'Preparing',
+                st_shipped: 'Shipped',
+                st_delivered: 'Delivered',
+                st_cancelled: 'Cancelled',
+                st_requested: 'Pending Review',
+                st_approved: 'Approved',
+                st_rejected: 'Rejected'
+            },
+            ar: {
+                brand_sub: 'متجر العراق الرقمي المعتمد',
+                footer_line: 'توريد ثنائي · تسعير بالدولار · عمليات العراق',
+                nav_dashboard: 'لوحة التحكم',
+                nav_orders: 'الطلبات والتوريد',
+                nav_products: 'كتالوج المنتجات',
+                nav_returns: 'المرتجعات والاسترداد',
+                nav_settings: 'إعدادات المتجر',
+                title_dashboard: 'نظرة عامة ومؤشرات الأداء',
+                title_orders: 'إدارة الطلبات والتوريد',
+                title_products: 'كتالوج المنتجات وجهات التوريد',
+                title_returns: 'إدارة المرتجعات وخدمة ما بعد البيع',
+                title_settings: 'إعدادات المتجر وقواعد العمل',
+                swagger: 'وثائق Swagger API',
+                h2: 'قاعدة بيانات H2',
+                refresh: 'تحديث البيانات',
+
+                // Dashboard KPI
+                metric_orders_lbl: 'إجمالي الطلبات',
+                metric_orders_sub: 'مخزون العراق المحلي والطلب المسبق من الصين',
+                metric_gmv_lbl: 'إجمالي حجم المبيعات (GMV)',
+                metric_gmv_sub: 'التسعير بالدولار الأمريكي',
+                metric_pending_lbl: 'طلبات قيد التجهيز',
+                metric_pending_sub: 'بانتظار التحضير أو الإرسال للمشتري',
+                metric_returns_lbl: 'طلبات الإرجاع',
+                metric_returns_sub: 'بانتظار المراجعة والاعتماد',
+
+                // Dual Sourcing
+                dual_source_title: 'حالة مسارات التوريد المزدوج (مصفوفة v4.7.0)',
+                iraq_stock_title: 'مخزون العراق المحلي (تسليم فوري)',
+                stat_catalog: 'إجمالي الكتالوج:',
+                items_unit: 'منتج',
+                stat_delivery: 'مدة التوصيل:',
+                stat_iraq_eta: 'تقديرياً ~2 يوم (مستودع بغداد والتوصيل السريع لجميع المحافظات)',
+                stat_payment: 'خيارات الدفع:',
+                stat_iraq_pay: 'الدفع عند الاستلام (COD) أو فيزا / ماستركارد',
+                china_preorder_title: 'الطلب المسبق من الصين (شحن جوي مباشر)',
+                china_items_hint: '(حذاء كلاسيكي ID:2، جاكيت صوف ID:5)',
+                stat_china_eta: 'تقديرياً 15-20 يوماً خط شحن جوي دولي مباشر',
+                stat_china_pay: 'البطاقات المسبقة الدفع فقط (فيزا / ماستركارد) - لا يتوفر دفع عند الاستلام',
+
+                // Tables & Lists
+                recent_orders_title: 'أحدث الطلبات',
+                view_all: 'عرض الكل',
+                loading: 'جاري التحميل...',
+                th_order_id: 'رقم الطلب',
+                th_customer: 'معلومات العميل',
+                th_destination: 'وجهة التوصيل',
+                th_fulfillment: 'مسار التوريد',
+                th_amount: 'المبلغ (USD)',
+                th_payment: 'طريقة الدفع',
+                th_status: 'الحالة',
+                th_actions: 'الإجراءات',
+                th_address: 'العنوان ونقطة الدلالة',
+                th_eta: 'مسار التوصيل والمدة',
+                th_id: 'المعرف',
+                th_prod_name: 'اسم المنتج',
+                th_category: 'الفئة',
+                th_price: 'سعر البيع',
+                th_old_price: 'السعر الأصلي',
+                th_stock: 'المخزون',
+                th_ret_id: 'معرف الإرجاع',
+                th_item: 'المنتج',
+                th_specs_qty: 'المواصفات / الكمية',
+                th_ret_reason: 'سبب الإرجاع',
+                th_refund_amt: 'مبلغ الاسترداد',
+
+                // Options & Buttons
+                opt_all_status: 'جميع الحالات',
+                opt_placed: 'تم تأكيد الطلب',
+                opt_preparing: 'قيد التجهيز',
+                opt_shipped: 'تم الشحن',
+                opt_delivered: 'تم التسليم',
+                opt_cancelled: 'ملغي',
+                btn_details: 'التفاصيل',
+                btn_start_prep: 'بدء التجهيز',
+                btn_dispatch: 'إرسال الشحنة',
+                btn_mark_delivered: 'تأكيد التسليم',
+                btn_add_product: 'إضافة منتج',
+                btn_edit: 'تعديل',
+                btn_approve: 'موافقة',
+                btn_reject: 'رفض',
+                st_processed: 'تمت المعالجة',
+
+                // Settings
+                lbl_whatsapp: 'رقم الواتساب الرسمي للمتجر',
+                hint_whatsapp: 'يُستخدم لخدمة العملاء والتواصل المباشر من التطبيق (مثال: +964...)',
+                lbl_free_ship: 'حد الشحن المجاني (بالدولار)',
+                hint_free_ship: 'الحد الأدنى لقيمة السلة للحصول على شحن مجاني (الافتراضي: $75.00)',
+                lbl_ship_fee: 'أجور الشحن القياسية (بالدولار)',
+                hint_ship_fee: 'أجور الشحن المطبقة عند عدم بلوغ حد الشحن المجاني (الافتراضي: $4.00)',
+                btn_save_settings: 'حفظ الإعدادات',
+
+                // Modals
+                modal_order_title: 'تفاصيل الطلب وبيانات التسليم',
+                modal_prod_add: 'إضافة منتج جديد',
+                modal_prod_edit: 'تعديل بيانات المنتج',
+                modal_save: 'حفظ المنتج',
+                modal_cancel: 'إلغاء',
+                lbl_prod_name_ar: 'اسم المنتج (بالعربية) *',
+                lbl_prod_name_en: 'الاسم بالإنجليزية',
+                lbl_prod_cat: 'الفئة الأساسية *',
+                lbl_prod_source: 'قناة التوريد المعتمدة *',
+                lbl_prod_price: 'سعر البيع (بالدولار) *',
+                lbl_prod_old_price: 'السعر الأصلي (اختياري)',
+                lbl_prod_stock: 'الكمية المتوفرة في المخزون *',
+                lbl_prod_badge: 'شارة المنتج (اختياري)',
+
+                // Tags
+                tag_china: 'شحن جوي مسبق (الصين)',
+                tag_iraq: 'مخزون محلي (العراق)',
+                tag_cod: 'الدفع عند الاستلام (COD)',
+                tag_card: 'بطاقة دفع',
+                st_placed: 'مؤكد',
+                st_preparing: 'قيد التجهيز',
+                st_shipped: 'تم الشحن',
+                st_delivered: 'تم التسليم',
+                st_cancelled: 'ملغي',
+                st_requested: 'قيد المراجعة',
+                st_approved: 'معتمد',
+                st_rejected: 'مرفوض'
+            }
+        };
+
+        function switchAdminLang(lang) {
+            adminLang = lang;
+            localStorage.setItem('monarca-admin-lang', lang);
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+            const enBtn = document.getElementById('admin-lang-en');
+            const arBtn = document.getElementById('admin-lang-ar');
+            if (enBtn && arBtn) {
+                enBtn.style.background = lang === 'en' ? '#fff' : 'transparent';
+                enBtn.style.color = lang === 'en' ? 'var(--brown)' : 'var(--muted)';
+                enBtn.style.fontWeight = lang === 'en' ? '700' : '500';
+                arBtn.style.background = lang === 'ar' ? '#fff' : 'transparent';
+                arBtn.style.color = lang === 'ar' ? 'var(--brown)' : 'var(--muted)';
+                arBtn.style.fontWeight = lang === 'ar' ? '700' : '500';
+            }
+
+            const t = i18nDict[lang] || i18nDict.en;
+
+            // Update all [data-i18n]
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const k = el.dataset.i18n;
+                if (t[k]) {
+                    el.innerText = t[k];
+                }
+            });
+
+            // Update current tab title
+            const pageTitleEl = document.getElementById('page-title');
+            if (pageTitleEl) {
+                pageTitleEl.innerText = t['title_' + currentTab] || 'Monarca Admin';
+            }
+
+            // Refresh tab contents with updated localization
+            refreshCurrentTab();
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(el => el.style.display = 'none');
+            
+            const btn = document.querySelector(`.nav-item[onclick*="${tab}"]`);
+            if (btn) btn.classList.add('active');
+            
+            const pane = document.getElementById(`tab-${tab}`);
+            if (pane) pane.style.display = 'block';
+
+            const t = i18nDict[adminLang] || i18nDict.en;
+            document.getElementById('page-title').innerText = t['title_' + tab] || 'Monarca Admin';
+
+            refreshCurrentTab();
+        }
+
+        function refreshCurrentTab() {
+            if (currentTab === 'dashboard') loadDashboard();
+            else if (currentTab === 'orders') loadOrders();
+            else if (currentTab === 'products') loadProducts();
+            else if (currentTab === 'returns') loadReturns();
+            else if (currentTab === 'settings') loadSettings();
+        }
+
+        async function loadDashboard() {
+            const t = i18nDict[adminLang] || i18nDict.en;
+            try {
+                const res = await fetch(`${API_BASE}/dashboard`).then(r => r.json());
+                if (res.code === 200) {
+                    const d = res.data;
+                    document.getElementById('metric-orders').innerText = d.totalOrders;
+                    document.getElementById('metric-gmv').innerText = '$' + Number(d.totalGmv || 0).toFixed(2);
+                    document.getElementById('metric-pending').innerText = d.pendingFulfillment;
+                    document.getElementById('metric-returns').innerText = d.returnRequestsCount;
+                    document.getElementById('stat-iraq-count').innerText = d.iraqStockCount;
+                    document.getElementById('stat-china-count').innerText = d.chinaPreorderCount;
+                }
+
+                // Recent orders
+                const ordRes = await fetch(`${API_BASE}/orders`).then(r => r.json());
+                if (ordRes.code === 200) {
+                    allOrders = ordRes.data;
+                    const rows = allOrders.slice(0, 5).map(renderOrderRowShort).join('');
+                    document.getElementById('dash-orders-table').innerHTML = rows || `<tr><td colspan="7" style="text-align:center;">${t.loading}</td></tr>`;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderOrderRowShort(o) {
+            const t = i18nDict[adminLang] || i18nDict.en;
+            const srcLabel = o.hasChinaItem ? t.tag_china : t.tag_iraq;
+            const srcTag = `<span class="tag ${o.hasChinaItem ? 'tag-china' : 'tag-iraq'}">${srcLabel}</span>`;
+            
+            const payLabel = o.paymentMethod === 'cod' ? t.tag_cod : `${t.tag_card} (${(o.paymentMethod || '').toUpperCase()})`;
+            const payTag = `<span class="tag ${o.paymentMethod === 'cod' ? 'tag-cod' : 'tag-card'}">${payLabel}</span>`;
+            
+            const stLabel = t['st_' + o.status] || o.status;
+            const stTag = `<span class="tag tag-${o.status}">${stLabel}</span>`;
+
+            const phoneFormatted = o.customerPhone ? `<span dir="ltr" style="unicode-bidi:isolate; display:inline-block;">${o.customerPhone}</span>` : '—';
+
+            return `<tr>
+                <td><b>${o.id}</b></td>
+                <td>${o.customerName || '—'}<br><small style="color:var(--muted)">${phoneFormatted}</small></td>
+                <td>${o.city || '—'} · ${o.area || ''}</td>
+                <td>${srcTag}</td>
+                <td><b style="color:var(--brown);">$${Number(o.total).toFixed(2)}</b></td>
+                <td>${payTag}</td>
+                <td>${stTag}</td>
+            </tr>`;
+        }
+
+        async function loadOrders() {
+            const t = i18nDict[adminLang] || i18nDict.en;
+            const status = document.getElementById('order-filter-status').value;
+            const url = status === 'all' ? `${API_BASE}/orders` : `${API_BASE}/orders?status=${status}`;
+            const res = await fetch(url).then(r => r.json());
+            if (res.code === 200) {
+                allOrders = res.data;
+                const rows = allOrders.map(o => {
+                    const srcLabel = o.hasChinaItem ? t.tag_china : t.tag_iraq;
+                    const srcTag = `<span class="tag ${o.hasChinaItem ? 'tag-china' : 'tag-iraq'}">${srcLabel}</span>`;
+
+                    const payLabel = o.paymentMethod === 'cod' ? t.tag_cod : `${t.tag_card} ($${Number(o.paidTotal).toFixed(2)})`;
+                    const payTag = `<span class="tag ${o.paymentMethod === 'cod' ? 'tag-cod' : 'tag-card'}">${payLabel}</span>`;
+
+                    const stLabel = t['st_' + o.status] || o.status;
+                    const stTag = `<span class="tag tag-${o.status}">${stLabel}</span>`;
+
+                    const phoneFormatted = o.customerPhone ? `<span dir="ltr" style="unicode-bidi:isolate; display:inline-block;">${o.customerPhone}</span>` : '—';
+                    const landmarkTxt = adminLang === 'ar' ? 'نقطة دالة:' : 'Landmark:';
+
+                    return `<tr>
+                        <td><b>${o.id}</b></td>
+                        <td><b>${o.customerName || '—'}</b><br><small style="color:var(--muted)">${phoneFormatted}</small></td>
+                        <td>${o.city || ''} · ${o.area || ''}<br><small style="color:var(--muted)">${landmarkTxt} ${o.landmark || '—'}</small></td>
+                        <td>${srcTag}<br><small style="color:var(--muted)">${o.deliverySummary || ''}</small></td>
+                        <td><b style="color:var(--brown);">$${Number(o.total).toFixed(2)}</b></td>
+                        <td>${payTag}</td>
+                        <td>${stTag}</td>
+                        <td style="white-space:nowrap;">
+                            <button class="btn btn-secondary btn-sm" onclick="viewOrderDetail('${o.id}')">${t.btn_details}</button>
+                            ${o.status === 'placed' ? `<button class="btn btn-primary btn-sm" onclick="updateOrderStatus('${o.id}','preparing')">${t.btn_start_prep}</button>` : ''}
+                            ${o.status === 'preparing' ? `<button class="btn btn-primary btn-sm" onclick="updateOrderStatus('${o.id}','shipped')">${t.btn_dispatch}</button>` : ''}
+                            ${o.status === 'shipped' ? `<button class="btn btn-primary btn-sm" onclick="updateOrderStatus('${o.id}','delivered')">${t.btn_mark_delivered}</button>` : ''}
+                        </td>
+                    </tr>`;
+                }).join('');
+                document.getElementById('orders-table-body').innerHTML = rows || `<tr><td colspan="8" style="text-align:center;">${t.loading}</td></tr>`;
+            }
+        }
+
+        async function updateOrderStatus(orderId, newStatus) {
+            const promptMsg = adminLang === 'ar' 
+                ? `هل ترغب في تغيير حالة الطلب ${orderId} إلى: ${newStatus}؟`
+                : `Advance order ${orderId} status to ${newStatus}?`;
+            if (!confirm(promptMsg)) return;
+
+            const res = await fetch(`${API_BASE}/orders/${orderId}/status?status=${newStatus}`, { method: 'PUT' }).then(r => r.json());
+            if (res.code === 200) {
+                alert(adminLang === 'ar' ? 'تم تحديث حالة الطلب بنجاح' : 'Order status updated successfully');
+                loadOrders();
+            }
+        }
+
+        function viewOrderDetail(orderId) {
+            const t = i18nDict[adminLang] || i18nDict.en;
+            const o = allOrders.find(x => x.id === orderId);
+            if (!o) return;
+
+            const phoneFormatted = o.customerPhone ? `<span dir="ltr" style="unicode-bidi:isolate; display:inline-block;">${o.customerPhone}</span>` : '—';
+
+            let itemsHtml = (o.items || []).map(item => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed var(--line);">
+                    <div>
+                        <b>${item.productName}</b> <span class="tag tag-${item.fulfillmentSource}">${item.fulfillmentSource === 'china' ? (adminLang==='ar'?'الصين':'China') : (adminLang==='ar'?'العراق':'Iraq')}</span><br>
+                        <small style="color:var(--muted)">${adminLang==='ar'?'المواصفات:':'Specs:'} ${item.color || ''} · ${item.size || ''} × ${item.qty} units</small>
+                    </div>
+                    <b>$${(Number(item.unitPrice) * item.qty).toFixed(2)}</b>
+                </div>
+            `).join('');
+
+            const isAr = adminLang === 'ar';
+            document.getElementById('order-modal-content').innerHTML = `
+                <div style="line-height:1.8; font-size:13px; margin-bottom:16px;">
+                    <p><b>${isAr?'رقم الطلب:':'Order ID:'}</b> ${o.id} &nbsp;|&nbsp; <b>${isAr?'تاريخ الإنشاء:':'Created At:'}</b> ${o.createdAt ? o.createdAt.replace('T', ' ').substring(0, 19) : '—'}</p>
+                    <p><b>${isAr?'المستلم:':'Recipient:'}</b> ${o.customerName} &nbsp;|&nbsp; <b>${isAr?'رقم الهاتف:':'Phone:'}</b> ${phoneFormatted}</p>
+                    <p><b>${isAr?'عنوان التوصيل:':'Delivery Address:'}</b> ${o.city} · ${o.locality} · ${o.area} · ${o.street}</p>
+                    <p><b>${isAr?'أقرب نقطة دالة:':'Nearest Landmark:'}</b> <span style="color:var(--brown); font-weight:600;">${o.landmark || '—'}</span></p>
+                    ${o.deliveryNote ? `<p><b>${isAr?'ملاحظات التوصيل:':'Delivery Note:'}</b> ${o.deliveryNote}</p>` : ''}
+                    <p><b>${isAr?'بيانات الدفع:':'Payment Info:'}</b> ${isAr?'الطريقة:':'Method:'} ${(o.paymentMethod || '').toUpperCase()} | ${isAr?'الحالة:':'Status:'} ${o.paymentStatus} | ${isAr?'المبلغ المدفوع:':'Paid Amount:'} $${Number(o.paidTotal).toFixed(2)}</p>
+                </div>
+                <h4 style="margin-bottom:10px; color:var(--brown);">${isAr?'المنتجات المشتراة':'Purchased Items'}</h4>
+                <div style="background:var(--soft); padding:12px; border-radius:8px; margin-bottom:16px;">
+                    ${itemsHtml || '<p>—</p>'}
+                </div>
+                <div style="text-align:${isAr?'left':'right'}; font-size:14px;">
+                    ${isAr?'المجموع:':'Subtotal:'} $${Number(o.subtotal).toFixed(2)} | ${isAr?'الخصم:':'Discount:'} -$${Number(o.discount).toFixed(2)} | ${isAr?'أجور الشحن:':'Shipping:'} $${Number(o.shippingFee).toFixed(2)}<br>
+                    <b style="font-size:18px; color:var(--brown);">${isAr?'المبلغ الإجمالي المستحق:':'Total Payable:'} $${Number(o.total).toFixed(2)}</b>
+                </div>
+            `;
+            openModal('order-detail-modal');
+        }
+
+        async function loadProducts() {
+            const t = i18nDict[adminLang] || i18nDict.en;
+            const res = await fetch(`${API_BASE}/products`).then(r => r.json());
+            if (res.code === 200) {
+                allProducts = res.data;
+                const rows = allProducts.map(p => {
+                    const srcLabel = p.fulfillmentSource === 'china' ? t.tag_china : t.tag_iraq;
+                    const srcTag = `<span class="tag ${p.fulfillmentSource === 'china' ? 'tag-china' : 'tag-iraq'}">${srcLabel}</span>`;
+                    return `<tr>
+                        <td><b>${p.id}</b></td>
+                        <td>
+                            <b>${p.name}</b><br>
+                            <small style="color:var(--muted)">${p.enName || ''}</small>
+                        </td>
+                        <td>${p.category}</td>
+                        <td>${srcTag}</td>
+                        <td><b style="color:var(--brown);">$${Number(p.price).toFixed(2)}</b></td>
+                        <td>${p.oldPrice ? `<del style="color:var(--muted)">$${Number(p.oldPrice).toFixed(2)}</del>` : '—'}</td>
+                        <td>${p.stock}</td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" onclick="editProduct(${p.id})">${t.btn_edit}</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+                document.getElementById('products-table-body').innerHTML = rows || `<tr><td colspan="8" style="text-align:center;">${t.loading}</td></tr>`;
+            }
+        }
+
+        function editProduct(id) {
+            const t = i18nDict[adminLang] || i18nDict.en;
+            const p = allProducts.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('modal-product-title').innerText = (adminLang === 'ar' ? 'تعديل بيانات المنتج' : 'Edit Product') + ` (ID: ${p.id})`;
+            document.getElementById('prod-id').value = p.id;
+            document.getElementById('prod-name').value = p.name;
+            document.getElementById('prod-en').value = p.enName || '';
+            document.getElementById('prod-cat').value = p.category;
+            document.getElementById('prod-source').value = p.fulfillmentSource;
+            document.getElementById('prod-price').value = p.price;
+            document.getElementById('prod-old-price').value = p.oldPrice || '';
+            document.getElementById('prod-stock').value = p.stock;
+            document.getElementById('prod-badge').value = p.badge || '';
+            openModal('product-modal');
+        }
+
+        function openNewProductModal() {
+            document.getElementById('modal-product-title').innerText = adminLang === 'ar' ? 'إضافة منتج جديد' : 'Add New Product';
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-id').value = '';
+            openModal('product-modal');
+        }
+
+        async function handleProductSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-id').value;
+            const body = {
+                id: id ? Number(id) : null,
+                name: document.getElementById('prod-name').value,
+                enName: document.getElementById('prod-en').value,
+                category: document.getElementById('prod-cat').value,
+                fulfillmentSource: document.getElementById('prod-source').value,
+                price: Number(document.getElementById('prod-price').value),
+                oldPrice: document.getElementById('prod-old-price').value ? Number(document.getElementById('prod-old-price').value) : null,
+                stock: Number(document.getElementById('prod-stock').value),
+                badge: document.getElementById('prod-badge').value
+            };
+            const res = await fetch(`${API_BASE}/products`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            }).then(r => r.json());
+            if (res.code === 200) {
+                closeModal('product-modal');
+                alert(adminLang === 'ar' ? 'تم حفظ المنتج بنجاح' : 'Product saved successfully');
+                loadProducts();
+            }
+        }
+
+        async function loadReturns() {
+            const t = i18nDict[adminLang] || i18nDict.en;
+            const res = await fetch(`${API_BASE}/returns`).then(r => r.json());
+            if (res.code === 200) {
+                const rows = (res.data || []).map(r => {
+                    const stLabel = t['st_' + r.status] || r.status;
+                    const noRefundNote = adminLang === 'ar' ? 'شحنة ملغية قبل الدفع - بدون استرداد نقدي' : 'Uncollected COD - No cash refund';
+                    return `<tr>
+                        <td><b>${r.id}</b></td>
+                        <td>${r.orderId}</td>
+                        <td><b>${r.productName || '—'}</b></td>
+                        <td>${r.color || ''} / ${r.size || ''} × ${r.qty} units</td>
+                        <td>${r.reason}</td>
+                        <td>
+                            <b style="color:var(--brown);">$${Number(r.refundAmount || 0).toFixed(2)}</b>
+                            ${r.noRefund ? `<br><small style="color:var(--muted)">${noRefundNote}</small>` : ''}
+                        </td>
+                        <td><span class="tag tag-${r.status}">${stLabel}</span></td>
+                        <td style="white-space:nowrap;">
+                            ${r.status === 'requested' ? `
+                                <button class="btn btn-primary btn-sm" onclick="updateReturnStatus('${r.id}','approved')">${t.btn_approve}</button>
+                                <button class="btn btn-secondary btn-sm" onclick="updateReturnStatus('${r.id}','rejected')">${t.btn_reject}</button>
+                            ` : `<small style="color:var(--muted)">${t.st_processed}</small>`}
+                        </td>
+                    </tr>`;
+                }).join('');
+                document.getElementById('returns-table-body').innerHTML = rows || `<tr><td colspan="8" style="text-align:center;">${t.loading}</td></tr>`;
+            }
+        }
+
+        async function updateReturnStatus(id, st) {
+            const promptMsg = adminLang === 'ar'
+                ? `هل ترغب في تحديث حالة طلب الإرجاع ${id} إلى: ${st}؟`
+                : `Update return request ${id} status to ${st}?`;
+            if (!confirm(promptMsg)) return;
+
+            const res = await fetch(`${API_BASE}/returns/${id}/status?status=${st}`, { method: 'PUT' }).then(r => r.json());
+            if (res.code === 200) {
+                alert(adminLang === 'ar' ? 'تم تحديث حالة طلب الإرجاع بنجاح' : 'Return request status updated successfully');
+                loadReturns();
+            }
+        }
+
+        async function loadSettings() {
+            const res = await fetch(`${API_BASE}/config`).then(r => r.json());
+            if (res.code === 200) {
+                const m = res.data;
+                document.getElementById('cfg-whatsapp').value = m['store.whatsapp'] || '';
+                document.getElementById('cfg-free-ship').value = m['shipping.freeThreshold'] || '75.00';
+                document.getElementById('cfg-ship-fee').value = m['shipping.standardFee'] || '4.00';
+            }
+        }
+
+        async function saveSettings() {
+            const wa = document.getElementById('cfg-whatsapp').value;
+            const free = document.getElementById('cfg-free-ship').value;
+            const fee = document.getElementById('cfg-ship-fee').value;
+
+            await fetch(`${API_BASE}/config?key=store.whatsapp&value=${encodeURIComponent(wa)}`, { method: 'POST' });
+            await fetch(`${API_BASE}/config?key=shipping.freeThreshold&value=${encodeURIComponent(free)}`, { method: 'POST' });
+            await fetch(`${API_BASE}/config?key=shipping.standardFee&value=${encodeURIComponent(fee)}`, { method: 'POST' });
+            alert(adminLang === 'ar' ? 'تم حفظ الإعدادات بنجاح!' : 'Settings updated successfully!');
+        }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // Initial Boot
+        switchAdminLang(adminLang);
+    </script>
+</body>
+</html>

@@ -1,0 +1,976 @@
+{
+  "version": "4.7.0",
+  "result": "PASS",
+  "timestamp": "2026-10-26T16:55:41.491Z",
+  "routeNames": 53,
+  "renderPasses": 303,
+  "codFlowRenders": [
+    {
+      "language": "ar",
+      "stage": "confirmed",
+      "route": "success",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "confirmed",
+      "route": "order/M-DEMO-033740963-4qu",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "confirmed",
+      "route": "invoice/M-DEMO-033740963-4qu",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "confirmed",
+      "route": "tracking/M-DEMO-033740963-4qu",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "delivered-uncollected",
+      "route": "order/M-DEMO-033740963-4qu",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "delivered-uncollected",
+      "route": "invoice/M-DEMO-033740963-4qu",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "delivered-uncollected",
+      "route": "tracking/M-DEMO-033740963-4qu",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "return-form",
+      "route": "return/M-DEMO-033740963-4qu",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "exchange-form-unavailable-size",
+      "route": "return/M-DEMO-033740963-4qu",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "return-requested",
+      "route": "return-detail/RT-MVPHZT10-VB7",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "return-completed-no-refund",
+      "route": "return-detail/RT-MVPHZT10-VB7",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "confirmed",
+      "route": "success",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "confirmed",
+      "route": "order/M-DEMO-033741034-hlz",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "confirmed",
+      "route": "invoice/M-DEMO-033741034-hlz",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "confirmed",
+      "route": "tracking/M-DEMO-033741034-hlz",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "delivered-uncollected",
+      "route": "order/M-DEMO-033741034-hlz",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "delivered-uncollected",
+      "route": "invoice/M-DEMO-033741034-hlz",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "delivered-uncollected",
+      "route": "tracking/M-DEMO-033741034-hlz",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "return-form",
+      "route": "return/M-DEMO-033741034-hlz",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "exchange-form-unavailable-size",
+      "route": "return/M-DEMO-033741034-hlz",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "return-requested",
+      "route": "return-detail/RT-MVPHZT2Z-GRO",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "return-completed-no-refund",
+      "route": "return-detail/RT-MVPHZT2Z-GRO",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    }
+  ],
+  "sourceFlowRenders": [
+    {
+      "language": "ar",
+      "scenario": "china-visa",
+      "route": "success",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "china-visa",
+      "route": "order/M-DEMO-033741105-ylu",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "china-visa",
+      "route": "invoice/M-DEMO-033741105-ylu",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "china-visa",
+      "route": "tracking/M-DEMO-033741105-ylu",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "china-mastercard",
+      "route": "success",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "china-mastercard",
+      "route": "order/M-DEMO-033741160-l3l",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "china-mastercard",
+      "route": "invoice/M-DEMO-033741160-l3l",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "china-mastercard",
+      "route": "tracking/M-DEMO-033741160-l3l",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "mixed-visa",
+      "route": "success",
+      "currency": "USD",
+      "sources": [
+        "iraq",
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "mixed-visa",
+      "route": "order/M-DEMO-033741212-h55",
+      "currency": "USD",
+      "sources": [
+        "iraq",
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "mixed-visa",
+      "route": "invoice/M-DEMO-033741212-h55",
+      "currency": "USD",
+      "sources": [
+        "iraq",
+        "china"
+      ]
+    },
+    {
+      "language": "ar",
+      "scenario": "mixed-visa",
+      "route": "tracking/M-DEMO-033741212-h55",
+      "currency": "USD",
+      "sources": [
+        "iraq",
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "china-visa",
+      "route": "success",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "china-visa",
+      "route": "order/M-DEMO-033741265-gnv",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "china-visa",
+      "route": "invoice/M-DEMO-033741265-gnv",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "china-visa",
+      "route": "tracking/M-DEMO-033741265-gnv",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "china-mastercard",
+      "route": "success",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "china-mastercard",
+      "route": "order/M-DEMO-033741319-jyf",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "china-mastercard",
+      "route": "invoice/M-DEMO-033741319-jyf",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "china-mastercard",
+      "route": "tracking/M-DEMO-033741319-jyf",
+      "currency": "USD",
+      "sources": [
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "mixed-visa",
+      "route": "success",
+      "currency": "USD",
+      "sources": [
+        "iraq",
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "mixed-visa",
+      "route": "order/M-DEMO-033741373-jet",
+      "currency": "USD",
+      "sources": [
+        "iraq",
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "mixed-visa",
+      "route": "invoice/M-DEMO-033741373-jet",
+      "currency": "USD",
+      "sources": [
+        "iraq",
+        "china"
+      ]
+    },
+    {
+      "language": "en",
+      "scenario": "mixed-visa",
+      "route": "tracking/M-DEMO-033741373-jet",
+      "currency": "USD",
+      "sources": [
+        "iraq",
+        "china"
+      ]
+    }
+  ],
+  "currencyResidual": [],
+  "deliveryBidiChecks": [
+    {
+      "language": "ar",
+      "label": "home",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "categories",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "collection/china",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "product/2",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "product/5",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "home",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "categories",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "collection/china",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "product/2",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "product/5",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "checkout:china-visa",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:china-visa:success",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:china-visa:order/M-DEMO-033741105-ylu",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:china-visa:invoice/M-DEMO-033741105-ylu",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:china-visa:tracking/M-DEMO-033741105-ylu",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "checkout:china-mastercard",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:china-mastercard:success",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:china-mastercard:order/M-DEMO-033741160-l3l",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:china-mastercard:invoice/M-DEMO-033741160-l3l",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:china-mastercard:tracking/M-DEMO-033741160-l3l",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "checkout:mixed-visa",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:mixed-visa:success",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:mixed-visa:order/M-DEMO-033741212-h55",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:mixed-visa:invoice/M-DEMO-033741212-h55",
+      "result": "PASS"
+    },
+    {
+      "language": "ar",
+      "label": "actual-source:ar:mixed-visa:tracking/M-DEMO-033741212-h55",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "checkout:china-visa",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:china-visa:success",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:china-visa:order/M-DEMO-033741265-gnv",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:china-visa:invoice/M-DEMO-033741265-gnv",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:china-visa:tracking/M-DEMO-033741265-gnv",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "checkout:china-mastercard",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:china-mastercard:success",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:china-mastercard:order/M-DEMO-033741319-jyf",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:china-mastercard:invoice/M-DEMO-033741319-jyf",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:china-mastercard:tracking/M-DEMO-033741319-jyf",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "checkout:mixed-visa",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:mixed-visa:success",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:mixed-visa:order/M-DEMO-033741373-jet",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:mixed-visa:invoice/M-DEMO-033741373-jet",
+      "result": "PASS"
+    },
+    {
+      "language": "en",
+      "label": "actual-source:en:mixed-visa:tracking/M-DEMO-033741373-jet",
+      "result": "PASS"
+    }
+  ],
+  "dictionaryEntries": 2211,
+  "staticStringsScanned": 1646,
+  "checks": [
+    "Actual Arabic and English COD submissions render success, order, invoice, tracking and zero-refund returns; paid amount remains zero and address data is unchanged",
+    "HTML text and accessible attributes translated; submitted option values and input/user/script/textarea content preserved",
+    "English language/locale and decimal USD currency API",
+    "Arabic neutral action and RTL",
+    "English LTR",
+    "Arabic decimal numerals with USD",
+    "Whitespace is stable across repeated localization",
+    "All 18 Iraqi city labels display in English while Arabic option values and protected user addresses remain intact; Arabic labels remain Arabic",
+    "35 parameterized errors, coupon, OTP, after-sales, date, currency and COD probes",
+    "Query language takes priority over saved preference, including when storage access is denied",
+    "DOM localize translates fixed text and input/textarea placeholders while preserving values, user content and option submission values",
+    "DOM localization is reversible; language changes persist and emit the documented event",
+    "MutationObserver is limited to app/overlay/toast and catches asynchronous errors without observing or mutating form values",
+    "Only the known delivery range is isolated in Arabic HTML, using stable Western digits; plain text APIs, user text, attributes, values, options and existing bdi remain unchanged",
+    "Quoted attributes remain escaped and invalid numeric entities do not crash localization",
+    "Unknown copy remains intact and is exposed by misses()"
+  ],
+  "dynamicProbes": [
+    {
+      "source": "متوفر في العراق · حوالي يومين / طلب من الصين · ١٥–٢٠ يوماً",
+      "english": "In stock in Iraq · About 2 days / Order from China · 15–20 days"
+    },
+    {
+      "source": "من ٣٥٠ USD",
+      "english": "From 350 USD"
+    },
+    {
+      "source": "حقيبة جلد طبيعي، 350 USD",
+      "english": "Natural leather bag, 350 USD"
+    },
+    {
+      "source": "الحد الأدنى لهذه القسيمة ٤٠ USD.",
+      "english": "Minimum spend for this coupon: 40 USD."
+    },
+    {
+      "source": "الرمز غير صحيح. رمز التجربة 1234. تبقى ٣ محاولات.",
+      "english": "Incorrect code. The demo code is 1234. 3 attempts remain."
+    },
+    {
+      "source": "تم تطبيق M10 على القطع المحددة.",
+      "english": "Applied M10 to selected items."
+    },
+    {
+      "source": "تم تطبيق M10 على السلة",
+      "english": "Applied M10 to your bag."
+    },
+    {
+      "source": "تمت إضافة ٢ قطعة بحسب التوفر الحالي. تُستخدم الأسعار الحالية في الحقيبة.",
+      "english": "2 item(s) added according to current availability. Current prices apply in your bag."
+    },
+    {
+      "source": "XL غير متوفر",
+      "english": "XL unavailable"
+    },
+    {
+      "source": "XL غير متوفر؛ طلب تنبيه",
+      "english": "XL unavailable; request alert"
+    },
+    {
+      "source": "أضيفي قطعاً للسلة ثم استخدمي الرمز M10",
+      "english": "Add items to your bag, then use M10"
+    },
+    {
+      "source": "المبلغ المستحق: ٣٥٠ USD",
+      "english": "Amount due: 350 USD"
+    },
+    {
+      "source": "الموعد المطلوب: ٢٦ تشرين الأول",
+      "english": "Requested date: 26 October"
+    },
+    {
+      "source": "طلب إعادة جدولة تجريبي: ٢٦ تشرين الأول",
+      "english": "Demo reschedule request: 26 October"
+    },
+    {
+      "source": "شحنة البديل التجريبية: EX-1042",
+      "english": "Demo replacement shipment: EX-1042"
+    },
+    {
+      "source": "المدفوع: 0 USD",
+      "english": "Paid: 0 USD"
+    },
+    {
+      "source": "المدفوع: ٠ USD",
+      "english": "Paid: 0 USD"
+    },
+    {
+      "source": "الإجمالي: ٣٥٠ USD",
+      "english": "Total: 350 USD"
+    },
+    {
+      "source": "إجمالي الطلب: ٣٥٠ USD",
+      "english": "Order total: 350 USD"
+    },
+    {
+      "source": "الإجمالي المدفوع: 0 USD",
+      "english": "Total paid: 0 USD"
+    },
+    {
+      "source": "الإجمالي المستحق: ٣٥٠ USD",
+      "english": "Total due: 350 USD"
+    },
+    {
+      "source": "المبلغ المستحق بعد الإلغاء: 0 USD",
+      "english": "Amount due after cancellation: 0 USD"
+    },
+    {
+      "source": "مرتبط بالطلب M-DEMO-1024",
+      "english": "Linked to order M-DEMO-1024"
+    },
+    {
+      "source": "صالحة حتى ٢٥ تشرين الثاني",
+      "english": "Valid until 25 November"
+    },
+    {
+      "source": "(١٥ ث)",
+      "english": "(15 s)"
+    },
+    {
+      "source": "تمت الموافقة التجريبية. جهّزي القطع بتغليفها الأصلي. رمز التسليم التجريبي: RT-1042. تواصلي مع الدعم لترتيب الإرجاع في المنتج الفعلي.",
+      "english": "Demo approved. Prepare the items in their original packaging. Demo handover code: RT-1042. Contact support to arrange a return in the live service."
+    },
+    {
+      "source": "جهّزي القطع المرتبطة بطلب RT-1042 بتغليفها الأصلي. عنوان الاستلام الفعلي وتعليمات شركة التوصيل يحددهما المتجر عند اعتماد الخدمة.",
+      "english": "Prepare the items for request RT-1042 in their original packaging. The store will provide the actual collection address and courier instructions once the service is approved."
+    },
+    {
+      "source": "مرحباً Monarca، أود الاستفسار عن توصيل طلبي رقم M-DEMO-1024.",
+      "english": "Hello Monarca, I would like to ask about delivery for order M-DEMO-1024."
+    },
+    {
+      "source": "مرحباً Monarca، أحتاج مساعدة بخصوص طلبي رقم M-DEMO-1024.",
+      "english": "Hello Monarca, I need help with order M-DEMO-1024."
+    },
+    {
+      "source": "التوصيل المتوقع: متوفر في العراق · حوالي يومين / طلب من الصين · ١٥–٢٠ يوماً",
+      "english": "Estimated delivery: In stock in Iraq · About 2 days / Order from China · 15–20 days"
+    },
+    {
+      "source": "توصيل خلال ١٥–٢٠ يوماً تقريباً · الدفع المسبق بالبطاقة فقط",
+      "english": "Delivery in about 15–20 days · prepaid by card only"
+    },
+    {
+      "source": "تم حفظ الطلب. المبلغ مستحق عند الاستلام ولم يُحصّل أي مبلغ نقدي.",
+      "english": "Order saved. Payment is due on delivery; no cash has been collected."
+    },
+    {
+      "source": "لم يُحصّل أي مبلغ نقدي. يمكن إعادة القطع دون إنشاء استرداد.",
+      "english": "No cash was collected. Items can be returned without creating a refund."
+    },
+    {
+      "source": "أضيفي عنواناً من ٤–٩٠ حرفاً وتفاصيل من ١٠–١٢٠٠ حرف.",
+      "english": "Enter a title of 4–90 characters and details of 10–1,200 characters."
+    },
+    {
+      "source": "اختاري خيارات متوفرة وكمية ضمن المخزون",
+      "english": "Choose available options and a quantity within stock"
+    }
+  ],
+  "sourceResidual": [
+    {
+      "text": "bag handbag leather حقيبة حقائب شنطة بني جلد",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "heels shoes أحذية حذاء كعب بيج",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "shirt satin قميص قمصان ملابس بلوزة ساتان حرير",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "hoodie black هودي هوديز ملابس اسود",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "jacket brown جاكيت جاكيتات ملابس بني",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "trousers pants بنطال بناطيل ملابس بنطلون",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "accessories earrings إكسسوارات اقراط أقراط حلق ذهب",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "سارة أحمد",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "المنصور",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "شارع الروّاد",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "قرب مول المنصور",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "سارة",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": " غير متوفر\"",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "رجاع",
+      "classification": "internal text classification token"
+    },
+    {
+      "text": "الطابق الأول",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "أضيفي قطعاً للسلة ثم استخدمي الرمز ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "المدينة المختارة: ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "البراضعية",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "شارع الوطن",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "قرب السوق",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "تم تطبيق ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " على القطع المحددة.",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "ا",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "ي",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "ه",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": " غير متوفر؛ طلب تنبيه\"",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "مرتبط بالطلب ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "الحد الأدنى لهذه القسيمة ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " ث)",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "صالحة حتى ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "العربية",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": " على السلة",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "الرمز غير صحيح. رمز التجربة 1234. تبقى ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " محاولات.",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "بطاقة ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "الموعد المطلوب: ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "المبلغ المستحق: ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "جهّزي القطع المرتبطة بطلب ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " بتغليفها الأصلي. عنوان الاستلام الفعلي وتعليمات شركة التوصيل يحددهما المتجر عند اعتماد الخدمة.",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "تمت الموافقة التجريبية. جهّزي القطع بتغليفها الأصلي. رمز التسليم التجريبي: ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": ". تواصلي مع الدعم لترتيب الإرجاع في المنتج الفعلي.",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "تمت إضافة ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " قطعة بحسب التوفر الحالي. تُستخدم الأسعار الحالية في الحقيبة.",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "طلب إعادة جدولة تجريبي: ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    }
+  ],
+  "renderErrors": [],
+  "missing": [],
+  "intentionallyPreserved": [
+    "Deliver to بغداد",
+    "Baghdad · المنصور",
+    "Home · سارة أحمد · Baghdad",
+    "Work · سارة أحمد · Basra",
+    "سارة أحمد",
+    "بغداد · المنصور · شارع الروّاد",
+    "قرب مول المنصور",
+    "شارع الروّاد · قرب مول المنصور",
+    "Basra · البراضعية",
+    "شارع الوطن · قرب السوق",
+    "س",
+    "سارة",
+    "اختبار مستخدم",
+    "هذه رسالة من المستخدم",
+    "العربية",
+    "ملاحظة مستخدم",
+    "Home · TEST CUSTOMER · بغداد"
+  ],
+  "limits": "Actual classic-script VM evaluation and HTML/DOM pipeline tests, including all named Arabic routes, English route/product/state sweeps, real COD submissions and returns, China Visa/Mastercard and mixed card submissions in both languages. Currency residual checks inspect actual rendered text in both languages. User-supplied names, addresses, messages and Iraqi locality values intentionally remain unchanged. Source residuals are data/internal search terms and template fragments; see concrete dynamic probes. No browser/layout testing in this script."
+}

@@ -1,0 +1,36 @@
+/* Approved finishing pass: slightly smaller type; Arabic hero reads from the right. */
+.phone{font-size:16px}
+.phone :is(.page-top h1,.ac-title,.ck-heading h2,.cat-intro h2,.cat-list-intro h2){font-size:21px}
+.phone :is(.section-head h2,.home-products .section-head h2,.cat-section-heading h2,.cat-curation h3,.journal h3){font-size:19px}
+.phone :is(.pd-content>h1,.ck-payment-result h1,.success-content h1,.ac-about-cover h2){font-size:23px}
+.phone :is(.ac-care-card h2,.cat-result-summary p,.store-contact-heading h2){font-size:18px}
+.phone :is(.page-intro,.page-content>p,.ck-content>p,.ac-page>p,.od-page>p,.pd-description,.policy-section p,.ac-policy-block p,.ac-message p,.od-sheet-intro p,.sheet>p){font-size:14.5px}
+.phone :is(.product-card h3,.home-products .product-card h3,.cat-results .product-card h3){font-size:14.5px}
+.phone :is(.price,.home-products .price,.ck-cart-info strong,.ck-summary>div,.od-product b,.best-seller-meta b){font-size:15.2px}
+.phone :is(.pd-price-row>.price,.ck-summary .ck-grand){font-size:20px}
+.phone :is(.field,.checkbox-row,.ck-select-all,.ck-item-name,.ck-row-link,.ck-address-card p,.ck-checkout-address p,.ck-mini-line p,.ck-cart-info p,.ck-coupon p,.ac-menu,.ac-menu b,.ac-ticket-row,.od-fact,.od-product h3,.od-order-heading,.rt-select-line b){font-size:13.5px}
+.phone :is(.field>span,.field-note,.page-intro,.info-box,.ck-content>p,.mn46-language-note){font-size:15.2px}
+.phone .field :is(input:not([type="checkbox"]):not([type="radio"]),select,textarea),.phone :is(.cat-search input,.ac-search-form input,.ac-chat-compose textarea){font-size:16.2px}
+.phone :is(.primary,.secondary,.danger-btn,.text-btn,.text-link,.section-head button,.store-contact-button){font-size:13.5px}
+.phone .bottom-nav button{font-size:13.5px}
+html[lang="en"] .phone .bottom-nav button{font-size:12px}
+.phone .sheet-head h2{font-size:19px}
+.phone .mn46-list>button{font-size:16px}
+.phone .mn46-title{font-size:23px}
+.phone .mn46-languages>button{font-size:19px}
+html[lang="ar"] .phone .monarca-hero-copy{direction:rtl;text-align:right;align-items:flex-start}
+html[lang="ar"] .phone .monarca-hero-copy :is(h1,p){direction:rtl;text-align:right;width:100%}
+html[lang="ar"] .phone .monarca-hero-copy h1{font-size:30px}
+html[lang="ar"] .phone .monarca-hero-copy p{font-size:13.5px}
+html[lang="ar"] .phone .monarca-hero-copy button{font-size:15.2px}
+@media(max-width:360px){
+ .phone .page-top h1{font-size:19px}
+ .phone :is(.product-card h3,.home-products .product-card h3,.cat-results .product-card h3){font-size:13.5px}
+ .phone :is(.section-head h2,.home-products .section-head h2){font-size:17.2px}
+ .phone .section-head button{font-size:12.5px}
+ .phone .bottom-nav button{font-size:12.5px}
+ html[lang="en"] .phone .bottom-nav button{font-size:12px}
+ html[lang="ar"] .phone .monarca-hero-copy h1{font-size:27.5px}
+ html[lang="ar"] .phone .monarca-hero-copy p{font-size:12.5px}
+ html[lang="ar"] .phone .monarca-hero-copy button{font-size:14.5px}
+}

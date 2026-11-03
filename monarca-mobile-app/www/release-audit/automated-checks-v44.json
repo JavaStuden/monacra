@@ -1,0 +1,201 @@
+{
+  "version": "4.4",
+  "date": "2026-10-19",
+  "evidenceType": "Node.js VM state and rendered HTML checks; not browser or native-device evidence",
+  "result": "PASS",
+  "scenarioGroups": {
+    "flow": 13,
+    "iraqLocalization": 8,
+    "automaticShippingAndLegacyFREE100": 6,
+    "total": 27,
+    "failed": 0
+  },
+  "integration": {
+    "renderPasses": 218,
+    "registeredModuleRoutes": 49,
+    "namedRoutes": 52,
+    "unhandledActions": 0,
+    "unhandledRoutes": 0,
+    "unhandledForms": 0
+  },
+  "independentCodeReview": {
+    "scope": [
+      "Explicit checkout address route and account address-book return intent",
+      "New-order consent enforcement and existing pending-order resumption",
+      "Pending-order signature reuse and same-order payment retry",
+      "Automatic standard delivery and preserved historical FREE100 snapshots"
+    ],
+    "unclosedP0P1Found": false,
+    "statement": "No P0/P1 found within the reviewed interactive prototype scope. This does not certify live commerce readiness."
+  },
+  "suites": [
+    {
+      "script": "final-flow-audit.cjs",
+      "exitCode": 0,
+      "result": "PASS",
+      "scenarioGroups": 13,
+      "renderPasses": null,
+      "checks": [
+        {
+          "name": "Iraqi local/international/Arabic digit phone normalization",
+          "result": "PASS"
+        },
+        {
+          "name": "Selected cart pricing excludes unchecked rows and includes express fee",
+          "result": "PASS"
+        },
+        {
+          "name": "Direct buy does not replace bag coupon pricing on returning to bag",
+          "result": "PASS"
+        },
+        {
+          "name": "Account address book resets checkout selection intent",
+          "result": "PASS"
+        },
+        {
+          "name": "Explicit checkout address selection survives route revisit; account add saves to book",
+          "result": "PASS"
+        },
+        {
+          "name": "A missing terms consent cannot create a new payment snapshot through payment deep link",
+          "result": "PASS"
+        },
+        {
+          "name": "Existing pending order resumes without a new terms checkbox and without duplicate order",
+          "result": "PASS"
+        },
+        {
+          "name": "Wrong card CVV does not create an order",
+          "result": "PASS"
+        },
+        {
+          "name": "Cart card->OTP failure->decline->same order retry->paid keeps unchecked line",
+          "result": "PASS"
+        },
+        {
+          "name": "Direct purchase payment preserves whole bag and freezes address/item price",
+          "result": "PASS"
+        },
+        {
+          "name": "Single-use coupon race rejects second pending snapshot and preserves bag",
+          "result": "PASS"
+        },
+        {
+          "name": "Unpaid cancellation creates no refund; paid pre-shipment cancellation includes shipping once",
+          "result": "PASS"
+        },
+        {
+          "name": "Partial return quantities, cancellation release, refund allocation and exchange terminal state",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "script": "iraq-localization-v44.cjs",
+      "exitCode": 0,
+      "result": "PASS",
+      "scenarioGroups": 8,
+      "renderPasses": null,
+      "checks": [
+        {
+          "name": "Phone edit shows national digits beside a single fixed +964 prefix",
+          "result": "PASS"
+        },
+        {
+          "name": "Existing and preview addresses gain locality without duplicate display",
+          "result": "PASS"
+        },
+        {
+          "name": "New address requires locality, preserves free input and returns to address book",
+          "result": "PASS"
+        },
+        {
+          "name": "Selected locality reaches checkout, payment snapshot, order, invoice and success",
+          "result": "PASS"
+        },
+        {
+          "name": "Locality does not alter established delivery price rules",
+          "result": "PASS"
+        },
+        {
+          "name": "Gold earring variants and brown jacket search metadata agree with product visuals",
+          "result": "PASS"
+        },
+        {
+          "name": "Order and invoice show escaped notes, gift message and both current/legacy coupon keys",
+          "result": "PASS"
+        },
+        {
+          "name": "Visible account version labels agree with v4.4",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "script": "free100-v44.cjs",
+      "exitCode": 0,
+      "result": "PASS",
+      "scenarioGroups": 6,
+      "renderPasses": null,
+      "checks": [
+        {
+          "name": "New wallets offer M10 and expired sample, with automatic standard delivery explanation",
+          "result": "PASS"
+        },
+        {
+          "name": "Legacy FREE100 wallet records remain intact but are absent from all four coupon tabs and actions",
+          "result": "PASS"
+        },
+        {
+          "name": "Entering FREE100 in either coupon form explains automatic shipping without applying or consuming a coupon",
+          "result": "PASS"
+        },
+        {
+          "name": "Previously active FREE100 selections migrate to automatic delivery with unchanged fee rules",
+          "result": "PASS"
+        },
+        {
+          "name": "Existing FREE100 pending snapshot keeps original amount and can pay without consuming legacy records",
+          "result": "PASS"
+        },
+        {
+          "name": "M10 still applies and is consumed only after successful payment; expired demo remains visible",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "script": "integration-v4-smoke.cjs",
+      "exitCode": 0,
+      "result": "PASS",
+      "scenarioGroups": null,
+      "renderPasses": 218,
+      "checks": null,
+      "moduleCount": 4,
+      "registeredRoutes": 49,
+      "totalRouteNames": 52,
+      "products": 14,
+      "moduleActions": 97,
+      "moduleForms": 24,
+      "apiFunctions": 27,
+      "unhandledActions": {},
+      "unhandledRoutes": {},
+      "blankOutputs": [],
+      "errors": [],
+      "coreSubmitBridge": [
+        "checkout coupon form through core submit",
+        "catalog search form through core submit",
+        "account FAQ form through core submit",
+        "orders search form through core submit",
+        "module action through core click",
+        "snapshot card form plus OTP to paid order"
+      ]
+    }
+  ],
+  "limits": [
+    "These suites execute the actual five classic scripts using the shared minimal DOM harness. They do not use a browser layout engine.",
+    "Scenario groups and render passes are different measures and must not be added together as independent end-to-end tests.",
+    "Payment, login, inventory, refunds, shipping and support remain prototype simulations; no live banking, backend, SMS or logistics service was validated.",
+    "No server credentials or personal test fixture values are included in these result files."
+  ]
+}

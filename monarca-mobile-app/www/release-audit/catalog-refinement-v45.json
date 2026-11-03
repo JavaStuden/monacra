@@ -1,0 +1,62 @@
+{
+  "version": "4.5.0",
+  "result": "PASS",
+  "passed": 13,
+  "failed": 0,
+  "total": 13,
+  "tests": [
+    {
+      "name": "Category overview is a six-item icon grid with four selectable departments and no side rail",
+      "result": "PASS"
+    },
+    {
+      "name": "Icon selection expands matching subcategories and subcategory browsing opens filtered products",
+      "result": "PASS"
+    },
+    {
+      "name": "All pieces, offers, camera, search and bestseller discovery remain actionable",
+      "result": "PASS"
+    },
+    {
+      "name": "Invalid category selection cannot corrupt the department panel",
+      "result": "PASS"
+    },
+    {
+      "name": "Paid variants aggregate by product and orderCount counts each order once",
+      "result": "PASS"
+    },
+    {
+      "name": "Only paid supported fulfillment states count; pending, failed and legacy status/payment flags are ignored",
+      "result": "PASS"
+    },
+    {
+      "name": "Nonexistent product IDs and invalid quantities are ignored instead of becoming product 1",
+      "result": "PASS"
+    },
+    {
+      "name": "Duplicate order IDs are counted once and tied products use stable product ID order",
+      "result": "PASS"
+    },
+    {
+      "name": "Ranking is read-only and respects a home limit without padding with zero-sale products",
+      "result": "PASS"
+    },
+    {
+      "name": "Preview home shows honest paid-order ranking, demonstration label and a working more route",
+      "result": "PASS"
+    },
+    {
+      "name": "Full bestseller collection shows all ranked items and discloses local-only statistics",
+      "result": "PASS"
+    },
+    {
+      "name": "No eligible orders produces a truthful empty state with a recovery shopping link",
+      "result": "PASS"
+    },
+    {
+      "name": "Completing and cancelling a local order updates quantity ranking on the next render",
+      "result": "PASS"
+    }
+  ],
+  "limits": "Actual app scripts evaluated in isolated VM. These checks verify category routes, handlers and ranking semantics, not browser appearance, actual device behavior or production-wide sales. No new sales fixture was added to the shipped app. Ranking means original quantities ordered in paid, non-cancelled orders; it does not subtract after-sales return quantities or claim net retained sales. Synthetic returned/refunded flags in the robustness fixture test unsupported legacy status/payment values, not the app after-sales lifecycle."
+}

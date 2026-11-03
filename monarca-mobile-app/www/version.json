@@ -1,0 +1,18 @@
+{
+  "version": "4.7.0",
+  "release_id": "20261027-v4.7.0-c31cc16d0a52",
+  "content_sha256": "c31cc16d0a52a52bdbb2a50612f79aa95dc0339ad51797c7a56d2196e77802ac",
+  "mode": "interactive-prototype",
+  "locale": "ar-IQ",
+  "languages": [
+    "ar-IQ",
+    "en-IQ"
+  ],
+  "payments": "simulation-only",
+  "currency": "USD",
+  "fulfillment": {
+    "iraq": "about 2 days; COD or card",
+    "china": "15–20 days; prepaid card only"
+  },
+  "created_at_utc": "2026-10-26T17:15:17.991019+00:00"
+}

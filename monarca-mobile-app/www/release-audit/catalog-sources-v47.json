@@ -1,0 +1,117 @@
+{
+  "version": "4.7.0",
+  "result": "PASS",
+  "checks": [
+    {
+      "name": "AR home and category channels are visible, clickable and open their own product lists",
+      "result": "PASS",
+      "evidence": {
+        "entryPages": [
+          "home",
+          "categories"
+        ],
+        "channels": [
+          "collection/iraq",
+          "collection/china"
+        ]
+      }
+    },
+    {
+      "name": "AR Iraq and China counts match explicit inventory origins and source tabs navigate between them",
+      "result": "PASS",
+      "evidence": {
+        "iraq": 12,
+        "china": 2,
+        "all": 14
+      }
+    },
+    {
+      "name": "AR source tabs also filter results in place without requiring a collection deep link",
+      "result": "PASS"
+    },
+    {
+      "name": "AR category and ascending/descending price sorting keep the selected source",
+      "result": "PASS"
+    },
+    {
+      "name": "AR filter form and its resets retain China context, including empty stock-only recovery",
+      "result": "PASS",
+      "evidence": {
+        "sourceRetained": "china",
+        "emptyRecoveryProducts": 2
+      }
+    },
+    {
+      "name": "AR stock-only means Iraq availability and never promotes China stock into local inventory",
+      "result": "PASS"
+    },
+    {
+      "name": "AR USD range filters use 0–800, allow cents and reject invalid bounds without losing source",
+      "result": "PASS"
+    },
+    {
+      "name": "AR channel labels, ETA and payment copy are localized in actual rendered UI",
+      "result": "PASS",
+      "evidence": {
+        "language": "ar",
+        "direction": "rtl"
+      }
+    },
+    {
+      "name": "EN home and category channels are visible, clickable and open their own product lists",
+      "result": "PASS",
+      "evidence": {
+        "entryPages": [
+          "home",
+          "categories"
+        ],
+        "channels": [
+          "collection/iraq",
+          "collection/china"
+        ]
+      }
+    },
+    {
+      "name": "EN Iraq and China counts match explicit inventory origins and source tabs navigate between them",
+      "result": "PASS",
+      "evidence": {
+        "iraq": 12,
+        "china": 2,
+        "all": 14
+      }
+    },
+    {
+      "name": "EN source tabs also filter results in place without requiring a collection deep link",
+      "result": "PASS"
+    },
+    {
+      "name": "EN category and ascending/descending price sorting keep the selected source",
+      "result": "PASS"
+    },
+    {
+      "name": "EN filter form and its resets retain China context, including empty stock-only recovery",
+      "result": "PASS",
+      "evidence": {
+        "sourceRetained": "china",
+        "emptyRecoveryProducts": 2
+      }
+    },
+    {
+      "name": "EN stock-only means Iraq availability and never promotes China stock into local inventory",
+      "result": "PASS"
+    },
+    {
+      "name": "EN USD range filters use 0–800, allow cents and reject invalid bounds without losing source",
+      "result": "PASS"
+    },
+    {
+      "name": "EN channel labels, ETA and payment copy are localized in actual rendered UI",
+      "result": "PASS",
+      "evidence": {
+        "language": "en",
+        "direction": "ltr"
+      }
+    }
+  ],
+  "limits": "Actual complete classic-script VM, HTML localization and event bridge. Source entry clicks and filter/sort events are exercised against rendered controls. No browser geometry, touch-device or font-rendering claims; existing RTL/type CSS is intentionally not simulated."
+}

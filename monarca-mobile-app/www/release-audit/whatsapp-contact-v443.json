@@ -1,0 +1,62 @@
+{
+  "version": "4.4.3",
+  "result": "PASS",
+  "passed": 13,
+  "failed": 0,
+  "total": 13,
+  "tests": [
+    {
+      "name": "Published single contact configuration is empty and non-dialable by default",
+      "result": "PASS"
+    },
+    {
+      "name": "Missing configuration safely defaults to the prototype preview",
+      "result": "PASS"
+    },
+    {
+      "name": "Account and support provide explicit WhatsApp entry points and clarify internal simulation",
+      "result": "PASS"
+    },
+    {
+      "name": "Order and delivery entry points preserve their verified order context",
+      "result": "PASS"
+    },
+    {
+      "name": "Address form offers help without sending or prefilling its personal address data",
+      "result": "PASS"
+    },
+    {
+      "name": "Actual core click opens a demo message preview and changes no shopping state",
+      "result": "PASS"
+    },
+    {
+      "name": "Return and help controls work from the contact preview",
+      "result": "PASS"
+    },
+    {
+      "name": "Prefill contains no customer name, phone, delivery address or payment information",
+      "result": "PASS"
+    },
+    {
+      "name": "Unknown, unsafe or missing order IDs fall back to a generic consultation",
+      "result": "PASS"
+    },
+    {
+      "name": "Configured format is normalised to the official wa.me URL with encoded text",
+      "result": "PASS"
+    },
+    {
+      "name": "Live configuration still requires an intentional external link click and manual send",
+      "result": "PASS"
+    },
+    {
+      "name": "Invalid, foreign, placeholder or URL configuration never generates a contact link",
+      "result": "PASS"
+    },
+    {
+      "name": "Changing the one config field changes the link without touching customer storage or adding routes",
+      "result": "PASS"
+    }
+  ],
+  "limits": "Actual app scripts and core click dispatch evaluated in an isolated VM; no external link opened, no message sent, no live business number configured. The numeric link fixture exists only inside this VM test, never in the published contact configuration. Browser appearance is checked separately."
+}

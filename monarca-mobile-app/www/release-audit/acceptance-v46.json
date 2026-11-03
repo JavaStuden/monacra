@@ -1,0 +1,247 @@
+{
+  "result": "PASS",
+  "timestamp": "2026-10-26T11:40:11.119Z",
+  "suite": "Monarca v4.6 integrated AR/EN checkout + COD + navigation",
+  "scripts": [
+    "i18n-v46.js",
+    "app.js",
+    "checkout-v4.js",
+    "catalog-v4.js",
+    "account-v4.js",
+    "orders-v4.js",
+    "experience-v46.js"
+  ],
+  "total": 22,
+  "passed": 22,
+  "failed": 0,
+  "results": [
+    {
+      "name": "AR unified checkout with cod",
+      "result": "PASS",
+      "evidence": {
+        "orderStatus": "placed",
+        "paymentStatus": "cod_due",
+        "paidTotal": 0,
+        "confirmationRoute": "#success",
+        "language": "ar"
+      }
+    },
+    {
+      "name": "AR unified checkout with visa",
+      "result": "PASS",
+      "evidence": {
+        "orderStatus": "placed",
+        "paymentStatus": "paid",
+        "paidTotal": 245000,
+        "confirmationRoute": "#success",
+        "language": "ar"
+      }
+    },
+    {
+      "name": "AR unified checkout with mastercard",
+      "result": "PASS",
+      "evidence": {
+        "orderStatus": "placed",
+        "paymentStatus": "paid",
+        "paidTotal": 245000,
+        "confirmationRoute": "#success",
+        "language": "ar"
+      }
+    },
+    {
+      "name": "EN unified checkout with cod",
+      "result": "PASS",
+      "evidence": {
+        "orderStatus": "placed",
+        "paymentStatus": "cod_due",
+        "paidTotal": 0,
+        "confirmationRoute": "#success",
+        "language": "en"
+      }
+    },
+    {
+      "name": "EN unified checkout with visa",
+      "result": "PASS",
+      "evidence": {
+        "orderStatus": "placed",
+        "paymentStatus": "paid",
+        "paidTotal": 245000,
+        "confirmationRoute": "#success",
+        "language": "en"
+      }
+    },
+    {
+      "name": "EN unified checkout with mastercard",
+      "result": "PASS",
+      "evidence": {
+        "orderStatus": "placed",
+        "paymentStatus": "paid",
+        "paidTotal": 245000,
+        "confirmationRoute": "#success",
+        "language": "en"
+      }
+    },
+    {
+      "name": "AR missing address stays inline; required fields and Iraqi phone validate",
+      "result": "PASS",
+      "evidence": {
+        "routeBeforeConfirmation": "checkout",
+        "savedPhone": "+964 7700000000",
+        "citySubmissionValue": "بغداد"
+      }
+    },
+    {
+      "name": "EN missing address stays inline; required fields and Iraqi phone validate",
+      "result": "PASS",
+      "evidence": {
+        "routeBeforeConfirmation": "checkout",
+        "savedPhone": "+964 7700000000",
+        "citySubmissionValue": "بغداد"
+      }
+    },
+    {
+      "name": "AR mixed preorder COD is disabled and forged submission is rejected twice",
+      "result": "PASS",
+      "evidence": {
+        "disabledChoice": true,
+        "forgedSubmitRejected": true,
+        "commitRevalidationRejected": true
+      }
+    },
+    {
+      "name": "EN mixed preorder COD is disabled and forged submission is rejected twice",
+      "result": "PASS",
+      "evidence": {
+        "disabledChoice": true,
+        "forgedSubmitRejected": true,
+        "commitRevalidationRejected": true
+      }
+    },
+    {
+      "name": "Menu is a registered route; all menu destinations and language actions use the actual event bridge",
+      "result": "PASS",
+      "evidence": {
+        "registeredMenu": true,
+        "destinations": [
+          "account",
+          "orders",
+          "addresses",
+          "support",
+          "region",
+          "settings"
+        ],
+        "languageDirections": [
+          "ltr",
+          "rtl"
+        ]
+      }
+    },
+    {
+      "name": "AR buy-now from product opens checkout directly and preserves the independent bag",
+      "result": "PASS",
+      "evidence": {
+        "directRoute": "checkout",
+        "orderProductId": 3,
+        "bagUnchanged": true
+      }
+    },
+    {
+      "name": "EN buy-now from product opens checkout directly and preserves the independent bag",
+      "result": "PASS",
+      "evidence": {
+        "directRoute": "checkout",
+        "orderProductId": 3,
+        "bagUnchanged": true
+      }
+    },
+    {
+      "name": "Language switching preserves bag, user data, IDs, saved addresses and unsaved input values",
+      "result": "PASS",
+      "evidence": {
+        "roundTrips": 3,
+        "submittedValuesPreserved": true,
+        "productIdsUnchanged": true,
+        "protectedSavedAddressDisplay": true
+      }
+    },
+    {
+      "name": "AR failed pending order retries with the same ID and immutable amount/address/items",
+      "result": "PASS",
+      "evidence": {
+        "sameOrderId": "M-DEMO-014809585-jsh",
+        "priceSnapshotUnchanged": true,
+        "addressSnapshotUnchanged": true,
+        "couponConsumedOnce": true
+      }
+    },
+    {
+      "name": "EN failed pending order retries with the same ID and immutable amount/address/items",
+      "result": "PASS",
+      "evidence": {
+        "sameOrderId": "M-DEMO-014809744-kuc",
+        "priceSnapshotUnchanged": true,
+        "addressSnapshotUnchanged": true,
+        "couponConsumedOnce": true
+      }
+    },
+    {
+      "name": "AR selected in-stock COD excludes an unchecked preorder from eligibility and consumption",
+      "result": "PASS",
+      "evidence": {
+        "confirmedProductIds": [
+          1
+        ],
+        "untouchedBagProductIds": [
+          2
+        ]
+      }
+    },
+    {
+      "name": "EN selected in-stock COD excludes an unchecked preorder from eligibility and consumption",
+      "result": "PASS",
+      "evidence": {
+        "confirmedProductIds": [
+          1
+        ],
+        "untouchedBagProductIds": [
+          2
+        ]
+      }
+    },
+    {
+      "name": "AR COD receipt, delivery and cancellation never imply collected money or a cash refund",
+      "result": "PASS",
+      "evidence": {
+        "cashCollected": 0,
+        "refundRecords": 0,
+        "deliveryKeptCodDue": true,
+        "unpaidReturnComplete": true
+      }
+    },
+    {
+      "name": "EN COD receipt, delivery and cancellation never imply collected money or a cash refund",
+      "result": "PASS",
+      "evidence": {
+        "cashCollected": 0,
+        "refundRecords": 0,
+        "deliveryKeptCodDue": true,
+        "unpaidReturnComplete": true
+      }
+    },
+    {
+      "name": "AR preorder confirmation and order never promise in-stock delivery timing",
+      "result": "PASS",
+      "evidence": {
+        "preorderTiming": "store-confirmed"
+      }
+    },
+    {
+      "name": "EN preorder confirmation and order never promise in-stock delivery timing",
+      "result": "PASS",
+      "evidence": {
+        "preorderTiming": "store-confirmed"
+      }
+    }
+  ],
+  "limits": "Real script VM and event dispatch including final core HTML localization; no browser/layout engine, actual charges, SMS, carrier, or bank calls. Form values are supplied through the harness FormData bridge; hashchange is advanced explicitly after routed clicks."
+}

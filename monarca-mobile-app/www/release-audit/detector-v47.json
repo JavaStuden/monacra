@@ -1,0 +1,14 @@
+{
+  "scope": [
+    "app.js",
+    "catalog-v4.js",
+    "checkout-v4.js",
+    "checkout-v4.css",
+    "orders-v4.js",
+    "account-v4.js",
+    "experience-v46.js",
+    "sourcing-v47.css"
+  ],
+  "findings": [],
+  "limits": "Static scan of selected changed files only; not whole-project accessibility certification."
+}

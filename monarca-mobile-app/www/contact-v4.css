@@ -1,0 +1,29 @@
+/* Store contact follows the boutique palette; WhatsApp remains recognisable. */
+.store-contact-card{padding:20px;margin:24px 0;border:1px solid var(--line);background:var(--white)}
+.store-contact-heading{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.store-contact-heading>svg{width:29px;height:29px;color:#35664b}
+.store-contact-heading h2{font-size:18px;line-height:1.6;font-weight:500}
+.store-contact-heading small{display:block;font-size:11px;line-height:1.8;color:var(--muted)}
+.store-contact-card>p{font-size:13px;line-height:1.9;color:var(--muted);margin-bottom:16px}
+.store-contact-card .store-contact-button{margin-top:16px}
+.store-contact-number{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;line-height:1.8}
+.store-contact-number b{font-size:14px;font-weight:500;white-space:nowrap}
+.store-contact-demo{color:#71513a;font-size:11px;line-height:1.8}
+.store-contact-button{min-height:46px;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;font-size:14px;line-height:1.6;text-align:center}
+.store-contact-button>svg{width:21px;height:21px;color:#35664b}
+.store-contact-menu{display:flex;align-items:center;gap:13px;text-align:start;width:100%;min-height:72px;padding:14px 0;border-bottom:1px solid var(--line)}
+.store-contact-menu>svg:first-child{width:24px;height:24px;color:#35664b}
+.store-contact-menu>span:not(.ac-menu-icon){flex:1;min-width:0}
+.store-contact-menu>.ac-menu-icon{flex:0 0 36px;color:#35664b}
+.store-contact-menu b{font-size:14px;line-height:1.7;font-weight:500;display:block}
+.store-contact-menu small{font-size:12px;line-height:1.8;color:var(--muted);display:block}
+.store-contact-address-help{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+.store-contact-address-help>p{font-size:12px;line-height:1.8;color:var(--muted)}
+.store-contact-sheet>p{font-size:13px;line-height:1.9;color:var(--muted);margin:12px 0 16px}
+.store-contact-sheet .store-contact-number{padding:13px;background:var(--soft)}
+.store-contact-message{margin:16px 0;padding:15px;border:1px solid var(--line);background:var(--white);font-size:14px;line-height:1.9;overflow-wrap:anywhere;white-space:pre-wrap}
+.store-contact-sheet .store-contact-caption{font-size:12px;line-height:1.8;color:var(--muted)}
+.store-contact-sheet .button-stack{gap:10px;margin-top:20px}
+.store-contact-dialog .sheet-head .icon-btn{width:44px;height:44px;min-width:44px;min-height:44px}
+.store-contact-sheet .button-stack .text-btn{min-height:44px}
+@media(max-width:360px){.store-contact-card{padding:16px}.store-contact-heading h2{font-size:17px}.store-contact-number{align-items:flex-start;flex-direction:column;gap:3px}}

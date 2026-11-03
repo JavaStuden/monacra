@@ -1,0 +1,27 @@
+{
+  "format": "JPEG",
+  "sample_rgb": {
+    "outside_logo": [
+      247,
+      246,
+      242
+    ],
+    "inside_logo_corner": [
+      247,
+      246,
+      242
+    ],
+    "inside_logo_right_corner": [
+      246,
+      246,
+      244
+    ]
+  },
+  "max_channel_delta_from_header": 2,
+  "dom_header_rgb": [
+    248,
+    246,
+    242
+  ],
+  "result": "PASS"
+}

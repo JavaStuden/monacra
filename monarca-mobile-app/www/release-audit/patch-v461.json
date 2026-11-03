@@ -1,0 +1,19 @@
+{
+  "version": "4.6.1",
+  "result": "PASS",
+  "business_scripts_unchanged_from_v460": [
+    "store-contact.js",
+    "i18n-v46.js",
+    "app.js",
+    "checkout-v4.js",
+    "catalog-v4.js",
+    "account-v4.js",
+    "orders-v4.js",
+    "experience-v46.js"
+  ],
+  "actual_browser_viewports": 12,
+  "issues": 0,
+  "arabic_banner": "RTL and right aligned H1/P; original photo/background position and logo retained",
+  "type_adjustment": "Key typography approximately 4–6% smaller; 16.2px fields; existing 44px+ main touch targets retained",
+  "limits": "Narrow CSS finishing patch. Prior business logic evidence is retained for v4.6.0 and was not rerun for this CSS-only change; no physical-device certification."
+}

@@ -1,0 +1,523 @@
+{
+  "checked": 32,
+  "issues": [
+    {
+      "route": "orders",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": "700 20px / 34px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": [
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الشحن"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "تم التسليم"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الملغاة"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الإرجاع والاستبدال"
+        }
+      ]
+    },
+    {
+      "route": "orders",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": [
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "تم التسليم"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الملغاة"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الإرجاع والاستبدال"
+        }
+      ]
+    },
+    {
+      "route": "orders",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": [
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الملغاة"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الإرجاع والاستبدال"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "route": "home",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": null,
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "categories",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": "700 20px / 34px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "collection/bestsellers",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": "700 20px / 34px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "product/1",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": "700 20px / 34px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "cart",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": "700 20px / 34px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "address",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": "700 20px / 34px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "checkout",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": "700 20px / 34px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "payment",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": "700 20px / 34px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "support",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": "700 20px / 34px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "orders",
+      "width": 320,
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "headingFont": "700 20px / 34px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": [
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الشحن"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "تم التسليم"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الملغاة"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الإرجاع والاستبدال"
+        }
+      ]
+    },
+    {
+      "route": "home",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": null,
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "categories",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "collection/bestsellers",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "product/1",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "cart",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "address",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "checkout",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "payment",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "support",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "orders",
+      "width": 390,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": [
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "تم التسليم"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الملغاة"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الإرجاع والاستبدال"
+        }
+      ]
+    },
+    {
+      "route": "home",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": null,
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "categories",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "collection/bestsellers",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "product/1",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "cart",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "address",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "checkout",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "payment",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "support",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "orders",
+      "width": 430,
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": [
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الملغاة"
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "od-filter ",
+          "text": "الإرجاع والاستبدال"
+        }
+      ]
+    },
+    {
+      "route": "categories",
+      "width": 1280,
+      "documentWidth": 1280,
+      "clientWidth": 1280,
+      "appWidth": 407,
+      "appScroll": 407,
+      "fontReady": true,
+      "headingFont": "700 22px / 37.4px \"Noto Sans Arabic\", Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "home",
+      "width": 1440,
+      "documentWidth": 1440,
+      "clientWidth": 1440,
+      "appWidth": 407,
+      "appScroll": 407,
+      "fontReady": true,
+      "headingFont": null,
+      "smallButtons": [],
+      "overflows": []
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "checked": 12,
+  "issues": [],
+  "results": [
+    {
+      "route": "home",
+      "width": 320,
+      "language": "ar",
+      "actualLang": "ar",
+      "direction": "rtl",
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [
+        {
+          "tag": "H1",
+          "size": "27.5px",
+          "direction": "rtl",
+          "align": "right"
+        },
+        {
+          "tag": "P",
+          "size": "12.5px",
+          "direction": "rtl",
+          "align": "right"
+        }
+      ],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "home",
+      "width": 390,
+      "language": "ar",
+      "actualLang": "ar",
+      "direction": "rtl",
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [
+        {
+          "tag": "H1",
+          "size": "30px",
+          "direction": "rtl",
+          "align": "right"
+        },
+        {
+          "tag": "P",
+          "size": "13.5px",
+          "direction": "rtl",
+          "align": "right"
+        }
+      ],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "home",
+      "width": 430,
+      "language": "ar",
+      "actualLang": "ar",
+      "direction": "rtl",
+      "documentWidth": 430,
+      "clientWidth": 430,
+      "appWidth": 430,
+      "appScroll": 430,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [
+        {
+          "tag": "H1",
+          "size": "30px",
+          "direction": "rtl",
+          "align": "right"
+        },
+        {
+          "tag": "P",
+          "size": "13.5px",
+          "direction": "rtl",
+          "align": "right"
+        }
+      ],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "home",
+      "width": 1440,
+      "language": "ar",
+      "actualLang": "ar",
+      "direction": "rtl",
+      "documentWidth": 1425,
+      "clientWidth": 1425,
+      "appWidth": 407,
+      "appScroll": 407,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [
+        {
+          "tag": "H1",
+          "size": "30px",
+          "direction": "rtl",
+          "align": "right"
+        },
+        {
+          "tag": "P",
+          "size": "13.5px",
+          "direction": "rtl",
+          "align": "right"
+        }
+      ],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "home",
+      "width": 320,
+      "language": "en",
+      "actualLang": "en",
+      "direction": "ltr",
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [
+        {
+          "tag": "H1",
+          "size": "23px",
+          "direction": "ltr",
+          "align": "left"
+        },
+        {
+          "tag": "P",
+          "size": "12px",
+          "direction": "ltr",
+          "align": "left"
+        }
+      ],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "home",
+      "width": 390,
+      "language": "en",
+      "actualLang": "en",
+      "direction": "ltr",
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [
+        {
+          "tag": "H1",
+          "size": "27px",
+          "direction": "ltr",
+          "align": "left"
+        },
+        {
+          "tag": "P",
+          "size": "13px",
+          "direction": "ltr",
+          "align": "left"
+        }
+      ],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "home",
+      "width": 1440,
+      "language": "en",
+      "actualLang": "en",
+      "direction": "ltr",
+      "documentWidth": 1425,
+      "clientWidth": 1425,
+      "appWidth": 407,
+      "appScroll": 407,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [
+        {
+          "tag": "H1",
+          "size": "27px",
+          "direction": "ltr",
+          "align": "left"
+        },
+        {
+          "tag": "P",
+          "size": "13px",
+          "direction": "ltr",
+          "align": "left"
+        }
+      ],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "checkout",
+      "width": 320,
+      "language": "ar",
+      "actualLang": "ar",
+      "direction": "rtl",
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "checkout",
+      "width": 390,
+      "language": "ar",
+      "actualLang": "ar",
+      "direction": "rtl",
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "checkout",
+      "width": 320,
+      "language": "en",
+      "actualLang": "en",
+      "direction": "ltr",
+      "documentWidth": 320,
+      "clientWidth": 320,
+      "appWidth": 320,
+      "appScroll": 320,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "checkout",
+      "width": 390,
+      "language": "en",
+      "actualLang": "en",
+      "direction": "ltr",
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [],
+      "smallButtons": [],
+      "overflows": []
+    },
+    {
+      "route": "menu",
+      "width": 390,
+      "language": "ar",
+      "actualLang": "ar",
+      "direction": "rtl",
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "appWidth": 390,
+      "appScroll": 390,
+      "fontReady": true,
+      "bodyFont": "Zain, Tahoma, \"Segoe UI\", Arial, sans-serif",
+      "heroOverflow": false,
+      "heroDirectionOk": true,
+      "smallInputs": [],
+      "heroType": [],
+      "smallButtons": [],
+      "overflows": []
+    }
+  ]
+}

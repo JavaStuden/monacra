@@ -1,0 +1,21 @@
+/* Sourcing is a shopping choice, with delivery and payment rules visible together. */
+.src47-shops{margin:20px 16px 26px}
+.src47-heading{margin-bottom:14px}
+.src47-heading h2{font-size:19px;font-weight:700;line-height:1.65}
+.src47-heading p,.src47-context{font-size:13px;line-height:1.8;color:var(--muted);margin-top:4px}
+.src47-shop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.src47-shop{display:flex;flex-direction:column;align-items:flex-start;text-align:start;gap:8px;min-width:0;padding:16px 13px;border:1px solid #d9cbbb;border-radius:14px;background:#f1ebe2}
+.src47-shop:last-child{background:#ece5db}
+.src47-shop-icon{display:grid;place-items:center;width:32px;height:32px;color:var(--brown)}
+.src47-shop-icon svg{width:25px;height:25px;stroke-width:1.5}
+.src47-shop>b{font-size:16px;line-height:1.6;font-weight:700}
+.src47-shop-time{font-size:14px;line-height:1.6;font-weight:700}
+.src47-shop small{font-size:13px;line-height:1.7;font-weight:400;color:#625344}
+.src47-shop-link{display:flex;align-items:center;gap:7px;font-size:13px;line-height:1.7;font-weight:700;margin-top:auto;padding-top:5px}
+.src47-shop-link svg{width:15px;height:15px}
+.src47-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:18px 16px 8px}
+.src47-tabs button{min-width:0;min-height:52px;padding:8px 6px;border:1px solid #dbd0c2;border-radius:12px;font-size:14px;line-height:1.5;font-weight:700;overflow-wrap:break-word}
+.src47-tabs button.active{background:var(--brown);border-color:var(--brown);color:var(--paper)}
+.src47-context{margin:0 18px 18px;text-align:start}
+.cat-screen>.src47-shops{margin-bottom:24px}
+@media(max-width:360px){.src47-shops{margin-inline:12px}.src47-shop-grid{gap:9px}.src47-shop{padding:13px 10px}.src47-shop>b{font-size:15px}.src47-shop-time{font-size:13.5px}.src47-tabs{margin-inline:12px}.src47-tabs button{font-size:13px}}

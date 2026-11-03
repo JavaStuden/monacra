@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Monarca</string>
+    <string name="title_activity_main">Monarca</string>
+    <string name="package_name">com.monarca.boutique</string>
+    <string name="custom_url_scheme">com.monarca.boutique</string>
+</resources>

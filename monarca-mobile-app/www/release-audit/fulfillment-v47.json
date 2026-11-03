@@ -1,0 +1,184 @@
+{
+  "version": "4.7.0",
+  "result": "PASS",
+  "total": 19,
+  "passed": 19,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "All catalogue items identify Iraq or China, with fail-closed unknown lines",
+      "result": "PASS"
+    },
+    {
+      "name": "USD shipping is $4 below $75, free from $75, with cents and no express surcharge",
+      "result": "PASS"
+    },
+    {
+      "name": "AR Iraq stock COD confirms in USD with approximately 2-day source snapshot and zero paid",
+      "result": "PASS",
+      "evidence": {
+        "total": 441,
+        "paid": 0,
+        "sources": [
+          {
+            "source": "iraq",
+            "label": "متوفر في العراق",
+            "estimate": "حوالي يومين",
+            "minDays": 2,
+            "maxDays": 2,
+            "count": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "EN Iraq stock COD confirms in USD with approximately 2-day source snapshot and zero paid",
+      "result": "PASS",
+      "evidence": {
+        "total": 441,
+        "paid": 0,
+        "sources": [
+          {
+            "source": "iraq",
+            "label": "متوفر في العراق",
+            "estimate": "حوالي يومين",
+            "minDays": 2,
+            "maxDays": 2,
+            "count": 2
+          }
+        ]
+      }
+    },
+    {
+      "name": "China visa confirms prepaid USD190, 15–20 days, without OTP",
+      "result": "PASS",
+      "evidence": {
+        "currency": "USD",
+        "total": 190,
+        "sources": [
+          {
+            "source": "china",
+            "label": "طلب من الصين",
+            "estimate": "١٥–٢٠ يوماً",
+            "minDays": 15,
+            "maxDays": 20,
+            "count": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "China mastercard confirms prepaid USD190, 15–20 days, without OTP",
+      "result": "PASS",
+      "evidence": {
+        "currency": "USD",
+        "total": 190,
+        "sources": [
+          {
+            "source": "china",
+            "label": "طلب من الصين",
+            "estimate": "١٥–٢٠ يوماً",
+            "minDays": 15,
+            "maxDays": 20,
+            "count": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "AR mixed Iraq/China order has two delivery groups, card-only and one-page confirmation",
+      "result": "PASS",
+      "evidence": {
+        "sources": [
+          {
+            "source": "iraq",
+            "label": "متوفر في العراق",
+            "estimate": "حوالي يومين",
+            "minDays": 2,
+            "maxDays": 2,
+            "count": 1
+          },
+          {
+            "source": "china",
+            "label": "طلب من الصين",
+            "estimate": "١٥–٢٠ يوماً",
+            "minDays": 15,
+            "maxDays": 20,
+            "count": 1
+          }
+        ],
+        "prepaid": 486
+      }
+    },
+    {
+      "name": "EN mixed Iraq/China order has two delivery groups, card-only and one-page confirmation",
+      "result": "PASS",
+      "evidence": {
+        "sources": [
+          {
+            "source": "iraq",
+            "label": "متوفر في العراق",
+            "estimate": "حوالي يومين",
+            "minDays": 2,
+            "maxDays": 2,
+            "count": 1
+          },
+          {
+            "source": "china",
+            "label": "طلب من الصين",
+            "estimate": "١٥–٢٠ يوماً",
+            "minDays": 15,
+            "maxDays": 20,
+            "count": 1
+          }
+        ],
+        "prepaid": 486
+      }
+    },
+    {
+      "name": "Unchecked China piece remains in bag and does not disable local COD",
+      "result": "PASS"
+    },
+    {
+      "name": "Forged live cart source/fulfillment cannot enable COD for China or mixed pieces",
+      "result": "PASS"
+    },
+    {
+      "name": "COD is revalidated at final commit against line source snapshots",
+      "result": "PASS"
+    },
+    {
+      "name": "Mixed success/order/tracking/receipt preserve both source estimates when live catalogue changes",
+      "result": "PASS"
+    },
+    {
+      "name": "Failed China card retry keeps its USD amount, source, ETA and coupon consumption exactly once",
+      "result": "PASS"
+    },
+    {
+      "name": "Missing/invalid delivery address remains inline and blocks a China card order",
+      "result": "PASS"
+    },
+    {
+      "name": "China Buy now goes directly to checkout and keeps the existing Iraq bag",
+      "result": "PASS"
+    },
+    {
+      "name": "Unknown product IDs fail closed for both COD and test card",
+      "result": "PASS"
+    },
+    {
+      "name": "Local unpaid COD cancellation and return never fabricate cash or a refund",
+      "result": "PASS"
+    },
+    {
+      "name": "Dollar-cent partial returns conserve discount cents and exclude original shipping",
+      "result": "PASS"
+    },
+    {
+      "name": "Card cancellation refunds the exact dollar-cent full payment including delivery",
+      "result": "PASS"
+    }
+  ],
+  "limits": "Actual classic scripts and event bridge in a VM, including current core pricing and localization. No browser layout, real charges, real currency conversion, cash collection or logistics calls."
+}

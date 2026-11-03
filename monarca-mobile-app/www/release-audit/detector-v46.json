@@ -1,0 +1,17 @@
+{
+  "result": "NO_FINDINGS_IN_SELECTED_FILES",
+  "findings": [],
+  "scope": [
+    "app.js",
+    "checkout-v4.js",
+    "catalog-v4.js",
+    "account-v4.js",
+    "orders-v4.js",
+    "experience-v46.js",
+    "experience-v46.css",
+    "zain-v46.css",
+    "i18n-v46.css",
+    "refinement-v45.css"
+  ],
+  "limits": "Static design detector on the selected implementation files, not proof of all-page accessibility or a real-device certification."
+}

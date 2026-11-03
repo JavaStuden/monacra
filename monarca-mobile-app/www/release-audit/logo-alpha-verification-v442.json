@@ -1,0 +1,22 @@
+{
+  "asset": "assets/monarca-logo-ink-v442.svg",
+  "type": "self-contained SVG alpha renderer",
+  "embedded_source_sha256": "d6539c0b6a289a05521106673c650cce0d557f12c7c31cdc842dcb2e574a4e8f",
+  "source_file": "assets/monarca-logo-reference.jpg",
+  "source_bytes_unchanged": true,
+  "canvas": [
+    190,
+    54
+  ],
+  "crop": [
+    298.586538,
+    59.140385,
+    343.826923,
+    97.719231
+  ],
+  "alpha_equation": "clamp(1.5665 - 2.163 * sRGB luminance)",
+  "white_and_cream_opacity": 0,
+  "letters_redrawn": false,
+  "css_filter": "none",
+  "css_mix_blend_mode": "normal"
+}

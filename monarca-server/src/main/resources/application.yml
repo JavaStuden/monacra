@@ -1,0 +1,67 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+
+spring:
+  application:
+    name: monarca-server
+  datasource:
+    # Embedded persistent database file for fast deployment
+    url: jdbc:h2:file:./data/monarcadb;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/public/
+
+# Monarca Business Rules Configuration (v4.7.0)
+monarca:
+  currency: USD
+  shipping:
+    standard-fee: 4.00
+    free-shipping-threshold: 75.00
+  coupons:
+    m10:
+      code: "M10"
+      discount-percent: 10
+      minimum-spend: 40.00
+  fulfillment:
+    iraq:
+      min-days: 2
+      max-days: 2
+      allow-cod: true
+    china:
+      min-days: 15
+      max-days: 20
+      allow-cod: false # China pre-orders strictly prohibit COD
+  security:
+    demo-otp: "1234"
+    admin-token: "${MONARCA_ADMIN_TOKEN:}"
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha

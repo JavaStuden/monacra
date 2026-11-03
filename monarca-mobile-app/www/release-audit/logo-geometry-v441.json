@@ -1,0 +1,62 @@
+[
+  {
+    "background": "rgb(248, 246, 242)",
+    "bannerRatio": 1.997658993367148,
+    "documentWidth": 320,
+    "filter": "none",
+    "headerHeight": 72,
+    "inkBlend": "multiply",
+    "logo": {
+      "height": 54,
+      "width": 190,
+      "x": 65,
+      "y": 44.5
+    },
+    "width": 320
+  },
+  {
+    "background": "rgb(248, 246, 242)",
+    "bannerRatio": 1.997758924283656,
+    "documentWidth": 390,
+    "filter": "none",
+    "headerHeight": 72,
+    "inkBlend": "multiply",
+    "logo": {
+      "height": 54,
+      "width": 190,
+      "x": 100,
+      "y": 44.5
+    },
+    "width": 390
+  },
+  {
+    "background": "rgb(248, 246, 242)",
+    "bannerRatio": 1.9976771196283392,
+    "documentWidth": 430,
+    "filter": "none",
+    "headerHeight": 72,
+    "inkBlend": "multiply",
+    "logo": {
+      "height": 54,
+      "width": 190,
+      "x": 120,
+      "y": 44.5
+    },
+    "width": 430
+  },
+  {
+    "background": "rgb(248, 246, 242)",
+    "bannerRatio": 1.9977485392040224,
+    "documentWidth": 1425,
+    "filter": "none",
+    "headerHeight": 77,
+    "inkBlend": "multiply",
+    "logo": {
+      "height": 54,
+      "width": 190,
+      "x": 587.3333740234375,
+      "y": 147.83334350585938
+    },
+    "width": 1440
+  }
+]

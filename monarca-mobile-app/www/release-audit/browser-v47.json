@@ -1,0 +1,37 @@
+{
+  "version": "4.7.0",
+  "result": "PASS",
+  "environment": "Codex in-app Chromium on Windows, 390x844 interactive flows; embedded actual AR/EN 320/390/430/1440px viewports",
+  "viewports": 38,
+  "issues": 0,
+  "walkthroughs": [
+    {
+      "flow": "Arabic home > China sourcing section > heel USD190 > size38 > Buy now > one-page Visa > confirmed",
+      "order": "M-DEMO-034107576-1ho",
+      "currency": "USD",
+      "total": 190,
+      "demoPaid": 190,
+      "delivery": "15–20 days, numeric range isolated LTR inside Arabic UI",
+      "cod": "disabled",
+      "originalIraqBag": "retained two items"
+    },
+    {
+      "flow": "Retained Iraq bag > checkout > COD > confirmed",
+      "order": "M-DEMO-034422865-9k0",
+      "currency": "USD",
+      "subtotal": 490,
+      "coupon": "M10",
+      "discount": 49,
+      "total": 441,
+      "paid": 0,
+      "dueOnDelivery": 441,
+      "delivery": "about2 days",
+      "bag": "cleared"
+    }
+  ],
+  "fixed_from_inspection": [
+    "Source empty-result recovery retains China context",
+    "Known Arabic delivery range is isolated as LTR 15–20; user data and inputs preserved"
+  ],
+  "limits": "Actual browser flows are the two listed paths. Mixed orders, refunds, source snapshot immutability and legacy namespace protection are VM evidence, not additional real-device walkthroughs. No actual payment, cash collection, SMS, carrier or external messaging. iOS/Android hardware, camera permissions, keyboard and screen-reader validation remain outside this run."
+}

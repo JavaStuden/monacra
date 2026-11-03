@@ -1,0 +1,280 @@
+/* Monarca v4.7.4 · Modern Luxury Arabic Typography (Self-Hosted Cairo + Noto Sans Arabic) */
+
+/* 1. Self-hosted Cairo Font Faces (Arabic & Latin subsets) */
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/cairo-v31-arabic-400.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/cairo-v31-latin-400.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/cairo-v31-arabic-600.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/cairo-v31-latin-600.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/cairo-v31-arabic-700.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/cairo-v31-latin-700.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/cairo-v31-arabic-800.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/cairo-v31-latin-800.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+
+/* 2. Self-hosted Noto Sans Arabic (Secondary Fallback) */
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('assets/fonts/noto-sans-arabic-arabic-v33.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+FB50-FDFF, U+FE70-FEFC;
+}
+
+/* 3. Global Typography Definitions */
+:root {
+  --font-ar: "Cairo", "Noto Sans Arabic", Tahoma, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --font-en: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font: var(--font-ar);
+  --font-serif: Georgia, "Times New Roman", serif;
+}
+
+html[lang="ar"], html[dir="rtl"] {
+  --font: var(--font-ar);
+  font-family: var(--font-ar);
+}
+html[lang="en"], html[dir="ltr"] {
+  --font: var(--font-en);
+  font-family: var(--font-en);
+}
+
+html, body {
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Crucial Arabic Rule: Arabic letters MUST NOT have letter-spacing */
+html[lang="ar"], html[dir="rtl"],
+html[lang="ar"] *, html[dir="rtl"] * {
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+}
+
+.phone, #app {
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+/* 4. Luxury Headings Hierarchy */
+h1, h2, h3, h4, h5, h6,
+.section-head h2, .page-top h1, .product-detail h1 {
+  font-family: var(--font) !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  color: #2b1e15 !important;
+}
+
+.cat-section-tile b {
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  letter-spacing: normal !important;
+}
+
+/* Arabic Page Top Titles */
+.page-top h1 {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: normal !important;
+}
+
+/* Section Headings */
+.section-head h2 {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #302218 !important;
+}
+
+/* Round Category Labels */
+.round-categories b {
+  font-family: var(--font) !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  color: #38291e !important;
+  margin-top: 8px !important;
+  display: block !important;
+  transition: color 0.2s ease !important;
+}
+.round-categories button:hover b {
+  color: var(--accent) !important;
+}
+.round-categories .product-photo {
+  border: 1.5px solid #dfd4c7 !important;
+  box-shadow: 0 4px 14px rgba(71, 53, 43, 0.08) !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease !important;
+}
+.round-categories button:hover .product-photo {
+  transform: translateY(-3px) scale(1.03) !important;
+  box-shadow: 0 8px 24px rgba(71, 53, 43, 0.16) !important;
+  border-color: var(--accent) !important;
+}
+
+/* Sourcing Shop Cards Polish */
+.src47-shop {
+  padding: 20px 18px !important;
+  border: 1px solid #ddd2c4 !important;
+  border-radius: 14px !important;
+  background: #faf6f0 !important;
+  box-shadow: 0 4px 16px rgba(71, 53, 43, 0.04) !important;
+  transition: all 0.25s ease !important;
+}
+.src47-shop:hover {
+  border-color: var(--accent) !important;
+  box-shadow: 0 8px 25px rgba(71, 53, 43, 0.1) !important;
+  transform: translateY(-2px) !important;
+}
+.src47-shop > b {
+  font-family: var(--font) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #2b1d14 !important;
+}
+.src47-shop-time {
+  font-family: var(--font) !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: var(--accent) !important;
+}
+.src47-shop small {
+  font-family: var(--font) !important;
+  font-size: 12.5px !important;
+  line-height: 1.6 !important;
+  color: #6d5d4f !important;
+}
+
+/* Buttons & Interactive Elements */
+button, .primary, .secondary, .text-btn {
+  font-family: var(--font) !important;
+  font-weight: 600 !important;
+}
+.primary {
+  font-weight: 700 !important;
+}
+
+/* Inputs, Selects, Labels */
+.field > span {
+  font-family: var(--font) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #3d2f24 !important;
+}
+.field input, .field select, .field textarea {
+  font-family: var(--font) !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+}
+
+/* Modern Luxury Floating Toast Notification (Non-intrusive) */
+#toast {
+  position: fixed !important;
+  top: 24px !important;
+  bottom: auto !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translate(-50%, -20px) !important;
+  background: rgba(43, 31, 23, 0.94) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: #fffdfa !important;
+  padding: 10px 24px !important;
+  border-radius: 30px !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.22) !important;
+  font-family: var(--font) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  z-index: 99999 !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  white-space: nowrap !important;
+}
+#toast.visible {
+  opacity: 1 !important;
+  transform: translate(-50%, 0) !important;
+}
+
+/* Bottom Nav Arabic Polish */
+.phone .bottom-nav button {
+  font-family: var(--font) !important;
+  font-size: 11.5px !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+  color: #7d6e61 !important;
+  transition: all 0.2s ease !important;
+}
+.phone .bottom-nav button.active {
+  color: #3b281d !important;
+  font-weight: 700 !important;
+}
+.phone .bottom-nav button.active::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 2.5px;
+  background: var(--accent);
+  border-radius: 2px;
+}

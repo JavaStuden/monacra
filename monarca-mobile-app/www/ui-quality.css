@@ -1,0 +1,198 @@
+/* UI quality fixes: business screens only. The approved home, logo and banner
+   are intentionally outside every selector in this file. */
+
+/* Reading hierarchy and contrast on the cream business-screen surfaces. */
+:is(.ck-content,.ac-page,.od-page,.ac-profile-hero,.ac-ticket-header,.ac-conversation,.ac-about-cover,.ac-chat-compose){--muted:#665d54;--accent:#805447}
+:is(.ck-content,.ac-page,.od-page) :is(p,.page-intro,.field,.field>span,.checkbox-row,.info-box,.field-note){font-size:12px;line-height:1.9}
+:is(.ck-content,.ac-page,.od-page) :is(small,.overline,.app-footer){font-size:11px;line-height:1.75}
+:is(.ck-content,.ac-page,.od-page) :is(input,select,textarea){min-width:0;font-size:14px;line-height:1.5}
+:is(.ck-content,.ac-page,.od-page) .field :is(input,select,textarea){font-size:14px}
+:is(.ck-content,.ac-page,.od-page) :is(.primary,.secondary,.text-btn,.danger-btn){font-size:12px;line-height:1.6}
+:is(.ck-content,.ac-page,.od-page) button{min-height:44px}
+:is(.ck-content,.ac-page,.od-page) .icon-btn{min-width:44px;min-height:44px}
+:is(.ck-content,.ac-page,.od-page) :is(.field-row,.ac-form-grid){grid-template-columns:repeat(2,minmax(0,1fr))}
+:is(.ck-content,.ac-page,.od-page) :is(.field,.inline-row>*,.info-box>div){min-width:0}
+:is(.ck-content,.ac-page,.od-page) :is(.text-btn,.primary,.secondary,.danger-btn){overflow-wrap:anywhere}
+:is(.ck-content,.ac-page,.od-page) :is(.checkbox-row,.field-note,.info-box){color:#665d54}
+:is(.ck-content,.ac-page,.od-page) .checkbox-row{min-height:44px;align-items:flex-start}
+:is(.ck-content,.ac-page,.od-page) .checkbox-row input{width:18px;height:18px;flex-shrink:0;margin-top:3px}
+
+/* Basket, addresses and checkout. */
+.ck-basket-intro,.ck-select-all,.ck-cart-info p,.ck-item-name,.ck-edit-variant,.ck-cart-info strong,.ck-row-link,.ck-address-card p,.ck-checkout-address p,.ck-mini-line p,.ck-mini-line b,.ck-summary>div,.ck-coupon p,.ck-error-reason p{font-size:12px;line-height:1.8}
+.ck-basket-intro span,.ck-cart-info small,.ck-row-link b,.ck-tag,.ck-summary em,.ck-assurances span,.ck-stepper,.ck-checkout-address .ck-tag,.ck-secure-heading small,.ck-demo-alert,.ck-test-data,.ck-test-data small,.ck-auth-summary,.ck-success-facts>span,.ck-payment-result .ck-transaction,.ck-transaction span{font-size:11px;line-height:1.8}
+.ck-basket-intro span,.ck-select-all span,.ck-cart-info p,.ck-address-card p,.ck-checkout-address p,.ck-mini-line p,.ck-coupon p,.ck-error-reason p,.ck-assurances,.ck-test-data small,.ck-secure-heading small,.ck-success-facts>span{color:#665d54}
+.ck-tag,.ck-summary em,.ck-demo-alert,.ck-stepper{color:#715744}
+.ck-stepper{gap:7px;line-height:1.7}
+.ck-stepper span{padding-bottom:11px}
+.ck-select-all label{min-height:44px;padding-block:8px}
+.ck-checkbox{min-width:44px;min-height:44px;align-items:flex-start;justify-content:center;padding-top:12px}
+.ck-cart-top{gap:10px}
+.ck-cart-info{overflow-wrap:anywhere}
+.ck-edit-variant{min-height:44px;padding-block:9px}
+.ck-cart-bottom{flex-wrap:wrap;gap:8px 12px}
+.ck-cart-bottom>div:last-child{flex-wrap:wrap;gap:4px 10px;justify-content:flex-end;margin-inline-start:auto}
+.ck-cart-bottom .text-btn{font-size:12px;padding:9px 7px;min-width:44px}
+.ck-cart-bottom .icon-btn{width:44px;height:44px;min-width:44px}
+.ck-cart-bottom .icon-btn svg{width:18px;height:18px}
+.ck-content .quantity{height:46px;width:max-content;flex-shrink:0}
+.ck-content .quantity button{width:44px;height:44px;min-width:44px;min-height:44px}
+.ck-content .quantity span{width:30px;font-size:12px}
+.ck-row-link b{flex-shrink:0}
+.ck-row-link{flex-wrap:wrap}
+.ck-address-card h3,.ck-checkout-address b,.ck-mini-line h3{font-size:14px;line-height:1.75}
+.ck-address-actions{flex-wrap:wrap;gap:4px 20px}
+.ck-address-actions .text-btn{font-size:12px;min-height:44px}
+.ck-checkout-address>div{min-width:0;overflow-wrap:anywhere}
+.ck-saved-item>div:last-child,.ck-mini-line>div:last-child{min-width:0;overflow-wrap:anywhere}
+.ck-saved-item h3,.ck-saved-item b{font-size:13px;line-height:1.7}
+.ck-saved-item p{font-size:12px}
+.ck-saved-item .text-btn{font-size:12px}
+.ck-summary b{font-variant-numeric:tabular-nums}
+.ck-summary .ck-grand{font-size:17px}
+.ck-assurances{gap:12px;flex-wrap:wrap}
+.ck-block-title h2{font-size:15px}
+.ck-block-title .text-btn{font-size:12px;padding-block:8px}
+.ck-payment-networks .payment-option{min-width:0;padding:14px 10px}
+.ck-payment-networks .payment-option>span:not(.visa-mark):not(.mastercard-mark){font-size:12px;overflow-wrap:anywhere}
+.ck-content .payment-option small{font-size:11px;color:#665d54;line-height:1.8}
+.ck-content .payment-option>span{min-width:0}
+.ck-bank>span:not(.visa-mark):not(.mastercard-mark){font-size:10px;color:#665d54;letter-spacing:.8px}
+.ck-auth-summary>b{min-width:0;overflow-wrap:anywhere}
+.ck-payment-result>p,.ck-error-reason{font-size:12px;line-height:1.9}
+.ck-content .ck-form-error{font-size:12px}
+
+/* Account, coupons, notifications and customer care. */
+.ac-profile-hero>div>small,.ac-overline,.ac-about-cover>small{font-size:10px;color:#715744;letter-spacing:1.4px;line-height:1.8}
+.ac-profile-hero p,.ac-profile-heading p,.ac-lead,.ac-menu small,.ac-heading>div>p,.ac-caption,.ac-note p,.ac-demo-panel p,.ac-coupon p,.ac-coupon-body>small,.ac-numbered,.ac-mini-empty p,.ac-notification p,.ac-care-card p,.ac-ticket-preview small,.ac-ticket-preview p,.ac-faq p,.ac-ticket-row p,.ac-ticket-header>p,.ac-toggle-row small,.ac-setting-info p,.ac-about-cover p,.ac-brand-values p{font-size:12px;line-height:1.9;color:#665d54}
+.ac-menu b,.ac-heading h2,.ac-coupon h3,.ac-notification b,.ac-care-grid b,.ac-faq-link,.ac-ticket-preview b,.ac-ticket-row h3,.ac-message p,.ac-toggle-row b,.ac-brand-values h3{font-size:14px;line-height:1.8}
+.ac-menu-icon{width:38px;height:38px}
+.ac-heading>*,.ac-menu>span:nth-child(2),.ac-toggle-row>span{min-width:0;overflow-wrap:anywhere}
+.ac-heading .text-btn{font-size:12px;white-space:normal;text-align:start;flex-shrink:0}
+.ac-profile-hero .ac-hero-action{min-width:44px;min-height:44px;display:grid;place-items:center;font-size:12px}
+.ac-order-shortcuts{gap:8px;margin-inline:0}
+.ac-order-shortcuts button{min-height:68px;min-width:0;justify-content:center;gap:10px}
+.ac-order-shortcuts b{font-size:11px;line-height:1.6;text-align:center}
+.ac-order-shortcuts em{font-size:10px;min-width:18px;height:18px;left:-12px}
+.ac-stat span{font-size:11px;color:#665d54;line-height:1.7}
+.ac-account-stats{gap:2px}
+.ac-note p{color:#665d54}
+.ac-page .field small{font-size:11px;line-height:1.8;color:#665d54}
+.ac-demo-panel{font-size:12px;line-height:1.9}
+.ac-demo-panel b{font-size:13px}
+.ac-phone-field>span{font-size:14px}
+.ac-resend-line{font-size:12px;flex-wrap:wrap}
+.ac-resend-line button{min-height:44px;font-size:12px}
+.ac-tab{font-size:12px;min-height:44px;color:#715c49}
+.ac-search-form input,.ac-search-form>button{font-size:13px;min-height:46px}
+.ac-chip{font-size:11px;line-height:1.7;white-space:normal;color:#71513a}
+.ac-chip.success{color:#476044}
+.ac-coupon-value{width:88px;color:#795634;gap:10px}
+.ac-coupon-value small{font-size:10px;color:#71513a;letter-spacing:.5px;line-height:1.7;padding:0 7px}
+.ac-coupon-body{padding:16px 13px}
+.ac-coupon .primary,.ac-coupon .secondary,.ac-coupon .text-btn{font-size:12px;min-height:44px}
+.ac-coupon.inactive .ac-coupon-value{color:#71675b}
+.ac-notification-meta,.ac-notification small,.ac-ticket-row>small,.ac-ticket-header .ac-heading,.ac-ticket-header .text-btn,.ac-login-record small,.ac-login-record em,.ac-bank-card small,.ac-network-row>span:last-child,.ac-setting-info small{font-size:11px;line-height:1.8;color:#715c49}
+.ac-ticket-preview>span{min-width:0;overflow-wrap:anywhere}
+.ac-mini-empty .secondary,.ac-mini-empty .text-btn,.ac-care-card .primary,.ac-care-card .text-btn,.ac-ticket-tools .secondary,.ac-ticket-tools .text-btn{font-size:12px}
+.ac-care-grid button{min-width:0;padding-block:18px}
+.ac-care-card>small{font-size:10px;color:#71513a;line-height:1.7}
+.ac-faq summary{font-size:14px;line-height:1.8;min-height:48px}
+.ac-demo-inline{font-size:11px;color:#71513a;line-height:1.8;padding-block:12px}
+.ac-conversation .ac-message small{font-size:11px;color:#715c49;line-height:1.7}
+.ac-conversation .ac-message.mine small{color:#e2cfbd}
+.ac-message p{font-size:13px;line-height:1.9}
+.ac-chat-compose textarea{font-size:14px;line-height:1.75}
+.ac-chat-compose button{min-width:44px;min-height:44px}
+.ac-setting-info>div,.ac-login-record>span{min-width:0;overflow-wrap:anywhere}
+.ac-login-record b,.ac-bank-card b{font-size:12px;line-height:1.7}
+.ac-card-actions{flex-wrap:wrap;gap:3px 8px;justify-content:flex-end}
+.ac-card-actions .text-btn{font-size:12px;min-height:44px}
+.ac-card-actions .icon-btn{width:44px;height:44px;min-width:44px}
+.ac-card-actions .icon-btn svg{width:18px;height:18px}
+.ac-bank-card .ac-heading{flex-wrap:wrap}
+.ac-policy-index button{min-height:48px;font-size:12px;line-height:1.75;min-width:0}
+.ac-policy-block p,.ac-policy-footer p{font-size:12px;line-height:2;color:#665d54}
+.ac-policy-block>small,.ac-about-meta{font-size:11px;line-height:1.8;color:#715c49;letter-spacing:.6px}
+.ac-about-meta{flex-wrap:wrap;gap:8px}
+
+/* Orders and aftercare: allow long names, identifiers and amounts to wrap. */
+.od-list-intro p,.od-detail-head>p,.od-product-info,.od-product-info>p,.od-note,.od-note-body,.od-address,.od-address>span,.od-tracking-hero p,.od-timeline p,.od-demo-panel>p,.od-delivery-log small,.rt-select-line b,.rt-amount>span,.rt-amount>p,.od-return-items,.od-refund-hero>p,.od-sheet-intro>p,.od-reorder-report p{font-size:12px;line-height:1.9}
+.od-filter,.od-list-count,.od-list-count .text-btn,.od-order-heading small,.od-order-products small,.od-service-strip,.od-tag,.od-product-info>small,.od-product-info .od-after-count,.od-fact,.od-fact>strong,.od-error-text,.od-request-card b,.od-request-card b>.ltr,.od-request-card small,.od-refund-card small,.od-return-card>small,.od-tracking-hero .overline,.od-tracking-hero>.ltr,.od-timeline small,.rt-select-line small,.rt-item-fields .field>span,.rt-line-value,.rt-attachments>.inline-row small,.rt-attachments>p,.rt-upload,.od-return-card>p{font-size:11px;line-height:1.8}
+.od-order-heading b,.od-order-products>span:nth-child(2),.od-order-products>strong,.od-product-name,.od-product-info>strong,.od-refund-card>strong,.od-section-title h2,.od-timeline h3,.od-demo-panel>b,.od-delivery-log b,.od-return-card>.inline-row:first-child>b,.od-return-card>.inline-row:last-child,.od-sheet-intro>b,.od-reorder-report b{font-size:13px;line-height:1.8}
+.od-list-count,.od-order-heading small,.od-order-products small,.od-product-info>p,.od-fact>span,.od-address>p,.od-address>span,.od-request-card small,.od-refund-card small,.od-tracking-hero p,.od-timeline p,.od-timeline small,.od-demo-panel>p,.od-delivery-log small,.rt-select-line small,.rt-line-value,.rt-attachments>.inline-row small,.rt-attachments>p,.rt-amount>span,.rt-amount>p,.od-return-card>small,.od-return-items,.od-refund-hero>p{color:#665d54}
+.od-timeline>li.future h3,.od-timeline>li.future p{color:#71675d}
+.od-tag{max-width:54%;overflow-wrap:anywhere;color:#71513a}
+.od-tag-paid,.od-tag-delivered,.od-tag-refunded,.od-tag-completed{color:#3f5c43}
+.od-tag-cancelled,.od-tag-rejected{color:#873b30}
+.od-tag-payment_pending{color:#73502d}
+.od-filter{min-height:44px}
+.od-list-count{flex-wrap:wrap;gap:6px 12px}
+.od-order-products{gap:12px}
+.od-order-products>span:nth-child(2){overflow-wrap:anywhere}
+.od-order-products>strong{font-variant-numeric:tabular-nums}
+.od-actions-compact{flex-wrap:wrap;gap:8px}
+.od-actions-compact .primary,.od-actions-compact .secondary{min-height:44px;font-size:12px;padding:10px}
+.od-actions-compact .text-btn{font-size:12px;min-height:44px}
+.od-bottom-links .secondary{font-size:12px;min-height:48px;line-height:1.75}
+.od-product-name{min-height:44px;text-align:start}
+.od-product-info .text-btn{font-size:12px;min-height:44px}
+.od-fact{gap:12px;line-height:1.9}
+.od-fact>span{flex:1;min-width:0}
+.od-fact>strong{min-width:0;max-width:60%}
+.od-card-network{min-width:0;flex-wrap:wrap;gap:10px}
+.od-card-network b{font-size:12px;overflow-wrap:anywhere}
+.od-request-card,.od-refund-card{flex-wrap:wrap;gap:8px}
+.od-request-card>span:nth-child(2),.od-refund-card>span:nth-child(2){min-width:90px}
+.od-refund-card>strong{max-width:38%;overflow-wrap:anywhere}
+.od-timeline h3{line-height:1.8}
+.od-timeline>li{min-height:90px}
+.od-timeline>li>div{padding-top:0}
+.od-time-dot{margin-top:2px}
+.rt-kind-toggle label{min-height:55px;font-size:12px;line-height:1.7;min-width:0;gap:7px}
+.rt-select-line{min-height:44px}
+.rt-select-line>input{width:18px;height:18px}
+.rt-item-fields .field{min-width:0}
+.rt-item-fields select{min-height:44px;font-size:13px}
+.rt-line-value b{font-size:12px}
+.rt-attachment-grid>div>button{width:44px;height:44px;min-width:44px;min-height:44px;left:0;top:0}
+.rt-attachment-grid>div>button svg{width:18px;height:18px}
+.od-invoice-stamp,.od-invoice>header>small,.od-invoice-table,.od-invoice-table th,.od-invoice-table td,.od-invoice-table td small{font-size:11px;line-height:1.8}
+.od-invoice-table{table-layout:fixed}
+.od-invoice-table th:first-child{width:47%}
+.od-invoice-table th:nth-child(2){width:15%}
+.od-invoice-table td{overflow-wrap:anywhere}
+.od-invoice-table th:last-child,.od-invoice-table td:last-child{white-space:normal}
+.od-invoice-table td small{color:#665d54}
+.od-invoice>header>small,.od-invoice-stamp{color:#71513a}
+
+/* Dialogs belonging to these modules have the same readable controls. */
+:is(#ck-variant-form,#ac-card-add-form,#od-cancel-form,#rt-cancel-form,#trk-reschedule-form){--muted:#665d54;--accent:#805447}
+:is(#ck-variant-form,#ac-card-add-form,#od-cancel-form,#rt-cancel-form,#trk-reschedule-form) :is(button,input,select,textarea){min-height:44px;font-size:14px}
+:is(#ck-variant-form,#ac-card-add-form,#od-cancel-form,#rt-cancel-form,#trk-reschedule-form) :is(.field,.field>span,p,.checkbox-row){font-size:12px;line-height:1.9}
+:is(#ck-variant-form,#ac-card-add-form) .mini-product>div:last-child{font-size:13px;min-width:0;overflow-wrap:anywhere}
+:is(#ck-variant-form,#ac-card-add-form) .mini-product small{font-size:12px}
+
+@media(max-width:380px){
+  .ck-cart-bottom{display:grid;grid-template-columns:minmax(0,1fr)}
+  .ck-cart-bottom>div:last-child{justify-content:space-between;margin-inline-start:0;width:100%;gap:4px}
+  .ck-payment-networks{grid-template-columns:minmax(0,1fr)}
+  .ck-content .field-row,.ac-page .ac-form-grid{grid-template-columns:minmax(0,1fr)}
+  .ck-summary{padding-inline:14px}
+  .ck-assurances{justify-content:flex-start;gap:10px}
+  .ac-coupon-value{width:70px}
+  .ac-coupon-body{padding:14px 11px}
+  .ac-order-shortcuts{gap:4px}
+  .ac-order-shortcuts b{font-size:11px}
+  .ac-care-grid b{font-size:13px}
+  .ac-card-actions{width:100%;justify-content:space-between}
+  .ac-policy-index{grid-template-columns:minmax(0,1fr)}
+  .od-order-products{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+  .od-order-products>.od-thumbnails{grid-column:1;grid-row:1 / span 2;align-self:center;max-width:101px}
+  .od-order-products>span:nth-child(2){grid-column:2;font-size:12px}
+  .od-order-products>strong{grid-column:2;font-size:13px;white-space:normal}
+  .od-bottom-links{grid-template-columns:minmax(0,1fr)}
+  .rt-kind-toggle{grid-template-columns:minmax(0,1fr);gap:8px}
+  .rt-kind-toggle label{font-size:12px;min-height:48px}
+  .od-invoice{padding-inline:10px}
+  .od-invoice-table th,.od-invoice-table td{padding-inline:4px}
+}

@@ -1,0 +1,1891 @@
+/* Monarca v4.7.5 · True Native Desktop Boutique, Touch Tablet & Pure Mobile Responsive Architecture */
+
+/* Real Native App Rules (When running inside installed APK on phone/tablet or IPA on iPhone/iPad) */
+body.is-native-app .device-simulator-bar,
+body.is-native-app #device-sim-bar {
+  display: none !important;
+}
+
+body.is-native-app,
+body.is-native-app .stage,
+body.is-native-app .stage.mode-tablet,
+body.is-native-app .stage.mode-mobile,
+body.is-native-app .phone {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: #ffffff !important;
+}
+
+body.is-native-app .statusbar,
+body.is-native-app .home-indicator,
+body.is-native-app .island {
+  display: none !important;
+}
+
+/* Android's native parent container applies the top system inset. iOS keeps
+   its WebView content edge-to-edge and uses env(safe-area-inset-top). */
+body.is-native-android {
+  --app-safe-top: 0px;
+}
+
+body.is-native-ios {
+  --app-safe-top: max(36px, env(safe-area-inset-top, 36px));
+}
+
+/* ==========================================================================
+   1. Floating Device Simulator & Viewport Switcher
+   ========================================================================== */
+.device-simulator-bar {
+  position: fixed !important;
+  bottom: 22px !important;
+  right: 22px !important;
+  top: auto !important;
+  left: auto !important;
+  width: auto !important;
+  background: rgba(36, 26, 19, 0.92) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  color: #ede5da !important;
+  padding: 5px 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  border-radius: 36px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+  z-index: 99999 !important;
+  direction: ltr !important;
+  user-select: none !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.device-simulator-bar:hover {
+  background: rgba(28, 19, 13, 0.98) !important;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.36), 0 0 0 1px rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-2px) !important;
+}
+
+.sim-brand {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 0 6px 0 4px !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+.sim-brand-logo {
+  width: 20px !important;
+  height: 20px !important;
+  background: var(--accent) !important;
+  color: white !important;
+  border-radius: 4px !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+}
+.sim-brand small {
+  display: none !important;
+}
+
+.sim-controls {
+  display: inline-flex !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  padding: 3px !important;
+  border-radius: 20px !important;
+  gap: 3px !important;
+}
+.sim-btn {
+  border: none !important;
+  background: none !important;
+  color: #c9bcaf !important;
+  padding: 5px 12px !important;
+  border-radius: 16px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  transition: all 0.2s ease !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+}
+.sim-btn:hover {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+.sim-btn.active {
+  background: var(--accent) !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+  font-weight: 700 !important;
+}
+
+.sim-actions {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin-left: 4px !important;
+}
+.lang-switcher-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 20px !important;
+  padding: 2px 4px !important;
+  cursor: pointer !important;
+}
+.lang-opt {
+  padding: 3px 8px !important;
+  border-radius: 14px !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  color: #d1c4b5 !important;
+  transition: all 0.2s !important;
+  border: none !important;
+  background: none !important;
+  cursor: pointer !important;
+}
+.lang-opt.active {
+  background: #ffffff !important;
+  color: #2b231d !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2) !important;
+}
+
+/* Header in-store language switcher (Clean pill in Desktop Header) */
+.header-lang-switch {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: var(--soft) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 20px !important;
+  padding: 3px 4px !important;
+  margin: 0 6px !important;
+  cursor: pointer !important;
+  height: 34px !important;
+  flex-shrink: 0 !important;
+}
+.header-lang-switch .lang-opt {
+  padding: 4px 10px !important;
+  font-size: 12px !important;
+  color: var(--muted) !important;
+  border-radius: 14px !important;
+}
+.header-lang-switch .lang-opt.active {
+  background: var(--brown) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Compact Mobile Language Switch Badge (Ultra Sleek, 38px) */
+.header-lang-compact {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 40px !important;
+  height: 30px !important;
+  padding: 0 10px !important;
+  border-radius: 15px !important;
+  background: rgba(79, 57, 48, 0.08) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--brown) !important;
+  font-family: var(--font) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: normal !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+  margin: 0 4px !important;
+}
+.header-lang-compact:hover {
+  background: var(--brown) !important;
+  color: #fff !important;
+}
+.header-lang-compact:active {
+  transform: scale(0.95) !important;
+}
+
+/* Hide / Show Language Controls based on device mode */
+.desktop-only-lang {
+  display: none !important;
+}
+
+/* ==========================================================================
+   2. DESKTOP MODE (>= 1024px & .mode-desktop)
+   100% PURE NATIVE LUXURY WEBSITE ARCHITECTURE
+   ========================================================================== */
+@media (min-width: 1024px) {
+  body {
+    background: #ffffff !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+  }
+
+  .stage.mode-desktop,
+  .stage:not(.mode-tablet):not(.mode-mobile) {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 100vh !important;
+    display: block !important;
+  }
+
+  /* Full-width phone shell erasure (becomes 100% normal website container) */
+  .stage.mode-desktop .phone,
+  .stage:not(.mode-tablet):not(.mode-mobile) .phone {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    background: transparent !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .stage.mode-desktop .statusbar,
+  .stage:not(.mode-tablet):not(.mode-mobile) .statusbar,
+  .stage.mode-desktop .home-indicator,
+  .stage:not(.mode-tablet):not(.mode-mobile) .home-indicator {
+    display: none !important;
+  }
+
+  .stage.mode-desktop .app-scroll,
+  .stage:not(.mode-tablet):not(.mode-mobile) .app-scroll {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    display: block !important;
+  }
+
+  /* Full-width Announcement Bar */
+  .stage.mode-desktop .monarca-announcement,
+  .stage:not(.mode-tablet):not(.mode-mobile) .monarca-announcement {
+    width: 100% !important;
+    background: #35261d !important;
+    color: #fffaf4 !important;
+    font-size: 13px !important;
+    padding: 11px 24px !important;
+    text-align: center !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    border: none !important;
+  }
+
+  /* Full-width Sticky Luxury Header */
+  .stage.mode-desktop .monarca-header,
+  .stage:not(.mode-tablet):not(.mode-mobile) .monarca-header {
+    width: 100% !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border-bottom: 1px solid #ebe4dc !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 900 !important;
+    padding: 0 !important;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.03) !important;
+  }
+
+  .stage.mode-desktop .brand-row,
+  .stage:not(.mode-tablet):not(.mode-mobile) .brand-row {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    height: 78px !important;
+    padding: 0 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Hide mobile hamburger menu on desktop */
+  .stage.mode-desktop .brand-row > button[data-go="menu"],
+  .stage:not(.mode-tablet):not(.mode-mobile) .brand-row > button[data-go="menu"] {
+    display: none !important;
+  }
+
+  /* Desktop Navigation Links */
+  .stage.mode-desktop .desktop-nav-links,
+  .stage:not(.mode-tablet):not(.mode-mobile) .desktop-nav-links {
+    display: flex !important;
+    align-items: center !important;
+    gap: 28px !important;
+  }
+  .desktop-nav-link {
+    font-family: var(--font) !important;
+    font-size: 14.5px !important;
+    font-weight: 600 !important;
+    color: var(--ink) !important;
+    text-decoration: none !important;
+    padding: 8px 4px !important;
+    position: relative !important;
+    transition: color 0.2s ease !important;
+  }
+  .desktop-nav-link:hover {
+    color: var(--accent) !important;
+  }
+  .desktop-nav-link.active {
+    color: var(--brown) !important;
+    font-weight: 700 !important;
+  }
+  .desktop-nav-link.active::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: -2px !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 2.5px !important;
+    background: var(--accent) !important;
+    border-radius: 2px !important;
+  }
+
+  .header-lang-compact {
+    display: none !important;
+  }
+  .desktop-only-lang {
+    display: inline-flex !important;
+  }
+
+  /* Desktop Hero Banner (Wide luxury container) */
+  .stage.mode-desktop .monarca-hero,
+  .stage:not(.mode-tablet):not(.mode-mobile) .monarca-hero {
+    max-width: 1400px !important;
+    height: 440px !important;
+    aspect-ratio: auto !important;
+    margin: 24px auto 36px !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 30px rgba(50, 35, 25, 0.08) !important;
+  }
+
+  /* Desktop Sourcing Section */
+  .stage.mode-desktop .src47-shops,
+  .stage:not(.mode-tablet):not(.mode-mobile) .src47-shops {
+    max-width: 1400px !important;
+    margin: 40px auto 44px !important;
+    padding: 0 36px !important;
+    box-sizing: border-box !important;
+  }
+  .stage.mode-desktop .src47-shop-grid,
+  .stage:not(.mode-tablet):not(.mode-mobile) .src47-shop-grid {
+    gap: 24px !important;
+  }
+  .stage.mode-desktop .src47-shop,
+  .stage:not(.mode-tablet):not(.mode-mobile) .src47-shop {
+    padding: 24px 28px !important;
+    border-radius: 16px !important;
+  }
+
+  /* Desktop Round Categories */
+  .stage.mode-desktop .round-categories,
+  .stage:not(.mode-tablet):not(.mode-mobile) .round-categories {
+    max-width: 1100px !important;
+    margin: 0 auto 40px !important;
+    padding: 0 36px !important;
+    gap: 36px !important;
+    box-sizing: border-box !important;
+  }
+  .stage.mode-desktop .round-categories b,
+  .stage:not(.mode-tablet):not(.mode-mobile) .round-categories b {
+    font-size: 14.5px !important;
+    margin-top: 10px !important;
+  }
+
+  /* Desktop Section Headings */
+  .stage.mode-desktop .section-head,
+  .stage:not(.mode-tablet):not(.mode-mobile) .section-head,
+  .stage.mode-desktop .home-products .section-head,
+  .stage:not(.mode-tablet):not(.mode-mobile) .home-products .section-head {
+    max-width: 1400px !important;
+    margin: 0 auto 24px !important;
+    padding: 0 36px !important;
+    box-sizing: border-box !important;
+  }
+  .stage.mode-desktop .section-head h2,
+  .stage:not(.mode-tablet):not(.mode-mobile) .section-head h2 {
+    font-size: 26px !important;
+  }
+
+  /* Desktop 4-Column Product Grids */
+  .stage.mode-desktop .product-grid,
+  .stage:not(.mode-tablet):not(.mode-mobile) .product-grid,
+  .stage.mode-desktop .home-products .product-grid,
+  .stage:not(.mode-tablet):not(.mode-mobile) .home-products .product-grid {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 36px 48px !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 36px 24px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Desktop Page Content Container */
+  .stage.mode-desktop .page-content,
+  .stage:not(.mode-tablet):not(.mode-mobile) .page-content {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 36px 36px 64px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Subpage Top Navigation Bar on Desktop */
+  .stage.mode-desktop .page-top,
+  .stage:not(.mode-tablet):not(.mode-mobile) .page-top {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 16px 36px !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid #ebe4dc !important;
+    box-sizing: border-box !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 800 !important;
+  }
+  .stage.mode-desktop .page-top-main,
+  .stage:not(.mode-tablet):not(.mode-mobile) .page-top-main {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+  }
+  .stage.mode-desktop .page-top h1,
+  .stage:not(.mode-tablet):not(.mode-mobile) .page-top h1 {
+    font-size: 20px !important;
+    margin: 0 !important;
+    text-align: inherit !important;
+    font-weight: 700 !important;
+    color: #352a22 !important;
+  }
+
+  /* Desktop Product Detail 2-Column Grid */
+  .stage.mode-desktop .product-view-desktop-grid,
+  .stage:not(.mode-tablet):not(.mode-mobile) .product-view-desktop-grid {
+    display: grid !important;
+    grid-template-columns: 520px 1fr !important;
+    gap: 54px !important;
+    max-width: 1360px !important;
+    margin: 28px auto !important;
+    padding: 0 36px !important;
+    align-items: start !important;
+    box-sizing: border-box !important;
+  }
+  .stage.mode-desktop .product-hero-pane,
+  .stage:not(.mode-tablet):not(.mode-mobile) .product-hero-pane {
+    position: sticky !important;
+    top: 100px !important;
+  }
+  .stage.mode-desktop .product-hero,
+  .stage:not(.mode-tablet):not(.mode-mobile) .product-hero {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06) !important;
+  }
+  .stage.mode-desktop .product-desktop-actions,
+  .stage:not(.mode-tablet):not(.mode-mobile) .product-desktop-actions {
+    display: flex !important;
+    gap: 16px !important;
+    margin-top: 32px !important;
+  }
+  .stage.mode-desktop .product-desktop-actions button,
+  .stage:not(.mode-tablet):not(.mode-mobile) .product-desktop-actions button {
+    flex: 1 !important;
+    min-height: 54px !important;
+    font-size: 15.5px !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+  .stage.mode-desktop .mobile-only-actions,
+  .stage:not(.mode-tablet):not(.mode-mobile) .mobile-only-actions {
+    display: none !important;
+  }
+
+  /* Desktop Cart 2-Column Grid */
+  .stage.mode-desktop .cart-view-desktop-grid,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cart-view-desktop-grid {
+    display: grid !important;
+    grid-template-columns: 1.4fr 1fr !important;
+    gap: 44px !important;
+    align-items: start !important;
+  }
+  .stage.mode-desktop .cart-summary-pane,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cart-summary-pane {
+    position: sticky !important;
+    top: 100px !important;
+    background: #ffffff !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    padding: 28px 32px !important;
+    box-shadow: 0 6px 24px rgba(71, 53, 43, 0.05) !important;
+  }
+  .stage.mode-desktop .cart-desktop-checkout-action,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cart-desktop-checkout-action {
+    display: block !important;
+    margin-top: 22px !important;
+  }
+  .stage.mode-desktop .cart-desktop-checkout-action button,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cart-desktop-checkout-action button {
+    width: 100% !important;
+    min-height: 52px !important;
+    font-size: 15.5px !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+  }
+  .stage.mode-desktop .mobile-only-bar,
+  .stage:not(.mode-tablet):not(.mode-mobile) .mobile-only-bar {
+    display: none !important;
+  }
+
+  /* Desktop Checkout 2-Column Grid */
+  .stage.mode-desktop .checkout-desktop-grid,
+  .stage:not(.mode-tablet):not(.mode-mobile) .checkout-desktop-grid {
+    display: grid !important;
+    grid-template-columns: 1.35fr 1fr !important;
+    gap: 44px !important;
+    align-items: start !important;
+  }
+  .stage.mode-desktop .checkout-main-pane,
+  .stage:not(.mode-tablet):not(.mode-mobile) .checkout-main-pane {
+    background: #ffffff !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    padding: 32px 36px !important;
+    box-shadow: 0 4px 20px rgba(71, 53, 43, 0.04) !important;
+  }
+  .stage.mode-desktop .checkout-summary-pane,
+  .stage:not(.mode-tablet):not(.mode-mobile) .checkout-summary-pane {
+    position: sticky !important;
+    top: 100px !important;
+  }
+  .stage.mode-desktop .checkout-summary-card,
+  .stage:not(.mode-tablet):not(.mode-mobile) .checkout-summary-card {
+    background: #ffffff !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    padding: 28px 32px !important;
+    box-shadow: 0 6px 24px rgba(71, 53, 43, 0.05) !important;
+  }
+  .stage.mode-desktop .checkout-desktop-pay-action,
+  .stage:not(.mode-tablet):not(.mode-mobile) .checkout-desktop-pay-action {
+    display: block !important;
+    margin-top: 22px !important;
+  }
+  .stage.mode-desktop .checkout-desktop-pay-action button,
+  .stage:not(.mode-tablet):not(.mode-mobile) .checkout-desktop-pay-action button {
+    width: 100% !important;
+    min-height: 52px !important;
+    font-size: 15.5px !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+  }
+
+  /* Desktop Categories Grid (4 Columns) */
+  .stage.mode-desktop .category-list,
+  .stage:not(.mode-tablet):not(.mode-mobile) .category-list {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 28px !important;
+    margin: 28px 0 40px !important;
+  }
+
+  /* Desktop Account Grid */
+  .stage.mode-desktop .account-hero,
+  .stage:not(.mode-tablet):not(.mode-mobile) .account-hero {
+    max-width: 1100px !important;
+    margin: 24px auto !important;
+    border-radius: 16px !important;
+    padding: 32px 40px !important;
+  }
+  .stage.mode-desktop .account-menu-grid,
+  .stage:not(.mode-tablet):not(.mode-mobile) .account-menu-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 18px !important;
+    max-width: 1100px !important;
+    margin: 0 auto 36px !important;
+  }
+  .stage.mode-desktop .account-menu-grid .menu-item,
+  .stage:not(.mode-tablet):not(.mode-mobile) .account-menu-grid .menu-item {
+    background: #ffffff !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 12px !important;
+    padding: 18px 24px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.2s ease !important;
+  }
+  .stage.mode-desktop .account-menu-grid .menu-item:hover,
+  .stage:not(.mode-tablet):not(.mode-mobile) .account-menu-grid .menu-item:hover {
+    transform: translateY(-2px) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 6px 20px rgba(71, 53, 43, 0.08) !important;
+  }
+
+  /* Desktop Orders Grid */
+  .stage.mode-desktop .orders-grid,
+  .stage:not(.mode-tablet):not(.mode-mobile) .orders-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 22px !important;
+  }
+
+  /* COMPLETELY HIDE MOBILE BOTTOM NAV ON DESKTOP */
+  .stage.mode-desktop .bottom-nav,
+  .stage:not(.mode-tablet):not(.mode-mobile) .bottom-nav {
+    display: none !important;
+  }
+
+  /* ==========================================================================
+     DESKTOP SUBPAGES ARCHITECTURE (Categories, Account, Wishlist, Orders, Bag)
+     ========================================================================== */
+  
+  /* Desktop Categories View (.cat-screen) */
+  .stage.mode-desktop .cat-screen,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-screen {
+    max-width: 1240px !important;
+    margin: 0 auto !important;
+    padding: 28px 32px 100px !important;
+    box-sizing: border-box !important;
+  }
+  .stage.mode-desktop .cat-intro,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-intro {
+    text-align: center !important;
+    padding: 24px 20px 20px !important;
+    max-width: 720px !important;
+    margin: 0 auto !important;
+  }
+  .stage.mode-desktop .cat-intro h2,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-intro h2 {
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    color: #302016 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.35 !important;
+  }
+  .stage.mode-desktop .cat-intro p,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-intro p {
+    font-size: 15px !important;
+    color: #857467 !important;
+    line-height: 1.7 !important;
+  }
+  .stage.mode-desktop .cat-search-row,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-search-row {
+    max-width: 680px !important;
+    margin: 0 auto 36px auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 0 !important;
+  }
+  .stage.mode-desktop .cat-search,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-search {
+    flex: 1 !important;
+    min-height: 50px !important;
+    padding: 10px 22px !important;
+    border-radius: 28px !important;
+    border: 1.5px solid #ded5c8 !important;
+    background: #ffffff !important;
+    box-shadow: 0 4px 18px rgba(50, 35, 25, 0.05) !important;
+    font-size: 14px !important;
+    color: #4b382a !important;
+    margin: 0 !important;
+    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    cursor: pointer !important;
+  }
+  .stage.mode-desktop .cat-search svg,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-search svg {
+    width: 20px !important;
+    height: 20px !important;
+    color: #8c6e57 !important;
+  }
+  .stage.mode-desktop .cat-search-label,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-search-label {
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #8c7b6d !important;
+  }
+  .stage.mode-desktop .cat-camera,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-camera {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    border: 1.5px solid #ded5c8 !important;
+    background: #ffffff !important;
+    box-shadow: 0 4px 18px rgba(50, 35, 25, 0.05) !important;
+    display: grid !important;
+    place-items: center !important;
+    cursor: pointer !important;
+  }
+  .stage.mode-desktop .cat-camera svg,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-camera svg {
+    width: 22px !important;
+    height: 22px !important;
+    color: #8c6e57 !important;
+  }
+  .stage.mode-desktop .cat-section-grid,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-section-grid {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 16px !important;
+    margin-bottom: 40px !important;
+  }
+  .stage.mode-desktop .cat-section-tile,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-section-tile {
+    min-height: 120px !important;
+    padding: 18px 10px !important;
+    border-radius: 16px !important;
+    border: 1.5px solid #e7ded2 !important;
+    background: #fdfbf9 !important;
+    box-shadow: 0 2px 10px rgba(50, 35, 25, 0.03) !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+  }
+  .stage.mode-desktop .cat-section-tile:hover,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-section-tile:hover {
+    transform: translateY(-3px) !important;
+    border-color: #be9d80 !important;
+    box-shadow: 0 8px 24px rgba(50, 35, 25, 0.09) !important;
+    background: #ffffff !important;
+  }
+  .stage.mode-desktop .cat-section-tile.active,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-section-tile.active {
+    background: #f5ede2 !important;
+    border-color: #8c6a50 !important;
+    box-shadow: 0 4px 18px rgba(50, 35, 25, 0.08) !important;
+  }
+  .stage.mode-desktop .cat-section-tile b,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-section-tile b {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    letter-spacing: normal !important;
+    color: #35261d !important;
+  }
+  .stage.mode-desktop .cat-section-tile small,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-section-tile small {
+    font-size: 12px !important;
+    color: #8f7d70 !important;
+  }
+  .stage.mode-desktop .cat-minihead,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-minihead {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 22px !important;
+    padding: 0 4px !important;
+  }
+  .stage.mode-desktop .cat-minihead h3,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-minihead h3 {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: #2e1f16 !important;
+  }
+  .stage.mode-desktop .cat-minihead p,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-minihead p {
+    font-size: 14px !important;
+    color: #857467 !important;
+    margin-top: 4px !important;
+  }
+
+  /* Subcategory Product Grid: 4 columns on desktop! */
+  .stage.mode-desktop .cat-subgrid,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-subgrid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 24px !important;
+    margin-top: 16px !important;
+  }
+  .stage.mode-desktop .cat-subtile,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-subtile {
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    border: 1px solid #ebd8c7 !important;
+    padding: 12px !important;
+    box-shadow: 0 4px 16px rgba(50, 35, 25, 0.04) !important;
+    transition: all 0.25s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    cursor: pointer !important;
+  }
+  .stage.mode-desktop .cat-subtile:hover,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-subtile:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 10px 28px rgba(50, 35, 25, 0.12) !important;
+    border-color: #be9d80 !important;
+  }
+  .stage.mode-desktop .cat-subtile > .product-photo,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-subtile > .product-photo {
+    border-radius: 10px !important;
+    aspect-ratio: 1 / 1 !important;
+    width: 100% !important;
+    object-fit: cover !important;
+  }
+  .stage.mode-desktop .cat-subtile > span,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-subtile > span {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #35261d !important;
+    margin-top: 12px !important;
+    display: block !important;
+  }
+  .stage.mode-desktop .cat-subtile > small,
+  .stage:not(.mode-tablet):not(.mode-mobile) .cat-subtile > small {
+    font-size: 12.5px !important;
+    color: #928072 !important;
+    display: block !important;
+    margin-top: 4px !important;
+  }
+
+  /* Desktop Account Page Architecture */
+  .stage.mode-desktop .ac-profile-hero,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-profile-hero {
+    max-width: 1240px !important;
+    margin: 24px auto 0 auto !important;
+    border-radius: 18px !important;
+    padding: 32px 42px !important;
+    background: linear-gradient(135deg, #f7f1e8 0%, #ebe2d6 100%) !important;
+    border: 1px solid #ded3c5 !important;
+    box-shadow: 0 6px 24px rgba(53, 38, 29, 0.05) !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  .stage.mode-desktop .ac-profile-hero .ac-avatar,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-profile-hero .ac-avatar {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 50% !important;
+    border: 2px solid #bba58a !important;
+    font-size: 26px !important;
+  }
+  .stage.mode-desktop .ac-profile-hero h2,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-profile-hero h2 {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: #2e1f16 !important;
+  }
+  .stage.mode-desktop .ac-hero-action,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-hero-action {
+    padding: 10px 24px !important;
+    border-radius: 24px !important;
+    background: #35261d !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    font-size: 13.5px !important;
+    transition: all 0.2s ease !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+  .stage.mode-desktop .ac-hero-action:hover,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-hero-action:hover {
+    background: #50392b !important;
+    transform: translateY(-1px) !important;
+  }
+  .stage.mode-desktop .ac-page,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-page {
+    max-width: 1240px !important;
+    margin: 0 auto !important;
+    padding: 28px 32px 100px !important;
+    box-sizing: border-box !important;
+  }
+  .stage.mode-desktop .ac-order-shortcuts,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-order-shortcuts {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 18px !important;
+    margin: 18px 0 28px 0 !important;
+  }
+  .stage.mode-desktop .ac-order-shortcuts button,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-order-shortcuts button {
+    background: #faf7f2 !important;
+    border: 1.5px solid #ebd8c7 !important;
+    border-radius: 14px !important;
+    padding: 22px 14px !important;
+    transition: all 0.25s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+    cursor: pointer !important;
+  }
+  .stage.mode-desktop .ac-order-shortcuts button:hover,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-order-shortcuts button:hover {
+    transform: translateY(-2px) !important;
+    background: #ffffff !important;
+    border-color: #be9d80 !important;
+    box-shadow: 0 6px 20px rgba(53, 38, 29, 0.08) !important;
+  }
+  .stage.mode-desktop .ac-order-shortcuts b,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-order-shortcuts b {
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    color: #35261d !important;
+  }
+  .stage.mode-desktop .ac-account-stats,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-account-stats {
+    border-radius: 16px !important;
+    background: #faf6f0 !important;
+    border: 1px solid #ebd8c7 !important;
+    padding: 24px 0 !important;
+    margin: 28px 0 !important;
+  }
+  .stage.mode-desktop .ac-stat b,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-stat b {
+    font-size: 26px !important;
+    font-weight: 700 !important;
+    color: #35261d !important;
+  }
+  .stage.mode-desktop .ac-stat span,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-stat span {
+    font-size: 13px !important;
+    color: #7f6e61 !important;
+  }
+  .stage.mode-desktop .ac-menu,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-menu {
+    padding: 18px 24px !important;
+    background: #ffffff !important;
+    border: 1px solid #ebd8c7 !important;
+    border-radius: 14px !important;
+    margin-bottom: 12px !important;
+    box-shadow: 0 2px 8px rgba(53, 38, 29, 0.03) !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    cursor: pointer !important;
+  }
+  .stage.mode-desktop .ac-menu:hover,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-menu:hover {
+    background: #fdfbf8 !important;
+    border-color: #be9d80 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 18px rgba(53, 38, 29, 0.06) !important;
+  }
+  .stage.mode-desktop .ac-menu b,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-menu b {
+    font-size: 14.5px !important;
+    font-weight: 600 !important;
+    color: #2e2017 !important;
+  }
+  .stage.mode-desktop .ac-menu small,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-menu small {
+    font-size: 12.5px !important;
+    color: #8a7a6e !important;
+  }
+  .stage.mode-desktop .ac-menu-icon,
+  .stage:not(.mode-tablet):not(.mode-mobile) .ac-menu-icon {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 50% !important;
+    background: #f3ece2 !important;
+  }
+
+  /* Desktop Generic Subpage Containers */
+  .stage.mode-desktop .page-content,
+  .stage:not(.mode-tablet):not(.mode-mobile) .page-content,
+  .stage.mode-desktop .wishlist-screen,
+  .stage:not(.mode-tablet):not(.mode-mobile) .wishlist-screen,
+  .stage.mode-desktop .checkout-screen,
+  .stage:not(.mode-tablet):not(.mode-mobile) .checkout-screen,
+  .stage.mode-desktop .orders-screen,
+  .stage:not(.mode-tablet):not(.mode-mobile) .orders-screen {
+    max-width: 1240px !important;
+    margin: 0 auto !important;
+    padding: 28px 32px 100px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Refined Back Button on Desktop */
+  .stage.mode-desktop .page-top .icon-btn[data-action="back"],
+  .stage:not(.mode-tablet):not(.mode-mobile) .page-top .icon-btn[data-action="back"] {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 50% !important;
+    background: #f4ede4 !important;
+    border: 1px solid #ded3c5 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+  }
+  .stage.mode-desktop .page-top .icon-btn[data-action="back"]:hover,
+  .stage:not(.mode-tablet):not(.mode-mobile) .page-top .icon-btn[data-action="back"]:hover {
+    background: #e8ded2 !important;
+    border-color: #be9d80 !important;
+  }
+}
+
+/* ==========================================================================
+   3. TABLET SIMULATOR & TOUCH OPTIMIZATION (768px - 1023px)
+   ========================================================================== */
+.stage.mode-tablet {
+  background: #ebe4da !important;
+  padding: 30px 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+.stage.mode-tablet .phone {
+  width: 860px !important;
+  max-width: 95vw !important;
+  height: min(960px, calc(100vh - 90px)) !important;
+  border: 1px solid #d4c8ba !important;
+  border-radius: 28px !important;
+  box-shadow: 0 20px 60px rgba(48, 38, 30, 0.2) !important;
+  overflow: hidden !important;
+  background: #fffefa !important;
+  margin: 0 auto !important;
+}
+.stage.mode-tablet .statusbar,
+.stage.mode-tablet .home-indicator {
+  display: none !important;
+}
+.stage.mode-tablet .app-scroll {
+  overflow: auto !important;
+}
+.stage.mode-tablet .product-grid,
+.stage.mode-tablet .home-products .product-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 22px 16px !important;
+  padding: 0 24px 32px !important;
+}
+.stage.mode-tablet .monarca-hero {
+  height: 280px !important;
+  margin: 16px 24px 24px !important;
+  border-radius: 12px !important;
+}
+.stage.mode-tablet .category-list {
+  grid-template-columns: repeat(4, 1fr) !important;
+}
+.stage.mode-tablet .cat-subgrid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 16px !important;
+}
+.stage.mode-tablet .cat-section-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 12px !important;
+}
+.stage.mode-tablet .ac-order-shortcuts {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 10px !important;
+}
+.stage.mode-tablet .product-view-desktop-grid {
+  grid-template-columns: 1fr 1.15fr !important;
+  gap: 24px !important;
+  padding: 0 20px !important;
+}
+.stage.mode-tablet .cart-view-desktop-grid,
+.stage.mode-tablet .checkout-desktop-grid {
+  grid-template-columns: 1.2fr 1fr !important;
+  gap: 22px !important;
+}
+.stage.mode-tablet .account-menu-grid,
+.stage.mode-tablet .orders-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 14px !important;
+}
+.stage.mode-tablet .bottom-nav {
+  position: sticky !important;
+  bottom: 16px !important;
+  max-width: 480px !important;
+  margin: 16px auto !important;
+  border-radius: 36px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid var(--line) !important;
+  display: flex !important;
+}
+
+/* Tablet Subpage Top Navigation Bar */
+.stage.mode-tablet .page-top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 56px !important;
+  min-height: 56px !important;
+  padding: 0 24px !important;
+  background: rgba(254, 253, 250, 0.98) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-bottom: 1px solid #ebe4dc !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.stage.mode-tablet .page-top-main {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+.stage.mode-tablet .page-top h1 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #2e1f16 !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: start !important;
+}
+.stage.mode-tablet .page-top-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-shrink: 0 !important;
+  margin-inline-start: auto !important;
+}
+.stage.mode-tablet .page-top .spacer {
+  display: none !important;
+}
+
+/* ==========================================================================
+   4. MOBILE SIMULATOR (.stage.mode-mobile)
+   ========================================================================== */
+.stage.mode-mobile {
+  background: #f6f3ee !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+}
+.stage.mode-mobile .phone {
+  width: 420px !important;
+  max-width: 100% !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  border: none !important;
+  border-left: 1px solid #e4dacd !important;
+  border-right: 1px solid #e4dacd !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 35px rgba(53, 38, 29, 0.08) !important;
+  overflow: hidden !important;
+  background: #fffefa !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+}
+.stage.mode-mobile .statusbar,
+.stage.mode-mobile .home-indicator,
+.stage .statusbar,
+.stage .home-indicator,
+.statusbar,
+.home-indicator,
+.island {
+  display: none !important;
+}
+.stage.mode-mobile .app-scroll {
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding-top: 0 !important;
+  padding-bottom: 74px !important;
+  box-sizing: border-box !important;
+}
+.stage.mode-mobile .desktop-nav-links {
+  display: none !important;
+}
+.stage.mode-mobile .header-lang-compact {
+  display: inline-flex !important;
+}
+
+/* Mobile Subpage Top Header - Perfectly Centered, Space-Between & No Overscroll Gap */
+.stage.mode-mobile .page-top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 52px !important;
+  min-height: 52px !important;
+  max-height: 52px !important;
+  padding: 0 14px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  background: rgba(254, 253, 250, 0.98) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-bottom: 1px solid #ebe4dc !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  width: 100% !important;
+}
+.stage.mode-mobile .page-top-main {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+.stage.mode-mobile .page-top-main h1,
+.stage.mode-mobile .page-top h1 {
+  font-size: 16.5px !important;
+  font-weight: 700 !important;
+  color: #2e1f16 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.25 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: start !important;
+  flex: 1 1 auto !important;
+}
+.stage.mode-mobile .page-top-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+  margin-inline-start: auto !important;
+}
+.stage.mode-mobile .page-top-actions .header-lang-compact {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 30px !important;
+  padding: 0 10px !important;
+  border-radius: 15px !important;
+  background: #ede6dd !important;
+  border: 1px solid #dcd1c4 !important;
+  color: #3d2f24 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+.stage.mode-mobile .page-top .icon-btn {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  border: none !important;
+  color: #3d2f24 !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+.stage.mode-mobile .page-top .icon-btn[data-action="back"] {
+  background: #f3ece3 !important;
+  border: 1px solid #e2d7c9 !important;
+}
+.stage.mode-mobile .page-top .icon-btn svg {
+  width: 19px !important;
+  height: 19px !important;
+}
+.stage.mode-mobile .page-top .spacer {
+  display: none !important;
+}
+
+/* Mobile Announcement & Header (Compact 1-Line Luxury Bar) */
+.stage.mode-mobile .monarca-announcement {
+  background: #35261d !important;
+  color: #fffaf4 !important;
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+  padding: 6px 12px !important;
+  min-height: 30px !important;
+  max-height: 34px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.stage.mode-mobile .monarca-announcement span {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+.stage.mode-mobile .monarca-announcement svg {
+  width: 13px !important;
+  height: 13px !important;
+  flex-shrink: 0 !important;
+}
+.stage.mode-mobile .monarca-header {
+  padding: 6px 14px 8px !important;
+  background: var(--paper) !important;
+  border-bottom: 1px solid #ebe4dc !important;
+}
+.stage.mode-mobile .monarca-header .brand-row {
+  height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+.stage.mode-mobile .monarca-wordmark {
+  width: 160px !important;
+  height: 42px !important;
+  background-size: 160px 42px !important;
+}
+
+.stage.mode-mobile .product-grid,
+.stage.mode-mobile .home-products .product-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 16px 10px !important;
+  padding: 0 14px 24px !important;
+}
+.stage.mode-mobile .bottom-nav {
+  position: sticky !important;
+  bottom: 0 !important;
+  display: flex !important;
+}
+.stage.mode-mobile .monarca-desktop-footer {
+  display: none !important;
+}
+
+/* ==========================================================================
+   5. ACTUAL MOBILE SCREENS & NATIVE APP (< 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .device-simulator-bar {
+    display: none !important;
+  }
+  body {
+    background: var(--paper) !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .stage,
+  .stage.mode-mobile,
+  .stage.mode-tablet {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 100dvh !important;
+    display: block !important;
+    width: 100% !important;
+    background: var(--paper) !important;
+  }
+  .phone,
+  .stage.mode-mobile .phone,
+  .stage.mode-tablet .phone {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: var(--paper) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+  .statusbar,
+  .home-indicator,
+  .island,
+  .stage.mode-mobile .statusbar,
+  .stage.mode-mobile .home-indicator {
+    display: none !important;
+  }
+  .desktop-nav-links {
+    display: none !important;
+  }
+  .header-lang-compact {
+    display: inline-flex !important;
+  }
+  .app-scroll {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 74px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior-y: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+  }
+  :root {
+    --app-safe-top: max(44px, env(safe-area-inset-top, 0px));
+  }
+  .page-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    height: calc(52px + var(--app-safe-top, 44px)) !important;
+    min-height: calc(52px + var(--app-safe-top, 44px)) !important;
+    max-height: calc(52px + var(--app-safe-top, 44px)) !important;
+    padding-top: var(--app-safe-top, 44px) !important;
+    padding-bottom: 0 !important;
+    padding-inline: 14px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    background: rgba(254, 253, 250, 0.98) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border-bottom: 1px solid #ebe4dc !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+    width: 100% !important;
+  }
+  .page-top-main {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  .page-top-main h1,
+  .page-top h1 {
+    font-size: 16.5px !important;
+    font-weight: 700 !important;
+    color: #2e1f16 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.25 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    text-align: start !important;
+    flex: 1 1 auto !important;
+  }
+  .page-top-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+    margin-inline-start: auto !important;
+  }
+  .page-top-actions .header-lang-compact {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 30px !important;
+    padding: 0 10px !important;
+    border-radius: 15px !important;
+    background: #ede6dd !important;
+    border: 1px solid #dcd1c4 !important;
+    color: #3d2f24 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+  }
+  .page-top .icon-btn {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    border: none !important;
+    color: #3d2f24 !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  .page-top .icon-btn[data-action="back"] {
+    background: #f3ece3 !important;
+    border: 1px solid #e2d7c9 !important;
+  }
+  .page-top .icon-btn svg {
+    width: 19px !important;
+    height: 19px !important;
+  }
+  .page-top .spacer {
+    display: none !important;
+  }
+  .monarca-announcement {
+    background: #35261d !important;
+    color: #fffaf4 !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    padding-top: max(8px, var(--app-safe-top, 44px)) !important;
+    padding-bottom: 8px !important;
+    padding-inline: 12px !important;
+    min-height: calc(34px + var(--app-safe-top, 44px)) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .monarca-announcement span {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+  }
+  .monarca-announcement svg {
+    width: 13px !important;
+    height: 13px !important;
+    flex-shrink: 0 !important;
+  }
+  .monarca-header {
+    padding: 6px 14px 8px !important;
+    background: var(--paper) !important;
+    border-bottom: 1px solid #ebe4dc !important;
+  }
+  .monarca-header .brand-row {
+    height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  .monarca-wordmark {
+    width: 160px !important;
+    height: 42px !important;
+    background-size: 160px 42px !important;
+  }
+  .bottom-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    padding-bottom: max(14px, env(safe-area-inset-bottom, 0px)) !important;
+    background: #fffefa !important;
+    z-index: 990 !important;
+    box-shadow: 0 -2px 10px rgba(50, 35, 25, 0.05) !important;
+    box-sizing: border-box !important;
+  }
+  .bottom-nav.is-product-bar {
+    padding: 10px 16px max(14px, env(safe-area-inset-bottom, 0px)) !important;
+    background: rgba(254, 253, 250, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-top: 1px solid #ebe4dc !important;
+    box-shadow: 0 -4px 20px rgba(50, 35, 25, 0.08) !important;
+    display: flex !important;
+    align-items: center !important;
+    z-index: 999 !important;
+  }
+  .product-fixed-bar {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+  .product-fixed-bar button {
+    flex: 1 1 0 !important;
+    height: 48px !important;
+    font-size: 14.5px !important;
+    font-weight: 600 !important;
+    border-radius: 24px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    cursor: pointer !important;
+  }
+  .product-fixed-bar button.primary {
+    background: #35261d !important;
+    color: #fffaf4 !important;
+    border: none !important;
+  }
+  .product-fixed-bar button.secondary {
+    background: #f5eee6 !important;
+    color: #35261d !important;
+    border: 1px solid #ddcebf !important;
+  }
+  .product-actions.mobile-only-actions {
+    display: none !important;
+  }
+  .product-grid,
+  .home-products .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px 10px !important;
+    padding: 0 14px 24px !important;
+  }
+  .monarca-desktop-footer {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   6. FULL-WIDTH LUXURY BOUTIQUE DESKTOP FOOTER
+   ========================================================================== */
+.monarca-desktop-footer {
+  width: 100%;
+  background: #251b15;
+  color: #ede5da;
+  padding: 64px 0 32px;
+  margin-top: 64px;
+  box-sizing: border-box;
+}
+.monarca-desktop-footer .footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 36px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 48px;
+  box-sizing: border-box;
+}
+.footer-logo {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 32px;
+  color: #fffaf4;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+}
+.footer-tagline {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #b7a798;
+  max-width: 320px;
+  margin-bottom: 20px;
+}
+.footer-coverage .badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #e4d7ca;
+}
+.monarca-desktop-footer h4 {
+  font-family: var(--font) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #fffaf4 !important;
+  margin: 0 0 20px !important;
+}
+.monarca-desktop-footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.monarca-desktop-footer li a {
+  font-size: 13.5px;
+  color: #b7a798;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.monarca-desktop-footer li a:hover {
+  color: #ffffff;
+}
+.footer-pay-desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #b7a798;
+  margin-bottom: 16px;
+}
+.footer-pay-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pay-badge {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #f1e7dc;
+}
+.footer-bottom {
+  max-width: 1400px;
+  margin: 48px auto 0;
+  padding: 24px 36px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #8f8073;
+}
+
+/* RTL Mirroring for Desktop Footer */
+html[dir="rtl"] .monarca-desktop-footer {
+  direction: rtl;
+  text-align: right;
+}
+html[dir="ltr"] .monarca-desktop-footer {
+  direction: ltr;
+  text-align: left;
+}
+
+
+/* ==========================================================================
+   v4.7.8 CRITICAL FIXES: STATUS BAR, OVERLAYS, DUPLICATE BUTTONS
+   ========================================================================== */
+
+/* 1. Prevent duplicate purchase buttons: hide in-page purchase bar on mobile & when fixed bar is active */
+@media (max-width: 768px) {
+  .pd-purchase-bar,
+  .product-desktop-actions {
+    display: none !important;
+  }
+}
+.stage.mode-mobile .pd-purchase-bar,
+.stage.mode-mobile .product-desktop-actions,
+body.route-product .pd-purchase-bar,
+body.route-product .product-desktop-actions {
+  display: none !important;
+}
+
+/* 2. Fix overlay and bottom-sheet z-index: must float ABOVE bottom-nav (z-index 990/999) */
+.overlay,
+#overlay-root .overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2500 !important;
+  background: rgba(48, 38, 30, 0.55) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+.sheet,
+#overlay-root .sheet {
+  position: relative !important;
+  z-index: 2501 !important;
+  width: 100% !important;
+  max-width: 540px !important;
+  max-height: 85vh !important;
+  padding: 24px 22px max(32px, calc(16px + env(safe-area-inset-bottom, 0px))) !important;
+  box-sizing: border-box !important;
+  border-radius: 20px 20px 0 0 !important;
+  background: #fefdfa !important;
+  box-shadow: 0 -12px 40px rgba(48, 38, 30, 0.22) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* 3. Ensure subpage top navigation bar never clashes with status bar */
+.stage.mode-mobile .page-top,
+.stage:not(.mode-tablet):not(.mode-desktop) .page-top,
+.page-top {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 52px !important;
+  height: auto !important;
+  padding-top: max(8px, env(safe-area-inset-top, 0px)) !important;
+  padding-bottom: 8px !important;
+  padding-inline: 14px !important;
+  box-sizing: border-box !important;
+  background: rgba(254, 253, 250, 0.98) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-bottom: 1px solid #ebe4dc !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  width: 100% !important;
+}
+
+/* 4. Bottom fixed action bar on product detail page */
+.bottom-nav.is-product-bar {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  padding: 10px 16px max(14px, env(safe-area-inset-bottom, 0px)) !important;
+  background: rgba(254, 253, 250, 0.98) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-top: 1px solid #ebe4dc !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06) !important;
+  z-index: 990 !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure product content scrolls above fixed bottom bar */
+body.route-product #app,
+body.route-product .app-scroll {
+  padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box !important;
+}
+
+/* Android's native shell owns the top system inset. Keep only Android
+   headers at their visual height; iOS uses the WebView safe-area variable. */
+@media (max-width: 768px) {
+  body.is-native-android .page-top {
+    height: 52px !important;
+    min-height: 52px !important;
+    max-height: 52px !important;
+    padding: 0 14px !important;
+  }
+
+  body.is-native-android .monarca-announcement {
+    min-height: 34px !important;
+    max-height: 34px !important;
+    padding: 8px 12px !important;
+  }
+}

@@ -1,0 +1,34 @@
+# Local data and runtime output
+monarca-server/data/
+monarca-server/target/
+monarca-server/*.log
+
+# Mobile dependencies and generated builds
+monarca-mobile-app/node_modules/
+monarca-mobile-app/android/.gradle/
+monarca-mobile-app/android/**/build/
+monarca-mobile-app/android/local.properties
+monarca-mobile-app/ios/Pods/
+monarca-mobile-app/ios/build/
+monarca-mobile-app/ios/DerivedData/
+monarca-mobile-app/ios/App/App/public/
+monarca-mobile-app/ios/App/App/capacitor.config.json
+
+# Signing credentials and private provisioning material
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+google-services.json
+
+# Packaged installers and archives
+*.apk
+*.aab
+*.ipa
+*.xcarchive/
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

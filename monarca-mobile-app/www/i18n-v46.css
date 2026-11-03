@@ -1,0 +1,48 @@
+/* Only directional layout changes; photography and brand assets keep their orientation. */
+html[lang="en"] .phone{direction:ltr}
+html[lang="en"] .phone :is(input:not([type="checkbox"]):not([type="radio"]),select,textarea){direction:ltr;text-align:start}
+html[lang="en"] .phone :is(.card-main,.recent-item,.accordion,.payment-option,.menu-item,.ac-menu,.ac-ticket-row,.cat-sub-card,.cat-section-tile,.ck-address-card,.ck-checkout-address,.od-order-card,.od-product,.od-fact,.rt-select-line,.ac-notification,.ac-coupon,.pd-content,.cat-list-intro,.cat-intro){text-align:start}
+html[lang="en"] .phone :is(h1,h2,h3,p,b,small,label,button,a,span){overflow-wrap:break-word}
+html[lang="en"] .phone :is(.primary,.secondary,.danger-btn,.ac-menu,.menu-item,.ac-tab,.od-filter,.cat-chips>button){white-space:normal}
+html[lang="en"] .phone :is(.product-card h3,.home-products .product-card h3){min-height:3.4em;line-height:1.55}
+html[lang="en"] .phone :is(.page-top h1,.ac-title,.ck-heading h2,.cat-intro h2,.cat-list-intro h2){line-height:1.45}
+html[lang="en"] .phone .favorite-btn{left:auto;right:1px}
+html[lang="en"] .phone .product-hero .favorite-btn{left:auto;right:14px}
+html[lang="en"] .phone :is(.recent-item svg:last-child,.photo-results-head button,.account-hero button,.menu-item>svg:last-child,.menu-item small){margin-right:0;margin-left:auto}
+html[lang="en"] .phone .menu-item .toggle{margin-right:0!important;margin-left:auto}
+html[lang="en"] .phone .stock-note::before{margin-left:0;margin-right:5px}
+html[lang="en"] .phone .timeline-step{padding:0 0 30px 32px}
+html[lang="en"] .phone .timeline-step:not(:last-child)::before{right:auto;left:7px}
+html[lang="en"] .phone .timeline-step .timeline-dot{right:auto;left:0}
+html[lang="en"] .phone .coupon-value{border-left:0;border-right:1px dashed #c9b395}
+html[lang="en"] .phone .home-products .section-head h2::after{right:auto;left:0}
+html[lang="en"] .phone :is(svg.icon-back,svg.icon-arrow){transform:scaleX(-1)}
+html[lang="en"] .phone :is(.ac-menu>span:nth-child(2),.ck-cart-info,.ck-mini-line>div,.od-product>div,.rt-select-line>span,.cat-sub-card>span){min-width:0}
+html[lang="en"] .phone :is(.ac-order-shortcuts b,.ck-stepper,.ck-tag,.od-tag,.cat-section-tile b){line-height:1.5}
+html[lang="en"] .phone .ac-order-shortcuts b{font-size:12px}
+html[lang="en"] .phone .bottom-nav button{font-size:12px}
+html[lang="en"] .phone .field-note,html[lang="en"] .phone .ac-note p,html[lang="en"] .phone .od-note p{line-height:1.7}
+html[lang="en"] .phone :is(.od-order-heading,.od-order-products,.od-service-strip,.od-product-name,.od-product-info .text-btn,.od-request-card,.od-refund-card,.od-invoice-table th,.cat-search,.cat-photo-callout,.cat-suggest-item,.pd-review-link,.pd-stock-alert,.pd-delivery>button,.pd-disclosure,.pd-qa-link,.cat-wish-product,.cat-linked-product,.rv-rating-picker legend,.ac-care-grid button,.ac-faq-link,.ac-ticket-preview,.ac-toggle-row,.ac-policy-index button,.ck-item-name,.ck-row-link,.ck-error-reason,.ck-content .info-box){text-align:start}
+html[lang="en"] .phone .rv-rating-picker legend{direction:ltr}
+html[lang="en"] .phone :is(.od-service-strip svg:last-child,.ck-row-link>svg:last-child,.ck-row-link b){margin-right:0;margin-left:auto}
+html[lang="en"] .phone .cat-search>span{margin-right:0;margin-left:auto;border-right:0;border-left:1px solid var(--line);padding-right:0;padding-left:10px}
+html[lang="en"] .phone .cat-rail{border-left:0;border-right:1px solid #dfd7cd}
+html[lang="en"] .phone .cat-rail button.active::before{right:auto;left:0}
+html[lang="en"] .phone .cat-results .product-card .badge{right:auto;left:5px}
+html[lang="en"] .phone .pd-stage .favorite-btn{left:auto;right:13px}
+html[lang="en"] .phone .pd-photo-count{left:auto;right:15px}
+html[lang="en"] .phone .pd-zoom-hint{right:auto;left:15px}
+html[lang="en"] .phone .pd-price-row del{margin-right:0;margin-left:7px}
+html[lang="en"] .phone .pd-measure-steps{padding-right:0;padding-left:19px}
+html[lang="en"] .phone :is(.pd-measure-steps li,.ac-numbered li){padding-right:0;padding-left:4px}
+html[lang="en"] .phone .ac-numbered{padding:0 0 0 18px}
+html[lang="en"] .phone .od-timeline>li:not(:last-child)::before{right:auto;left:9px}
+html[lang="en"] .phone .ac-stat{border-left:0;border-right:1px solid #dcd0c1}
+html[lang="en"] .phone .ac-stat:last-child{border-right:0}
+html[lang="en"] .phone .ac-coupon-value{border-left:0;border-right:1px dashed #ccb99e}
+html[lang="en"] .phone .ac-search-form>button{border-right:0;border-left:1px solid #dfd3c4}
+html[lang="en"] .phone .ac-unread-dot{left:auto;right:9px}
+html[lang="en"] .phone .ac-care-grid button>svg:last-child{left:auto;right:12px}
+html[lang="en"] .phone .ck-checkout-address .ck-tag{margin-right:0;margin-left:5px}
+html[lang="en"] .phone [data-user-text]{unicode-bidi:plaintext}
+@media(max-width:360px){html[lang="en"] .phone .page-top h1{font-size:20px}html[lang="en"] .phone .ac-order-shortcuts b{font-size:11px}}

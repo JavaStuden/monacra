@@ -1,0 +1,392 @@
+[
+  {
+    "documentWidth": 320,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أود الاستفسار عن منتجاتكم.",
+    "route": "#support",
+    "sheetScrollWidth": 320,
+    "sheetWidth": 320,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 274
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 274
+      }
+    ],
+    "width": 320
+  },
+  {
+    "documentWidth": 320,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أود الاستفسار عن منتجاتكم.",
+    "route": "#account",
+    "sheetScrollWidth": 320,
+    "sheetWidth": 320,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 274
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 274
+      }
+    ],
+    "width": 320
+  },
+  {
+    "documentWidth": 320,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أحتاج مساعدة بخصوص طلبي رقم M-DEMO-1024.",
+    "route": "#order/M-DEMO-1024",
+    "sheetScrollWidth": 320,
+    "sheetWidth": 320,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 274
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 274
+      }
+    ],
+    "width": 320
+  },
+  {
+    "documentWidth": 320,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أود الاستفسار عن توصيل طلبي رقم M-DEMO-1024.",
+    "route": "#tracking/M-DEMO-1024",
+    "sheetScrollWidth": 320,
+    "sheetWidth": 320,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 274
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 274
+      }
+    ],
+    "width": 320
+  },
+  {
+    "documentWidth": 320,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أحتاج مساعدة في إضافة عنوان التوصيل.",
+    "route": "#address",
+    "sheetScrollWidth": 320,
+    "sheetWidth": 320,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 274
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 274
+      }
+    ],
+    "width": 320
+  },
+  {
+    "documentWidth": 390,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أود الاستفسار عن منتجاتكم.",
+    "route": "#support",
+    "sheetScrollWidth": 390,
+    "sheetWidth": 390,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 344
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 344
+      }
+    ],
+    "width": 390
+  },
+  {
+    "documentWidth": 390,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أود الاستفسار عن منتجاتكم.",
+    "route": "#account",
+    "sheetScrollWidth": 390,
+    "sheetWidth": 390,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 344
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 344
+      }
+    ],
+    "width": 390
+  },
+  {
+    "documentWidth": 390,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أحتاج مساعدة بخصوص طلبي رقم M-DEMO-1024.",
+    "route": "#order/M-DEMO-1024",
+    "sheetScrollWidth": 390,
+    "sheetWidth": 390,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 344
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 344
+      }
+    ],
+    "width": 390
+  },
+  {
+    "documentWidth": 390,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أود الاستفسار عن توصيل طلبي رقم M-DEMO-1024.",
+    "route": "#tracking/M-DEMO-1024",
+    "sheetScrollWidth": 390,
+    "sheetWidth": 390,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 344
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 344
+      }
+    ],
+    "width": 390
+  },
+  {
+    "documentWidth": 390,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أحتاج مساعدة في إضافة عنوان التوصيل.",
+    "route": "#address",
+    "sheetScrollWidth": 390,
+    "sheetWidth": 390,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 344
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 344
+      }
+    ],
+    "width": 390
+  },
+  {
+    "documentWidth": 430,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أود الاستفسار عن منتجاتكم.",
+    "route": "#support",
+    "sheetScrollWidth": 430,
+    "sheetWidth": 430,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 384
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 384
+      }
+    ],
+    "width": 430
+  },
+  {
+    "documentWidth": 430,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أود الاستفسار عن منتجاتكم.",
+    "route": "#account",
+    "sheetScrollWidth": 430,
+    "sheetWidth": 430,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 384
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 384
+      }
+    ],
+    "width": 430
+  },
+  {
+    "documentWidth": 430,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أحتاج مساعدة بخصوص طلبي رقم M-DEMO-1024.",
+    "route": "#order/M-DEMO-1024",
+    "sheetScrollWidth": 430,
+    "sheetWidth": 430,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 384
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 384
+      }
+    ],
+    "width": 430
+  },
+  {
+    "documentWidth": 430,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أود الاستفسار عن توصيل طلبي رقم M-DEMO-1024.",
+    "route": "#tracking/M-DEMO-1024",
+    "sheetScrollWidth": 430,
+    "sheetWidth": 430,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 384
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 384
+      }
+    ],
+    "width": 430
+  },
+  {
+    "documentWidth": 430,
+    "hasExternalLink": false,
+    "message": "مرحباً Monarca، أحتاج مساعدة في إضافة عنوان التوصيل.",
+    "route": "#address",
+    "sheetScrollWidth": 430,
+    "sheetWidth": 430,
+    "targets": [
+      {
+        "height": 44,
+        "label": "إغلاق",
+        "width": 44
+      },
+      {
+        "height": 46,
+        "label": "العودة",
+        "width": 384
+      },
+      {
+        "height": 44,
+        "label": "مركز المساعدة",
+        "width": 384
+      }
+    ],
+    "width": 430
+  }
+]

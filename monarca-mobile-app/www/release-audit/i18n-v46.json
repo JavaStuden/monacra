@@ -1,0 +1,536 @@
+{
+  "result": "PASS",
+  "timestamp": "2026-10-26T11:39:14.096Z",
+  "routeNames": 53,
+  "renderPasses": 214,
+  "codFlowRenders": [
+    {
+      "language": "ar",
+      "stage": "confirmed",
+      "route": "success",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "confirmed",
+      "route": "order/M-DEMO-014753457-git",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "confirmed",
+      "route": "invoice/M-DEMO-014753457-git",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "confirmed",
+      "route": "tracking/M-DEMO-014753457-git",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "delivered-uncollected",
+      "route": "order/M-DEMO-014753457-git",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "delivered-uncollected",
+      "route": "invoice/M-DEMO-014753457-git",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "delivered-uncollected",
+      "route": "tracking/M-DEMO-014753457-git",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "return-form",
+      "route": "return/M-DEMO-014753457-git",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "exchange-form-unavailable-size",
+      "route": "return/M-DEMO-014753457-git",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "return-requested",
+      "route": "return-detail/RT-MVP6OU7U-PWG",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "ar",
+      "stage": "return-completed-no-refund",
+      "route": "return-detail/RT-MVP6OU7U-PWG",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "confirmed",
+      "route": "success",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "confirmed",
+      "route": "order/M-DEMO-014753707-3dn",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "confirmed",
+      "route": "invoice/M-DEMO-014753707-3dn",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "confirmed",
+      "route": "tracking/M-DEMO-014753707-3dn",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "delivered-uncollected",
+      "route": "order/M-DEMO-014753707-3dn",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "delivered-uncollected",
+      "route": "invoice/M-DEMO-014753707-3dn",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "delivered-uncollected",
+      "route": "tracking/M-DEMO-014753707-3dn",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "return-form",
+      "route": "return/M-DEMO-014753707-3dn",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "exchange-form-unavailable-size",
+      "route": "return/M-DEMO-014753707-3dn",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "return-requested",
+      "route": "return-detail/RT-MVP6OUEY-9BN",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    },
+    {
+      "language": "en",
+      "stage": "return-completed-no-refund",
+      "route": "return-detail/RT-MVP6OUEY-9BN",
+      "payment": "cod",
+      "paymentStatus": "cod_due",
+      "paidTotal": 0
+    }
+  ],
+  "dictionaryEntries": 2062,
+  "staticStringsScanned": 1649,
+  "checks": [
+    "Actual Arabic and English COD submissions render success, order, invoice, tracking and zero-refund returns; paid amount remains zero and address data is unchanged",
+    "HTML text and accessible attributes translated; submitted option values and input/user/script/textarea content preserved",
+    "English language/locale API",
+    "Arabic neutral action and RTL",
+    "English LTR",
+    "Legacy Arabic numerals/currency",
+    "Whitespace is stable across repeated localization",
+    "All 18 Iraqi city labels display in English while Arabic option values and protected user addresses remain intact; Arabic labels remain Arabic",
+    "32 parameterized errors, coupon, OTP, after-sales, date, currency and COD probes",
+    "Query language takes priority over saved preference, including when storage access is denied",
+    "DOM localize translates fixed text and input/textarea placeholders while preserving values, user content and option submission values",
+    "DOM localization is reversible; language changes persist and emit the documented event",
+    "MutationObserver is limited to app/overlay/toast and catches asynchronous errors without observing or mutating form values",
+    "Quoted attributes remain escaped and invalid numeric entities do not crash localization",
+    "Unknown copy remains intact and is exposed by misses()"
+  ],
+  "dynamicProbes": [
+    {
+      "source": "الحد الأدنى لهذه القسيمة ٥٠٬٠٠٠ د.ع.",
+      "english": "Minimum spend for this coupon: 50,000 IQD."
+    },
+    {
+      "source": "الرمز غير صحيح. رمز التجربة 1234. تبقى ٣ محاولات.",
+      "english": "Incorrect code. The demo code is 1234. 3 attempts remain."
+    },
+    {
+      "source": "تم تطبيق M10 على القطع المحددة.",
+      "english": "Applied M10 to selected items."
+    },
+    {
+      "source": "تم تطبيق M10 على السلة",
+      "english": "Applied M10 to your bag."
+    },
+    {
+      "source": "تمت إضافة ٢ قطعة بحسب التوفر الحالي. تُستخدم الأسعار الحالية في الحقيبة.",
+      "english": "2 item(s) added according to current availability. Current prices apply in your bag."
+    },
+    {
+      "source": "XL غير متوفر",
+      "english": "XL unavailable"
+    },
+    {
+      "source": "XL غير متوفر؛ طلب تنبيه",
+      "english": "XL unavailable; request alert"
+    },
+    {
+      "source": "أضيفي قطعاً للسلة ثم استخدمي الرمز M10",
+      "english": "Add items to your bag, then use M10"
+    },
+    {
+      "source": "المبلغ المستحق: ٤٥٠٬٠٠٠ د.ع",
+      "english": "Amount due: 450,000 IQD"
+    },
+    {
+      "source": "الموعد المطلوب: ٢٦ تشرين الأول",
+      "english": "Requested date: 26 October"
+    },
+    {
+      "source": "طلب إعادة جدولة تجريبي: ٢٦ تشرين الأول",
+      "english": "Demo reschedule request: 26 October"
+    },
+    {
+      "source": "شحنة البديل التجريبية: EX-1042",
+      "english": "Demo replacement shipment: EX-1042"
+    },
+    {
+      "source": "المدفوع: 0 IQD",
+      "english": "Paid: 0 IQD"
+    },
+    {
+      "source": "المدفوع: ٠ د.ع",
+      "english": "Paid: 0 IQD"
+    },
+    {
+      "source": "الإجمالي: ٤٥٠٬٠٠٠ د.ع",
+      "english": "Total: 450,000 IQD"
+    },
+    {
+      "source": "إجمالي الطلب: ٤٥٠٬٠٠٠ د.ع",
+      "english": "Order total: 450,000 IQD"
+    },
+    {
+      "source": "الإجمالي المدفوع: 0 IQD",
+      "english": "Total paid: 0 IQD"
+    },
+    {
+      "source": "الإجمالي المستحق: ٤٥٠٬٠٠٠ د.ع",
+      "english": "Total due: 450,000 IQD"
+    },
+    {
+      "source": "المبلغ المستحق بعد الإلغاء: 0 IQD",
+      "english": "Amount due after cancellation: 0 IQD"
+    },
+    {
+      "source": "مرتبط بالطلب M-DEMO-1024",
+      "english": "Linked to order M-DEMO-1024"
+    },
+    {
+      "source": "صالحة حتى ٢٥ تشرين الثاني",
+      "english": "Valid until 25 November"
+    },
+    {
+      "source": "(١٥ ث)",
+      "english": "(15 s)"
+    },
+    {
+      "source": "تمت الموافقة التجريبية. جهّزي القطع بتغليفها الأصلي. رمز التسليم التجريبي: RT-1042. تواصلي مع الدعم لترتيب الإرجاع في المنتج الفعلي.",
+      "english": "Demo approved. Prepare the items in their original packaging. Demo handover code: RT-1042. Contact support to arrange a return in the live service."
+    },
+    {
+      "source": "جهّزي القطع المرتبطة بطلب RT-1042 بتغليفها الأصلي. عنوان الاستلام الفعلي وتعليمات شركة التوصيل يحددهما المتجر عند اعتماد الخدمة.",
+      "english": "Prepare the items for request RT-1042 in their original packaging. The store will provide the actual collection address and courier instructions once the service is approved."
+    },
+    {
+      "source": "مرحباً Monarca، أود الاستفسار عن توصيل طلبي رقم M-DEMO-1024.",
+      "english": "Hello Monarca, I would like to ask about delivery for order M-DEMO-1024."
+    },
+    {
+      "source": "مرحباً Monarca، أحتاج مساعدة بخصوص طلبي رقم M-DEMO-1024.",
+      "english": "Hello Monarca, I need help with order M-DEMO-1024."
+    },
+    {
+      "source": "التوصيل المتوقع: ٢–٤ أيام عمل · تقدير تجريبي",
+      "english": "Estimated delivery: 2–4 working days · demo estimate"
+    },
+    {
+      "source": "١–٢ يوم عمل · إضافة ٥٬٠٠٠ د.ع (تجريبي)",
+      "english": "1–2 working days · add 5,000 IQD (demo)"
+    },
+    {
+      "source": "تم حفظ الطلب. المبلغ مستحق عند الاستلام ولم يُحصّل أي مبلغ نقدي.",
+      "english": "Order saved. Payment is due on delivery; no cash has been collected."
+    },
+    {
+      "source": "لم يُحصّل أي مبلغ نقدي. يمكن إعادة القطع دون إنشاء استرداد.",
+      "english": "No cash was collected. Items can be returned without creating a refund."
+    },
+    {
+      "source": "أضيفي عنواناً من ٤–٩٠ حرفاً وتفاصيل من ١٠–١٢٠٠ حرف.",
+      "english": "Enter a title of 4–90 characters and details of 10–1,200 characters."
+    },
+    {
+      "source": "اختاري خيارات متوفرة وكمية ضمن المخزون",
+      "english": "Choose available options and a quantity within stock"
+    }
+  ],
+  "sourceResidual": [
+    {
+      "text": "bag handbag leather حقيبة حقائب شنطة بني جلد",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "heels shoes أحذية حذاء كعب بيج",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "shirt satin قميص قمصان ملابس بلوزة ساتان حرير",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "hoodie black هودي هوديز ملابس اسود",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "jacket brown جاكيت جاكيتات ملابس بني",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "trousers pants بنطال بناطيل ملابس بنطلون",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "accessories earrings إكسسوارات اقراط أقراط حلق ذهب",
+      "classification": "internal search keywords"
+    },
+    {
+      "text": "سارة أحمد",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "المنصور",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "شارع الروّاد",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "قرب مول المنصور",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "سارة",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": " غير متوفر\"",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "رجاع",
+      "classification": "internal text classification token"
+    },
+    {
+      "text": "الطابق الأول",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "أضيفي قطعاً للسلة ثم استخدمي الرمز ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "المدينة المختارة: ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "البراضعية",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "شارع الوطن",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "قرب السوق",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "تم تطبيق ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " على القطع المحددة.",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " · تقدير تجريبي",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "ا",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "ي",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": "ه",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": " غير متوفر؛ طلب تنبيه\"",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "مرتبط بالطلب ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "الحد الأدنى لهذه القسيمة ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " ث)",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "صالحة حتى ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "العربية",
+      "classification": "intentional user/locality/autonym data"
+    },
+    {
+      "text": " على السلة",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "الرمز غير صحيح. رمز التجربة 1234. تبقى ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " محاولات.",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "بطاقة ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "الموعد المطلوب: ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "المبلغ المستحق: ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "جهّزي القطع المرتبطة بطلب ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " بتغليفها الأصلي. عنوان الاستلام الفعلي وتعليمات شركة التوصيل يحددهما المتجر عند اعتماد الخدمة.",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "تمت الموافقة التجريبية. جهّزي القطع بتغليفها الأصلي. رمز التسليم التجريبي: ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": ". تواصلي مع الدعم لترتيب الإرجاع في المنتج الفعلي.",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "تمت إضافة ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": " قطعة بحسب التوفر الحالي. تُستخدم الأسعار الحالية في الحقيبة.",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    },
+    {
+      "text": "طلب إعادة جدولة تجريبي: ",
+      "classification": "source template fragment; assembled cases covered by dynamic probes"
+    }
+  ],
+  "renderErrors": [],
+  "missing": [],
+  "intentionallyPreserved": [
+    "Deliver to بغداد",
+    "Baghdad · المنصور",
+    "Home · سارة أحمد · Baghdad",
+    "Work · سارة أحمد · Basra",
+    "سارة أحمد",
+    "بغداد · المنصور · شارع الروّاد",
+    "قرب مول المنصور",
+    "شارع الروّاد · قرب مول المنصور",
+    "Basra · البراضعية",
+    "شارع الوطن · قرب السوق",
+    "س",
+    "سارة",
+    "اختبار مستخدم",
+    "هذه رسالة من المستخدم",
+    "العربية",
+    "ملاحظة مستخدم"
+  ],
+  "limits": "Actual classic-script VM evaluation and HTML/DOM pipeline tests, including real COD form submissions and return transitions in both languages. User-supplied names, addresses, messages and Iraqi locality values intentionally remain unchanged. Source residuals are data/internal search terms and template fragments; see concrete dynamic probes. No browser/layout testing in this script."
+}

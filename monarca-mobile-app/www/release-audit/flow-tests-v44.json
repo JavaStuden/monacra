@@ -1,0 +1,61 @@
+{
+  "result": "PASS",
+  "passed": 13,
+  "failed": 0,
+  "total": 13,
+  "tests": [
+    {
+      "name": "Iraqi local/international/Arabic digit phone normalization",
+      "result": "PASS"
+    },
+    {
+      "name": "Selected cart pricing excludes unchecked rows and includes express fee",
+      "result": "PASS"
+    },
+    {
+      "name": "Direct buy does not replace bag coupon pricing on returning to bag",
+      "result": "PASS"
+    },
+    {
+      "name": "Account address book resets checkout selection intent",
+      "result": "PASS"
+    },
+    {
+      "name": "Explicit checkout address selection survives route revisit; account add saves to book",
+      "result": "PASS"
+    },
+    {
+      "name": "A missing terms consent cannot create a new payment snapshot through payment deep link",
+      "result": "PASS"
+    },
+    {
+      "name": "Existing pending order resumes without a new terms checkbox and without duplicate order",
+      "result": "PASS"
+    },
+    {
+      "name": "Wrong card CVV does not create an order",
+      "result": "PASS"
+    },
+    {
+      "name": "Cart card->OTP failure->decline->same order retry->paid keeps unchecked line",
+      "result": "PASS"
+    },
+    {
+      "name": "Direct purchase payment preserves whole bag and freezes address/item price",
+      "result": "PASS"
+    },
+    {
+      "name": "Single-use coupon race rejects second pending snapshot and preserves bag",
+      "result": "PASS"
+    },
+    {
+      "name": "Unpaid cancellation creates no refund; paid pre-shipment cancellation includes shipping once",
+      "result": "PASS"
+    },
+    {
+      "name": "Partial return quantities, cancellation release, refund allocation and exchange terminal state",
+      "result": "PASS"
+    }
+  ],
+  "limits": "VM state tests only. No browser layout, native device, real payment, network or backend checks."
+}

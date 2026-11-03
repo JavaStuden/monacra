@@ -1,0 +1,363 @@
+/* Monarca v4.7.4 · Luxury Boutique Experience, Real Arabic/English Hero & Navigation */
+
+.mn46-page {
+  padding: 24px 18px 32px;
+}
+.mn46-brand {
+  width: 190px;
+  height: 54px;
+  background: transparent url('assets/monarca-logo-ink-v442.svg') center/contain no-repeat;
+  margin: 8px auto 28px;
+}
+.mn46-list {
+  border-top: 1px solid var(--line);
+}
+.mn46-list > button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: start;
+  padding: 18px 4px;
+  min-height: 66px;
+  border-bottom: 1px solid var(--line);
+  font-size: 17px;
+  font-weight: 700;
+  font-family: var(--font);
+}
+.mn46-list > button > svg {
+  width: 23px;
+  height: 23px;
+  stroke-width: 1.6;
+}
+.mn46-list > button > span {
+  flex: 1;
+  min-width: 0;
+}
+.mn46-list > button > small {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.mn46-list > button > svg:last-child {
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+}
+.mn46-title {
+  font-size: 24px;
+  line-height: 1.6;
+  margin: 4px 0 22px;
+}
+.mn46-languages {
+  display: grid;
+  gap: 12px;
+}
+.mn46-languages > button {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--white);
+  text-align: start;
+  font-size: 20px;
+  font-family: var(--font);
+}
+.mn46-languages > button.selected {
+  border-color: var(--brown);
+  background: #eee4d7;
+}
+.mn46-languages > button > span {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.mn46-language-note {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-top: 24px;
+  font-family: var(--font);
+}
+.mn46-region {
+  margin-top: 24px;
+  padding: 18px;
+  border-radius: 14px;
+  background: var(--soft);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 16px;
+  flex-wrap: wrap;
+}
+.cod-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+.cod-mark > svg {
+  width: 21px;
+  height: 21px;
+}
+.phone .payment-option {
+  border-radius: 12px;
+}
+.phone .visa-mark {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.phone .payment-option .visa-mark {
+  flex: 0 0 43px;
+  min-width: 43px;
+  font-size: 20px;
+}
+.phone .payment-option .radio {
+  flex-shrink: 0;
+}
+.phone .monarca-announcement {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   HERO BANNER ARCHITECTURE (BILINGUAL RTL & LTR LUXURY PRECISION)
+   ========================================================================== */
+.monarca-hero {
+  background-image: url('assets/monarca-hero.png') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  position: relative;
+  aspect-ratio: 2/1;
+  overflow: hidden;
+}
+
+/* Arabic Mode Hero Copy (Text placed cleanly on left columns/stone wall, reading RTL) */
+html[lang="ar"] .monarca-hero-copy,
+html[dir="rtl"] .monarca-hero-copy {
+  position: absolute;
+  inset: 0 auto 0 4%;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  direction: rtl !important;
+  text-align: right !important;
+  padding: 18px 24px !important;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+html[lang="ar"] .monarca-hero-copy h1,
+html[dir="rtl"] .monarca-hero-copy h1 {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  border: 0;
+  font-family: var(--font) !important;
+  font-size: 34px !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  color: #301f14 !important;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7);
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+html[lang="ar"] .monarca-hero-copy p,
+html[dir="rtl"] .monarca-hero-copy p {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 8px 0 16px;
+  padding: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  border: 0;
+  font-family: var(--font) !important;
+  font-size: 14.5px !important;
+  font-weight: 500 !important;
+  line-height: 1.55 !important;
+  color: #4b3628 !important;
+  max-width: 260px !important;
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+html[lang="ar"] .monarca-hero-copy button,
+html[dir="rtl"] .monarca-hero-copy button {
+  position: static;
+  display: inline-flex !important;
+  direction: rtl !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 40px !important;
+  padding: 9px 22px !important;
+  background: rgba(48, 31, 20, 0.9) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  color: #fffaf4 !important;
+  border: 1px solid rgba(255, 245, 235, 0.4) !important;
+  border-radius: 30px !important;
+  font-family: var(--font) !important;
+  font-size: 13.5px !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+  letter-spacing: normal !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+html[lang="ar"] .monarca-hero-copy button:hover,
+html[dir="rtl"] .monarca-hero-copy button:hover {
+  background: rgba(30, 18, 11, 0.96) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+}
+html[lang="ar"] .monarca-hero-copy button svg,
+html[dir="rtl"] .monarca-hero-copy button svg {
+  visibility: visible !important;
+  width: 14px !important;
+  height: 14px !important;
+  stroke-width: 2.2 !important;
+}
+
+/* English Mode Hero Copy (Text placed on left columns, reading LTR) */
+html[lang="en"] .monarca-hero-copy {
+  position: absolute;
+  inset: 0 auto 0 4%;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  direction: ltr !important;
+  text-align: left !important;
+  padding: 18px 24px !important;
+  box-sizing: border-box;
+  z-index: 2;
+}
+html[lang="en"] .monarca-hero-copy h1 {
+  font-family: var(--font-serif, Georgia, serif) !important;
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  color: #301f14 !important;
+  margin: 0 !important;
+  direction: ltr !important;
+  text-align: left !important;
+}
+html[lang="en"] .monarca-hero-copy p {
+  font-family: var(--font) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  color: #4b3628 !important;
+  margin: 8px 0 16px !important;
+  max-width: 230px !important;
+  direction: ltr !important;
+  text-align: left !important;
+}
+html[lang="en"] .monarca-hero-copy button {
+  position: static;
+  display: inline-flex !important;
+  direction: ltr !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 40px !important;
+  padding: 9px 20px !important;
+  background: rgba(48, 31, 20, 0.9) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  color: #fffaf4 !important;
+  border: 1px solid rgba(255, 245, 235, 0.4) !important;
+  border-radius: 30px !important;
+  font-family: var(--font) !important;
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+html[lang="en"] .monarca-hero-copy button:hover {
+  background: rgba(30, 18, 11, 0.96) !important;
+  transform: translateY(-1px) !important;
+}
+html[lang="en"] .monarca-hero-copy button svg {
+  visibility: visible !important;
+  width: 14px !important;
+  height: 14px !important;
+  stroke-width: 2 !important;
+  transform: rotate(180deg) !important;
+}
+
+/* Desktop Scale Overrides */
+@media (min-width: 1024px) {
+  html[lang="ar"] .monarca-hero-copy h1,
+  html[dir="rtl"] .monarca-hero-copy h1 {
+    font-size: 44px !important;
+  }
+  html[lang="ar"] .monarca-hero-copy p,
+  html[dir="rtl"] .monarca-hero-copy p {
+    font-size: 17px !important;
+    max-width: 340px !important;
+  }
+  html[lang="ar"] .monarca-hero-copy button,
+  html[dir="rtl"] .monarca-hero-copy button {
+    font-size: 15px !important;
+    padding: 12px 28px !important;
+  }
+
+  html[lang="en"] .monarca-hero-copy h1 {
+    font-size: 42px !important;
+  }
+  html[lang="en"] .monarca-hero-copy p {
+    font-size: 16px !important;
+    max-width: 320px !important;
+  }
+  html[lang="en"] .monarca-hero-copy button {
+    font-size: 14.5px !important;
+    padding: 11px 26px !important;
+  }
+}
+
+/* Small Screen Adjustments */
+@media (max-width: 380px) {
+  html[lang="ar"] .monarca-hero-copy h1,
+  html[dir="rtl"] .monarca-hero-copy h1 {
+    font-size: 24px !important;
+  }
+  html[lang="ar"] .monarca-hero-copy p,
+  html[dir="rtl"] .monarca-hero-copy p {
+    font-size: 11.5px !important;
+    margin: 4px 0 8px !important;
+  }
+  html[lang="ar"] .monarca-hero-copy button,
+  html[dir="rtl"] .monarca-hero-copy button {
+    font-size: 11.5px !important;
+    padding: 6px 14px !important;
+    min-height: 32px !important;
+  }
+}

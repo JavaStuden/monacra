@@ -1,0 +1,51 @@
+{
+  "version": "4.7.0",
+  "result": "PASS",
+  "checks": [
+    {
+      "name": "Old IQD namespace is neither read as USD nor changed when saving the new prototype",
+      "result": "PASS",
+      "evidence": {
+        "oldKeyPreserved": true,
+        "newKey": "monarca-iraq-usd-v47",
+        "reloadedUsdCart": true
+      }
+    },
+    {
+      "name": "Reset affects only the active USD namespace and restores concrete USD sample orders",
+      "result": "PASS"
+    },
+    {
+      "name": "Preview starts with USD snapshots and does not persist over either namespace",
+      "result": "PASS"
+    },
+    {
+      "name": "All fourteen configured catalogue quotes are explicit USD amounts, including offer comparisons",
+      "result": "PASS",
+      "evidence": {
+        "products": 14,
+        "highestPrice": 350,
+        "shipping": 4,
+        "freeFrom": 75,
+        "couponMinimum": 40
+      }
+    },
+    {
+      "name": "Decimal USD formatting and arithmetic preserve cents without accidental dinar labels",
+      "result": "PASS"
+    },
+    {
+      "name": "Core fallback totals use USD shipping thresholds and decimal coupon amounts",
+      "result": "PASS"
+    },
+    {
+      "name": "Coupon validation uses 40 USD minimum and accessible product prices say USD",
+      "result": "PASS"
+    },
+    {
+      "name": "Account delivery/policy/price explanations contain both origins without old dinar or express claims",
+      "result": "PASS"
+    }
+  ],
+  "limits": "Actual classic-script VM with an injected localStorage map. Concrete prototype USD price table, not a live exchange rate or merchant-approved final price list. Does not validate browser layout or any actual payment."
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "backgroundImage": "url(\"http://127.0.0.1:8765/assets/monarca-logo-ink-v442.svg\")",
+    "before": "none",
+    "blend": "normal",
+    "documentWidth": 320,
+    "filter": "none",
+    "height": 54,
+    "viewport": 320,
+    "width": 190
+  },
+  {
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "backgroundImage": "url(\"http://127.0.0.1:8765/assets/monarca-logo-ink-v442.svg\")",
+    "before": "none",
+    "blend": "normal",
+    "documentWidth": 390,
+    "filter": "none",
+    "height": 54,
+    "viewport": 390,
+    "width": 190
+  },
+  {
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "backgroundImage": "url(\"http://127.0.0.1:8765/assets/monarca-logo-ink-v442.svg\")",
+    "before": "none",
+    "blend": "normal",
+    "documentWidth": 430,
+    "filter": "none",
+    "height": 54,
+    "viewport": 430,
+    "width": 190
+  },
+  {
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "backgroundImage": "url(\"http://127.0.0.1:8765/assets/monarca-logo-ink-v442.svg\")",
+    "before": "none",
+    "blend": "normal",
+    "documentWidth": 1425,
+    "filter": "none",
+    "height": 54,
+    "viewport": 1440,
+    "width": 190
+  }
+]

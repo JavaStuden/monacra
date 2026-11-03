@@ -1,0 +1,30 @@
+{
+  "version": "4.6.0",
+  "environment": "Codex in-app Chromium browser on Windows; 390x844 interactive walkthrough; embedded actual 320/390/430/1440px viewports",
+  "result": "PASS",
+  "responsive_viewports": 40,
+  "responsive_issues": 0,
+  "walkthroughs": [
+    {
+      "flow": "Arabic home > hamburger > real menu > language > English > bag > one-page checkout > COD > success",
+      "order": "M-DEMO-015059129-ho3",
+      "total_iqd": 571500,
+      "paid_iqd": 0,
+      "observed": "English confirmation explicitly shows Amount due on delivery and Paid: 0 IQD; bag cleared"
+    },
+    {
+      "flow": "English preorder item 2 > size 38 > Buy now > unified checkout > Mastercard test fill > confirm > success",
+      "order": "M-DEMO-014582520-o88",
+      "total_iqd": 245000,
+      "observed": "COD disabled with preorder reason; test card 4444 confirmed without an OTP page; original bag retained"
+    }
+  ],
+  "fixed_from_first_inspection": [
+    "Visa logo wrapping",
+    "payment and delivery option corners",
+    "English bottom navigation accessible name",
+    "COD Paid: 0 IQD translation and follow-up after-sales labels",
+    "Preorder confirmation and order/tracking ETA now store-confirmed rather than an in-stock shipping estimate"
+  ],
+  "verification_boundaries": "Final responsive board reconfirmed after fixes. Final COD success rechecked in browser. Preorder ETA correction additionally asserted in AR/EN VM success/order/tracking. No real payment, SMS, cash collection, courier action, external message or iOS/Android hardware test."
+}

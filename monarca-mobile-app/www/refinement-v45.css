@@ -1,0 +1,74 @@
+/* Shared boutique readability and radius rules; Zain faces load in zain-v46.css. */
+:root{--radius:12px;--radius-card:16px;--radius-control:12px}
+.phone{
+  --font:"Zain",Tahoma,"Segoe UI",Arial,sans-serif;
+  --muted:#665d54;--accent:#805447;
+  font-family:var(--font);font-size:16px;font-weight:500;
+  font-synthesis:none;text-rendering:optimizeLegibility;
+}
+.phone :is(button,input,select,textarea){font-family:var(--font);letter-spacing:0}
+.phone :is(h1,h2,h3,.ac-title,.page-subtitle){font-family:var(--font);letter-spacing:0;font-weight:700}
+.phone :is(.page-top h1,.ac-title,.ck-heading h2,.cat-intro h2,.cat-list-intro h2){font-size:22px;line-height:1.7}
+.phone :is(.section-head h2,.home-products .section-head h2,.cat-section-heading h2,.cat-curation h3,.journal h3){font-family:var(--font);font-size:20px;line-height:1.7;font-weight:700;letter-spacing:0}
+.phone :is(.pd-content>h1,.ck-payment-result h1,.success-content h1,.ac-about-cover h2){font-family:var(--font);font-size:24px;line-height:1.7;font-weight:700;letter-spacing:0}
+.phone :is(.ac-care-card h2,.cat-result-summary p,.store-contact-heading h2){font-family:var(--font);font-size:19px;line-height:1.8;font-weight:700;letter-spacing:0}
+.phone .page-top{min-height:52px;padding-block:0}
+.phone .page-top h1{min-width:0;overflow-wrap:anywhere}
+.phone .page-top .spacer,.phone .page-top .icon-btn{width:44px;flex-shrink:0}
+.phone :is(.page-content,.ck-content,.ac-page,.od-page,.cat-page,.pd-content,.sheet){line-height:1.8}
+.phone :is(.page-intro,.page-content>p,.ck-content>p,.ac-page>p,.od-page>p,.pd-description,.policy-section p,.ac-policy-block p,.ac-message p,.od-sheet-intro p,.sheet>p){font-size:15px;line-height:1.95;font-weight:500}
+.phone :is(.product-card h3,.home-products .product-card h3,.cat-results .product-card h3){font-size:15px;line-height:1.8;font-weight:600;overflow-wrap:anywhere}
+.phone .product-card h3{min-height:2.8em}
+.phone :is(.price,.home-products .price,.ck-cart-info strong,.ck-summary>div,.od-product b,.best-seller-meta b){font-family:var(--font);font-size:16px;line-height:1.7;font-weight:600}
+.phone :is(.pd-price-row>.price,.ck-summary .ck-grand){font-family:var(--font);font-size:21px;font-weight:700}
+.phone :is(.product-card .material,.cat-intro p,.cat-list-intro p,.cat-results-toolbar,.cat-chips>button,.cat-result-summary,.cat-section-tile small,.best-seller-meta,.best-seller-note){font-size:13px;line-height:1.8;font-weight:500;color:var(--muted)}
+.phone :is(.field,.field>span,.checkbox-row,.ck-select-all,.ck-item-name,.ck-row-link,.ck-address-card p,.ck-checkout-address p,.ck-mini-line p,.ck-cart-info p,.ck-coupon p,.ac-menu,.ac-menu b,.ac-ticket-row,.od-fact,.od-product h3,.od-order-heading,.rt-select-line b){font-size:14px;line-height:1.9;font-weight:500}
+.phone :is(.field>span,.ck-item-name,.ck-address-card h3,.ck-checkout-address b,.ck-mini-line h3,.ac-menu b,.store-contact-menu b,.od-product h3){font-weight:600}
+.phone :is(.field-note,.field>small,.info-box,.ck-tag,.ck-demo-alert,.ck-test-data,.ck-stepper,.ck-assurances,.ac-note,.ac-note p,.ac-menu small,.ac-policy-footer,.od-note,.od-note p,.od-fact small,.od-tag,.rt-line-value,.pd-subnote,.pd-delivery p,.pd-rating-note,.store-contact-demo,.store-contact-caption){font-size:13px;line-height:1.85;font-weight:500}
+.phone :is(.field-note,.checkbox-row,.ck-cart-info p,.ck-cart-info small,.ck-address-card p,.ck-checkout-address p,.ck-demo-alert,.ck-test-data small,.ck-assurances,.ac-note p,.ac-menu small,.od-note p,.store-contact-caption,.store-contact-sheet>p){color:var(--muted)}
+.phone .field :is(input:not([type="checkbox"]):not([type="radio"]),select,textarea),.phone :is(.cat-search input,.ac-search-form input,.ac-chat-compose textarea){font-size:16px;line-height:1.6;min-height:52px;border-radius:var(--radius-control);padding:12px 14px;caret-color:var(--brown)}
+.phone .field textarea{min-height:110px}
+.phone .field-row{gap:12px}
+.phone :is(.primary,.secondary,.danger-btn,.text-btn,.text-link,.section-head button,.store-contact-button){font-size:14px;line-height:1.8;font-weight:600;min-height:46px;letter-spacing:0}
+.phone :is(.primary,.secondary,.danger-btn){border-radius:var(--radius-control);padding:12px 16px}
+.phone :is(.primary,.secondary,.danger-btn):focus-visible{outline-width:2px;outline-offset:3px}
+.phone :is(.icon-btn,.favorite-btn){min-width:44px;min-height:44px}
+.phone .sheet .sheet-head .icon-btn{width:44px;height:44px}
+.phone .sheet-head h2{font-size:20px;line-height:1.7;font-weight:700}
+.phone .sheet{border-radius:20px 20px 0 0;padding-bottom:max(24px,env(safe-area-inset-bottom))}
+.phone :is(.bottom-nav){padding:10px 5px max(15px,env(safe-area-inset-bottom))}
+.phone .bottom-nav button{font-size:12px;font-weight:600;color:#6b6057;min-width:0;flex:1;min-height:55px;gap:5px;padding-inline:2px}
+.phone .bottom-nav button.active{color:var(--brown);font-weight:700}
+.phone .bottom-nav svg{width:24px;height:24px;stroke-width:1.7}
+.phone .round-categories b{font-size:13px;font-weight:600;line-height:1.7;color:#6b6057}
+.phone .round-categories button{min-width:0;min-height:44px}
+.phone :is(.cat-search,.ac-search-form){border-radius:var(--radius-control);overflow:hidden;min-height:52px}
+.phone .cat-search-label{font-size:14px;line-height:1.8;font-weight:500;color:var(--muted)}
+.phone .cat-camera{border-radius:var(--radius-control);min-width:48px;min-height:52px}
+.phone :is(.cat-search>button,.ac-search-form>button){min-width:48px;min-height:48px}
+.phone :is(.card-image,.cat-sub-card>.product-photo,.cat-feature,.cat-look-collage>button,.pd-stage,.pd-thumbnails>button,.pd-zoom-frame,.ck-cart-photo,.ck-saved-item>.product-photo,.od-product-image,.od-product>.product-photo,.rt-select-line>.product-photo){border-radius:12px;overflow:hidden}
+.phone :is(.home-products .card-image){border-radius:14px}
+.phone :is(.ck-address-card,.ck-checkout-address,.ck-summary,.ck-coupon,.ck-test-data,.ck-demo-alert,.ck-error-reason,.ac-account-stats,.ac-care-card,.ac-coupon,.ac-notification,.ac-ticket-preview,.ac-ticket-row,.ac-bank-card,.ac-mini-empty,.ac-demo-panel,.ac-policy-footer,.od-order-card,.od-payment-card,.od-service-strip,.od-demo-panel,.od-return-card,.rt-item,.rt-amount,.od-invoice,.store-contact-card,.store-contact-message,.store-contact-sheet .store-contact-number,.cat-curation,.cat-photo-callout,.cat-section-tile,.best-seller-empty){border-radius:var(--radius-card)}
+.phone :is(.od-order-card,.ac-coupon){overflow:hidden}
+.phone :is(.ac-care-grid button,.ac-policy-index button,.pd-sizes>button,.pd-stepper,.quantity,.rt-kind-toggle label,.rt-upload,.rt-attachment-grid>div,.rt-photo-strip>button,.info-box,.ac-note,.od-note){border-radius:var(--radius-control)}
+.phone :is(.cat-chips>button,.cat-active-filters button,.ac-chip,.ac-tab,.od-filter,.ck-tag,.od-tag,.badge){border-radius:8px}
+.phone .cat-section-tile{min-height:136px}
+.phone .cat-section-tile b{font-size:14px;line-height:1.7;font-weight:600}
+.phone .cat-section-tile.active{border-color:var(--brown)}
+.phone .store-contact-sheet>p{font-size:14px;font-weight:500;line-height:1.9}
+.phone .store-contact-message{font-size:15px;font-weight:500;line-height:1.9}
+.phone ::selection{background:#e5d6c5;color:#302923}
+.phone ::placeholder{color:#776b60;opacity:1;font-weight:400}
+.phone .app-scroll{scrollbar-color:#b29e89 #f1ece5}
+@media(max-width:360px){
+  .phone .page-top h1{font-size:20px}
+  .phone :is(.product-card h3,.home-products .product-card h3,.cat-results .product-card h3){font-size:14px}
+  .phone .round-categories{gap:8px;padding-inline:12px}
+  .phone .round-categories b{font-size:12px}
+  .phone .bottom-nav button{font-size:11px}
+  .phone :is(.section-head h2,.home-products .section-head h2){font-size:18px}
+  .phone .section-head button{font-size:13px}
+  .phone .cat-section-tile b{font-size:13px}
+  .phone .ck-assurances{gap:9px;flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){.phone *, .phone *::before,.phone *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
