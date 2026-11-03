@@ -29,17 +29,69 @@ jobs:
           npm ci
           npx cap sync android
 
-      - name: Build Android APK
+      - name: Configure Android Release Signing
+        env:
+          MONARCA_ANDROID_KEYSTORE_BASE64: ${{ secrets.MONARCA_ANDROID_KEYSTORE_BASE64 }}
+          MONARCA_ANDROID_STORE_PASSWORD: ${{ secrets.MONARCA_ANDROID_STORE_PASSWORD }}
+          MONARCA_ANDROID_KEY_ALIAS: ${{ secrets.MONARCA_ANDROID_KEY_ALIAS }}
+          MONARCA_ANDROID_KEY_PASSWORD: ${{ secrets.MONARCA_ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          KEYSTORE="$RUNNER_TEMP/monarca-release.jks"
+          if [[ -n "$MONARCA_ANDROID_KEYSTORE_BASE64" || -n "$MONARCA_ANDROID_STORE_PASSWORD" || -n "$MONARCA_ANDROID_KEY_ALIAS" || -n "$MONARCA_ANDROID_KEY_PASSWORD" ]]; then
+            if [[ -z "$MONARCA_ANDROID_KEYSTORE_BASE64" || -z "$MONARCA_ANDROID_STORE_PASSWORD" || -z "$MONARCA_ANDROID_KEY_ALIAS" || -z "$MONARCA_ANDROID_KEY_PASSWORD" ]]; then
+              echo "Android signing secrets are incomplete. Configure all four MONARCA_ANDROID_* repository secrets." >&2
+              exit 1
+            fi
+            echo "$MONARCA_ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE"
+            echo "MONARCA_ANDROID_KEYSTORE=$KEYSTORE" >> "$GITHUB_ENV"
+            echo "MONARCA_ANDROID_STORE_PASSWORD=$MONARCA_ANDROID_STORE_PASSWORD" >> "$GITHUB_ENV"
+            echo "MONARCA_ANDROID_KEY_ALIAS=$MONARCA_ANDROID_KEY_ALIAS" >> "$GITHUB_ENV"
+            echo "MONARCA_ANDROID_KEY_PASSWORD=$MONARCA_ANDROID_KEY_PASSWORD" >> "$GITHUB_ENV"
+            echo "MONARCA_SIGNING_MODE=persistent" >> "$GITHUB_ENV"
+            echo "Using the persistent Android release signing key." >> "$GITHUB_STEP_SUMMARY"
+          else
+            PASSWORD="$(openssl rand -hex 24)"
+            keytool -genkeypair -v \
+              -keystore "$KEYSTORE" \
+              -storetype PKCS12 \
+              -alias monarca \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass "$PASSWORD" \
+              -keypass "$PASSWORD" \
+              -dname "CN=Monarca, OU=Mobile, O=Monarca Boutique, L=Baghdad, ST=Baghdad, C=IQ"
+            echo "MONARCA_ANDROID_KEYSTORE=$KEYSTORE" >> "$GITHUB_ENV"
+            echo "MONARCA_ANDROID_STORE_PASSWORD=$PASSWORD" >> "$GITHUB_ENV"
+            echo "MONARCA_ANDROID_KEY_ALIAS=monarca" >> "$GITHUB_ENV"
+            echo "MONARCA_ANDROID_KEY_PASSWORD=$PASSWORD" >> "$GITHUB_ENV"
+            echo "MONARCA_SIGNING_MODE=temporary" >> "$GITHUB_ENV"
+            {
+              echo "### Android signing"
+              echo "This APK is signed with a temporary key and can be installed as a fresh install. Future builds use different keys, so Android cannot install them as updates over this APK. Configure the four repository secrets for a stable signing identity."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Build Signed Android APK
         working-directory: monarca-mobile-app/android
         run: |
+          set -euo pipefail
           chmod +x gradlew
           ./gradlew assembleRelease --stacktrace
+          APK="app/build/outputs/apk/release/app-release.apk"
+          test -s "$APK"
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          test -x "$APKSIGNER"
+          "$APKSIGNER" verify --verbose --print-certs "$APK"
+          mkdir -p ../release
+          cp "$APK" ../release/Monarca-v4.7.0.apk
 
       - name: Upload Android APK
         uses: actions/upload-artifact@v4
         with:
           name: Monarca-Android-APK
-          path: monarca-mobile-app/android/app/build/outputs/apk/release/*.apk
+          path: monarca-mobile-app/release/Monarca-v4.7.0.apk
 
   build-ios:
     name: Build iOS IPA
