@@ -1,4 +1,4 @@
-/* Monarca v4.7.2 · Responsive Controller & Multi-Language Synchronization */
+/* Monarca v4.7.9 · Responsive Controller, Dynamic Orientation/Foldable Adaptation & Multi-Language Sync */
 (() => {
   'use strict';
 
@@ -10,10 +10,10 @@
     // 1. Detect Native App Platform (Capacitor / Mobile Webview / Real Tablet)
     const isNative = !!(
       window.Capacitor?.isNativePlatform?.() ||
-      window.Capacitor?.getPlatform?.() !== 'web' ||
+      (window.Capacitor?.getPlatform && window.Capacitor.getPlatform() !== 'web') ||
       window.location.protocol === 'capacitor:' ||
       window.location.protocol === 'file:' ||
-      window.location.hostname === 'localhost'
+      (window.location.hostname === 'localhost' && !window.location.port)
     );
     if (isNative) {
       document.body.classList.add('is-native-app');
@@ -24,52 +24,98 @@
     }
 
     // 2. Device Viewport Mode Switcher (Desktop / Tablet / Mobile)
-    function setDeviceMode(mode) {
-      if (!stage) return;
+    let currentMode = null;
+    let isDispatchingResize = false;
+    let userLockedSimMode = false;
+
+    function setDeviceMode(mode, { persist = false } = {}) {
+      if (!stage || !mode) return;
+      const modeClass = 'mode-' + mode;
+      if (currentMode === mode && stage.classList.contains(modeClass)) {
+        return;
+      }
+      currentMode = mode;
       stage.classList.remove('mode-desktop', 'mode-tablet', 'mode-mobile');
-      stage.classList.add('mode-' + mode);
+      stage.classList.add(modeClass);
       simBtns.forEach(btn => {
         btn.classList.toggle('active', btn.dataset.sim === mode);
       });
-      try {
-        localStorage.setItem('monarca-device-mode', mode);
-      } catch (_) {}
-      window.dispatchEvent(new Event('resize'));
+      if (persist) {
+        try {
+          localStorage.setItem('monarca-device-mode', mode);
+        } catch (_) {}
+      }
+      if (!isDispatchingResize) {
+        isDispatchingResize = true;
+        try {
+          window.dispatchEvent(new Event('resize'));
+        } finally {
+          isDispatchingResize = false;
+        }
+      }
     }
 
-    simBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const mode = btn.dataset.sim;
-        if (mode) setDeviceMode(mode);
-      });
-    });
-
-    // Auto-detect screen layout on startup
-    if (isNative) {
-      // In native app, automatically select Tablet or Mobile based on physical screen width
-      if (window.innerWidth >= 1024) {
-        setDeviceMode('desktop');
-      } else if (window.innerWidth >= 768) {
-        setDeviceMode('tablet');
-      } else {
-        setDeviceMode('mobile');
+    function detectResponsiveMode() {
+      const width = window.innerWidth || document.documentElement.clientWidth || 375;
+      if (isNative) {
+        // Real Phone / Foldable / Tablet / iPad: always adapt to physical viewport width
+        if (width >= 1024) {
+          setDeviceMode('desktop');
+        } else if (width >= 768) {
+          setDeviceMode('tablet');
+        } else {
+          setDeviceMode('mobile');
+        }
+        return;
       }
-    } else {
-      // In web browser: wide screens (>= 1024px) default to desktop mode or saved choice
-      if (window.innerWidth >= 1024) {
+
+      // Web browser: if user manually clicked simulator bar on desktop, honor their choice
+      if (userLockedSimMode && width >= 768) {
+        return;
+      }
+
+      if (width >= 1024) {
         let savedMode = 'desktop';
         try {
           savedMode = localStorage.getItem('monarca-device-mode') || 'desktop';
         } catch (_) {}
         setDeviceMode(savedMode);
-      } else if (window.innerWidth >= 768) {
+      } else if (width >= 768) {
         setDeviceMode('tablet');
       } else {
         setDeviceMode('mobile');
       }
     }
 
-    // 2. Language Switcher Synchronization
+    simBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.sim;
+        if (mode) {
+          userLockedSimMode = true;
+          setDeviceMode(mode, { persist: true });
+        }
+      });
+    });
+
+    // Initial screen layout detection
+    detectResponsiveMode();
+
+    // Dynamically re-evaluate when rotating device (Portrait <-> Landscape) or unfolding foldables
+    let resizeRaf = null;
+    window.addEventListener('resize', () => {
+      if (isDispatchingResize) return;
+      if (resizeRaf) cancelAnimationFrame(resizeRaf);
+      resizeRaf = requestAnimationFrame(() => {
+        detectResponsiveMode();
+      });
+    });
+
+    window.addEventListener('orientationchange', () => {
+      setTimeout(detectResponsiveMode, 120);
+      setTimeout(detectResponsiveMode, 320);
+    });
+
+    // 3. Language Switcher Synchronization
     function syncLangButtons(lang) {
       document.querySelectorAll('.lang-opt').forEach(btn => {
         const val = btn.dataset.langVal || btn.dataset.val;

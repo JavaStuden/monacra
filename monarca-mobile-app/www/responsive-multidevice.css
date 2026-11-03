@@ -8,9 +8,14 @@ body.is-native-app #device-sim-bar {
 
 body.is-native-app,
 body.is-native-app .stage,
+body.is-native-app .stage.mode-desktop,
 body.is-native-app .stage.mode-tablet,
 body.is-native-app .stage.mode-mobile,
-body.is-native-app .phone {
+body.is-native-app .phone,
+body.is-native-app .stage .phone,
+body.is-native-app .stage.mode-desktop .phone,
+body.is-native-app .stage.mode-tablet .phone,
+body.is-native-app .stage.mode-mobile .phone {
   width: 100% !important;
   max-width: 100% !important;
   height: 100% !important;
@@ -1888,4 +1893,72 @@ body.route-product .app-scroll {
     max-height: 34px !important;
     padding: 8px 12px !important;
   }
+}
+
+
+/* ==========================================================================
+   v4.7.9 NATIVE TABLET, IPAD & FOLDABLE FULL-SCREEN ADAPTATION
+   Eliminates web simulator frame on real tablets (768px - 1023px & >= 1024px)
+   ========================================================================== */
+body.is-native-app .stage.mode-tablet,
+body.is-native-app .stage.mode-mobile {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: var(--paper, #fffefa) !important;
+  display: block !important;
+}
+
+body.is-native-app .stage.mode-tablet .phone,
+body.is-native-app .stage.mode-mobile .phone {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100dvh !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: var(--paper, #fffefa) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+body.is-native-app .stage.mode-tablet .app-scroll {
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box !important;
+}
+
+body.is-native-app .stage.mode-tablet .bottom-nav {
+  position: fixed !important;
+  bottom: max(14px, env(safe-area-inset-bottom, 14px)) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 32px) !important;
+  max-width: 520px !important;
+  margin: 0 !important;
+  z-index: 990 !important;
+}
+
+/* iPad / iOS Tablet safe-area top inset on announcement and sticky headers */
+body.is-native-ios .stage.mode-tablet .monarca-announcement,
+body.is-native-ios .stage.mode-desktop .monarca-announcement {
+  padding-top: max(10px, env(safe-area-inset-top, 24px)) !important;
+}
+
+body.is-native-ios .stage.mode-tablet .page-top,
+body.is-native-ios .stage.mode-desktop .page-top {
+  padding-top: max(12px, env(safe-area-inset-top, 24px)) !important;
+  height: auto !important;
+  min-height: calc(56px + env(safe-area-inset-top, 24px)) !important;
 }
