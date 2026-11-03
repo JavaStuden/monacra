@@ -15,6 +15,7 @@ npx cap sync ios
 
 echo "=== [2/4] Installing CocoaPods Dependencies ==="
 cd "$APP_DIR/ios/App"
+rm -rf App.xcworkspace
 pod install
 
 echo "=== [3/4] Archiving Xcode Project ==="
@@ -26,12 +27,13 @@ xcodebuild -workspace App.xcworkspace \
            archive \
            CODE_SIGN_IDENTITY="" \
            CODE_SIGNING_REQUIRED=NO \
-           CODE_SIGNING_ALLOWED=NO
+           CODE_SIGNING_ALLOWED=NO \
+           AD_HOC_CODE_SIGNING_ALLOWED=YES
 
 echo "=== [4/4] Packaging Monarca-v4.7.0.ipa ==="
 rm -rf Payload
 mkdir -p Payload
-cp -r ./build/App.xcarchive/Products/Applications/App.app Payload/Monarca.app
+cp -R ./build/App.xcarchive/Products/Applications/App.app Payload/App.app
 mkdir -p "$APP_DIR/release"
 zip -r "$APP_DIR/release/Monarca-v4.7.0.ipa" Payload
 rm -rf Payload

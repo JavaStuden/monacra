@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Dependencies
+      - name: Install Dependencies & Sync Android
         working-directory: monarca-mobile-app
         run: |
           npm ci
@@ -52,11 +52,12 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Dependencies & Pods
+      - name: Install Dependencies, Sync iOS & Install Pods
         working-directory: monarca-mobile-app
         run: |
           npm ci
           npx cap sync ios
+          rm -rf ios/App/App.xcworkspace
           cd ios/App && pod install
 
       - name: Build & Archive iOS App
@@ -65,21 +66,23 @@ jobs:
           xcodebuild -workspace App.xcworkspace \
                      -scheme App \
                      -configuration Release \
+                     -sdk iphoneos \
                      -destination 'generic/platform=iOS' \
                      -archivePath ./build/App.xcarchive \
                      archive \
                      CODE_SIGN_IDENTITY="" \
                      CODE_SIGNING_REQUIRED=NO \
-                     CODE_SIGNING_ALLOWED=NO
+                     CODE_SIGNING_ALLOWED=NO \
+                     AD_HOC_CODE_SIGNING_ALLOWED=YES
 
-      - name: Package Unsigned IPA
+      - name: Package Unsigned IPA (for AltStore / Sideloadly / TrollStore)
         working-directory: monarca-mobile-app/ios/App
         run: |
+          rm -rf Payload
           mkdir -p Payload
-          cp -r ./build/App.xcarchive/Products/Applications/App.app Payload/Monarca.app
-          zip -r Monarca-v4.7.0.ipa Payload
+          cp -R ./build/App.xcarchive/Products/Applications/App.app Payload/App.app
           mkdir -p ../../release
-          cp Monarca-v4.7.0.ipa ../../release/
+          zip -qry ../../release/Monarca-v4.7.0.ipa Payload
 
       - name: Upload iOS IPA
         uses: actions/upload-artifact@v4
