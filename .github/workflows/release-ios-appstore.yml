@@ -1,0 +1,170 @@
+name: Build signed iOS App Store IPA
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'App version, for example 4.7.0'
+        required: true
+        default: '4.7.0'
+        type: string
+      build_number:
+        description: 'Positive integer; increase for every upload of this version'
+        required: true
+        default: '1'
+        type: string
+      upload_to_testflight:
+        description: 'Upload to App Store Connect after exporting the signed IPA'
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-appstore-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release-ios:
+    runs-on: macos-26
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+        working-directory: monarca-mobile-app
+    env:
+      IOS_BUNDLE_ID: com.monarca.boutique
+      IOS_VERSION: ${{ inputs.version }}
+      IOS_BUILD_NUMBER: ${{ inputs.build_number }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate release inputs and credentials
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.MONARCA_IOS_CERTIFICATE_P12_BASE64 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.MONARCA_IOS_CERTIFICATE_PASSWORD }}
+          PROFILE_BASE64: ${{ secrets.MONARCA_IOS_PROVISIONING_PROFILE_BASE64 }}
+          API_KEY_ID: ${{ secrets.MONARCA_APPSTORE_API_KEY_ID }}
+          API_ISSUER_ID: ${{ secrets.MONARCA_APPSTORE_API_ISSUER_ID }}
+          API_PRIVATE_KEY: ${{ secrets.MONARCA_APPSTORE_API_PRIVATE_KEY }}
+          UPLOAD_TO_TESTFLIGHT: ${{ inputs.upload_to_testflight }}
+        run: |
+          python3 - <<'PY'
+          import os, re
+          if not re.fullmatch(r'\d+\.\d+\.\d+', os.environ['IOS_VERSION']):
+              raise SystemExit('Version must have the form 4.7.0.')
+          if not re.fullmatch(r'[1-9]\d{0,3}', os.environ['IOS_BUILD_NUMBER']):
+              raise SystemExit('Build number must be an integer between 1 and 9999.')
+          required = ['CERTIFICATE_BASE64', 'CERTIFICATE_PASSWORD', 'PROFILE_BASE64']
+          if os.environ['UPLOAD_TO_TESTFLIGHT'] == 'true':
+              required += ['API_KEY_ID', 'API_ISSUER_ID', 'API_PRIVATE_KEY']
+          missing = [name for name in required if not os.environ.get(name, '').strip()]
+          if missing:
+              raise SystemExit('Missing GitHub Actions secrets: ' + ', '.join(missing)
+                               + '. See monarca-mobile-app/IOS-APPSTORE-WINDOWS.md.')
+          PY
+
+      - name: Select Xcode 26 and verify the iOS SDK
+        run: |
+          XCODE_PATH="$(python3 - <<'PY'
+          import pathlib, re
+          paths = list(pathlib.Path('/Applications').glob('Xcode_26*.app'))
+          if not paths:
+              raise SystemExit('No Xcode 26 installation found on the runner.')
+          print(max(paths, key=lambda p: tuple(map(int, re.findall(r'\d+', p.name)))))
+          PY
+          )"
+          sudo xcode-select --switch "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
+          SDK_VERSION="$(xcrun --sdk iphoneos --show-sdk-version)"
+          test "${SDK_VERSION%%.*}" -ge 26
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: monarca-mobile-app/package-lock.json
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Install and sync the existing Capacitor app
+        run: |
+          gem install cocoapods --version 1.16.2 --no-document
+          npm ci
+          npx cap sync ios
+
+      - name: Install distribution signing credentials
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.MONARCA_IOS_CERTIFICATE_P12_BASE64 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.MONARCA_IOS_CERTIFICATE_PASSWORD }}
+          PROFILE_BASE64: ${{ secrets.MONARCA_IOS_PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          umask 077
+          KEYCHAIN_PATH="$RUNNER_TEMP/monarca-signing.keychain-db"
+          KEYCHAIN_PASSWORD="$(openssl rand -hex 32)"
+          echo "::add-mask::$KEYCHAIN_PASSWORD"
+          printf '%s' "$CERTIFICATE_BASE64" | base64 --decode > "$RUNNER_TEMP/monarca-distribution.p12"
+          printf '%s' "$PROFILE_BASE64" | base64 --decode > "$RUNNER_TEMP/monarca-profile.mobileprovision"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$RUNNER_TEMP/monarca-distribution.p12" -P "$CERTIFICATE_PASSWORD" \
+            -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: \
+            -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" >/dev/null
+          security list-keychains -d user -s "$KEYCHAIN_PATH"
+          security cms -D -i "$RUNNER_TEMP/monarca-profile.mobileprovision" \
+            > "$RUNNER_TEMP/monarca-profile.plist"
+          python3 scripts/prepare-ios-signing.py
+          for PROFILE_DIR in "$HOME/Library/MobileDevice/Provisioning Profiles" \
+            "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"; do
+            mkdir -p "$PROFILE_DIR"
+            PROFILE_UUID="$(python3 -c 'import json,os; print(json.load(open(os.environ["RUNNER_TEMP"]+"/monarca-signing.json"))["profile_uuid"])')"
+            cp "$RUNNER_TEMP/monarca-profile.mobileprovision" "$PROFILE_DIR/$PROFILE_UUID.mobileprovision"
+          done
+          ruby scripts/configure-ios-signing.rb
+
+      - name: Archive and export the signed App Store IPA
+        run: |
+          xcodebuild -workspace ios/App/App.xcworkspace -scheme App -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/monarca-derived-data" \
+            -archivePath "$RUNNER_TEMP/Monarca.xcarchive" archive
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/Monarca.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/monarca-export-options.plist" \
+            -exportPath "$RUNNER_TEMP/monarca-ios-export"
+          test -s "$RUNNER_TEMP/monarca-ios-export/App.ipa"
+          codesign --verify --deep --strict "$RUNNER_TEMP/Monarca.xcarchive/Products/Applications/App.app"
+
+      - name: Save the signed IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Monarca-iOS-AppStore-${{ inputs.version }}-${{ inputs.build_number }}
+          path: ${{ runner.temp }}/monarca-ios-export/App.ipa
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload to App Store Connect
+        if: ${{ inputs.upload_to_testflight }}
+        uses: apple-actions/upload-testflight-build@v5
+        with:
+          app-path: ${{ runner.temp }}/monarca-ios-export/App.ipa
+          issuer-id: ${{ secrets.MONARCA_APPSTORE_API_ISSUER_ID }}
+          api-key-id: ${{ secrets.MONARCA_APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.MONARCA_APPSTORE_API_PRIVATE_KEY }}
+          wait-for-processing: 'false'
+
+      - name: Remove temporary signing credentials
+        if: ${{ always() }}
+        run: |
+          security delete-keychain "$RUNNER_TEMP/monarca-signing.keychain-db" 2>/dev/null || true
+          if [[ -n "${IOS_PROFILE_UUID:-}" ]]; then
+            rm -f "$HOME/Library/MobileDevice/Provisioning Profiles/$IOS_PROFILE_UUID.mobileprovision" \
+              "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles/$IOS_PROFILE_UUID.mobileprovision"
+          fi
+          rm -f "$RUNNER_TEMP/monarca-distribution.p12" "$RUNNER_TEMP/monarca-profile.mobileprovision" \
+            "$RUNNER_TEMP/monarca-profile.plist" "$RUNNER_TEMP/monarca-signing.json"

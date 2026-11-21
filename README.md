@@ -74,6 +74,7 @@ mvn spring-boot:run
 * **Release 签名**：仓库不包含私钥。需要签名发布包时，在构建环境设置 `MONARCA_ANDROID_KEYSTORE`、`MONARCA_ANDROID_STORE_PASSWORD`、`MONARCA_ANDROID_KEY_ALIAS` 和 `MONARCA_ANDROID_KEY_PASSWORD`；未配置时可构建未签名 Release 包用于本地测试。
 
 ### 2. iOS 工程与 IPA 构建
+* **Windows 无 Mac 发布**：可继续使用现有 Capacitor 工程，通过 GitHub 云端 Mac 编译、正式签名并上传 TestFlight。参见 [Windows 发布操作说明](monarca-mobile-app/IOS-APPSTORE-WINDOWS.md)。手动发布工作流为 `release-ios-appstore.yml`，需要先配置 Apple 开发者证书与描述文件。
 * **最低系统版本**：iOS 13.0
 * **安装方式**：
   * 在 macOS 上使用 Xcode 为 App 配置 Apple Developer Team 后，Archive 并通过 TestFlight 或 App Store Connect 发布。

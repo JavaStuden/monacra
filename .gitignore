@@ -18,7 +18,9 @@ monarca-mobile-app/ios/App/App/capacitor.config.json
 *.keystore
 *.jks
 *.p12
+*.p8
 *.mobileprovision
+.ios-signing/
 google-services.json
 
 # Packaged installers and archives
