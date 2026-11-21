@@ -15,6 +15,7 @@ public class PlaceOrderRequest {
     private String apartment;
     private String deliveryNote;
     private String paymentMethod; // visa, mastercard, cod
+    private String chargeCurrency;
     private String couponCode;
     private Boolean simulateDecline = false;
 
@@ -55,6 +56,9 @@ public class PlaceOrderRequest {
 
     public String getPaymentMethod() { return paymentMethod; }
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+
+    public String getChargeCurrency() { return chargeCurrency; }
+    public void setChargeCurrency(String chargeCurrency) { this.chargeCurrency = chargeCurrency; }
 
     public String getCouponCode() { return couponCode; }
     public void setCouponCode(String couponCode) { this.couponCode = couponCode; }

@@ -2,6 +2,7 @@ package com.monarca.controller.api;
 
 import com.monarca.common.R;
 import com.monarca.dto.CartLineDTO;
+import com.monarca.dto.CustomerOrderResponse;
 import com.monarca.dto.LoginRequest;
 import com.monarca.dto.PlaceOrderRequest;
 import com.monarca.dto.QuoteRequest;
@@ -16,6 +17,8 @@ import com.monarca.service.OrderService;
 import com.monarca.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -67,14 +70,14 @@ public class ApiController {
     }
 
     @PostMapping("/checkout/quote")
-    @Operation(summary = "Calculate Checkout Quote & Dual-Sourcing Groups", description = "Calculates shipping fees ($75 free shipping threshold), applied discounts, delivery times, and strictly verifies COD eligibility (prohibiting COD if China items exist)")
+    @Operation(summary = "Calculate Checkout Quote & Delivery Groups", description = "Calculates shipping fees ($75 free shipping threshold), discounts and delivery times for orders paid online")
     public R<QuoteResponse> getQuote(@RequestBody QuoteRequest request) {
         QuoteResponse quote = fulfillmentService.calculateQuote(request.getItems(), request.getCouponCode());
         return R.ok(quote);
     }
 
     @PostMapping("/orders")
-    @Operation(summary = "Place a New Order", description = "Creates an order snapshot with exact prices and Iraqi delivery address, validates COD eligibility")
+    @Operation(summary = "Place a New Order", description = "Creates an unpaid order snapshot with exact prices and an Iraqi delivery address")
     public R<Order> placeOrder(@RequestBody PlaceOrderRequest request) {
         try {
             Order order = orderService.placeOrder(request);
@@ -88,18 +91,21 @@ public class ApiController {
 
     @GetMapping("/orders/{id}")
     @Operation(summary = "Get Order by ID")
-    public R<Order> getOrder(@PathVariable String id) {
+    public R<CustomerOrderResponse> getOrder(@PathVariable String id) {
         Order order = orderService.getOrder(id);
         if (order == null) {
             return R.fail(404, "Order not found");
         }
-        return R.ok(order);
+        return R.ok(CustomerOrderResponse.from(order));
     }
 
     @GetMapping("/orders")
-    @Operation(summary = "List Orders by Customer Phone")
-    public R<List<Order>> listOrders(@RequestParam(required = false) String phone) {
-        return R.ok(orderService.listOrders(phone));
+    @Operation(summary = "List customer orders (requires verified customer authentication)")
+    public ResponseEntity<R<List<Order>>> listOrders() {
+        R<List<Order>> response = R.fail(HttpStatus.UNAUTHORIZED.value(),
+                "Order history requires verified customer authentication.");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(response);
     }
 
     @PostMapping("/orders/{id}/cancel")

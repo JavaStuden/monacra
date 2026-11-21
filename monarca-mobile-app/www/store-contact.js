@@ -1,7 +1,7 @@
-/* Monarca store contact configuration.
- * Replace ONLY whatsappNumber with the store's approved Iraqi business number,
- * in international format, e.g. +964 followed by its actual mobile number.
- * An empty or invalid value keeps the safe, non-dialable prototype preview.
- * Never replace this with an arbitrary real-looking number.
- */
-window.MonarcaStoreContact = Object.freeze({whatsappNumber:''});
+/* Public Monarca business contacts. */
+window.MonarcaStoreContact = Object.freeze({
+  companyPhone: '+971 52 894 5131',
+  iraqPhone: '+964 750 222 3313',
+  whatsappNumber: '+9647502223313',
+  email: 'Operations@fort-gate.ae'
+});

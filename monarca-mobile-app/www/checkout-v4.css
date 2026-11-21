@@ -14,3 +14,11 @@
 .ck-delivery-group p{font-size:15px;line-height:1.7;margin:4px 0}
 .ck-delivery-group small{display:block;font-size:13px;line-height:1.8;color:var(--muted)}
 .ck-success-facts>span{max-width:100%;overflow-wrap:break-word}
+
+/* Keep mixed-direction card branding and payment copy in separate flex slots. */
+.ck-onepage .ck-payment-networks{grid-template-columns:minmax(0,1fr)}
+.ck-onepage .ck-payment-networks .payment-option:last-child{grid-column:auto}
+.ck-onepage .ck-payment-networks .payment-option{display:flex;align-items:center;gap:12px;padding:14px 16px;text-align:start}
+.ck-onepage .ck-payment-networks .stripe-card-brands{display:inline-flex;flex:0 0 auto;direction:ltr;unicode-bidi:isolate;white-space:nowrap;font:600 12px/1 Arial,sans-serif}
+.ck-onepage .ck-payment-networks .payment-option>span:not(.visa-mark):not(.mastercard-mark):not(.stripe-card-brands){flex:1 1 auto;min-width:0;line-height:1.6;overflow-wrap:anywhere}
+.ck-onepage .ck-payment-networks .payment-option .radio{flex:0 0 12px}

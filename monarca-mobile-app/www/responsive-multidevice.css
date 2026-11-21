@@ -1962,3 +1962,56 @@ body.is-native-ios .stage.mode-desktop .page-top {
   height: auto !important;
   min-height: calc(56px + env(safe-area-inset-top, 24px)) !important;
 }
+
+/* Desktop product pages use the fixed action bar while other desktop pages
+   keep the mobile navigation hidden. */
+@media (min-width: 1024px) {
+  .stage.mode-desktop .bottom-nav.is-product-bar,
+  .stage:not(.mode-tablet):not(.mode-mobile) .bottom-nav.is-product-bar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px 24px !important;
+    background: rgba(254, 253, 250, 0.98) !important;
+    border-top: 1px solid #ebe4dc !important;
+    box-shadow: 0 -4px 20px rgba(50, 35, 25, 0.08) !important;
+    z-index: 990 !important;
+  }
+
+  .stage.mode-desktop .bottom-nav.is-product-bar .product-fixed-bar,
+  .stage:not(.mode-tablet):not(.mode-mobile) .bottom-nav.is-product-bar .product-fixed-bar {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 560px !important;
+    margin: 0 auto !important;
+  }
+
+  .stage.mode-desktop .bottom-nav.is-product-bar .product-fixed-bar button,
+  .stage:not(.mode-tablet):not(.mode-mobile) .bottom-nav.is-product-bar .product-fixed-bar button {
+    display: inline-flex !important;
+    flex: 1 1 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+    min-height: 50px !important;
+    padding: 10px 18px !important;
+    border-radius: 6px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+  }
+
+  .stage.mode-desktop .bottom-nav.is-product-bar .product-fixed-bar button.primary,
+  .stage:not(.mode-tablet):not(.mode-mobile) .bottom-nav.is-product-bar .product-fixed-bar button.primary {
+    background: #35261d !important;
+    color: #fffaf4 !important;
+  }
+
+  .stage.mode-desktop .bottom-nav.is-product-bar .product-fixed-bar button.secondary,
+  .stage:not(.mode-tablet):not(.mode-mobile) .bottom-nav.is-product-bar .product-fixed-bar button.secondary {
+    background: #f5eee6 !important;
+    color: #35261d !important;
+    border: 1px solid #ddcebf !important;
+  }
+}

@@ -5,10 +5,10 @@ const M=window.Monarca;if(!M)return;
 const I=window.MonarcaI18n;
 const {top,icon,go,esc}=M;
 const language=()=>I?.language()||'ar';
-M.sourceSections=()=>`<section class="src47-shops" aria-labelledby="src47-heading"><div class="src47-heading"><h2 id="src47-heading">اختيار جهة التوريد</h2><p>التوصيل والدفع حسب جهة التوريد</p></div><div class="src47-shop-grid">${[
- ['iraq','box','متوفر في العراق','توصيل خلال يومين تقريباً','الدفع عند الاستلام أو بالبطاقة'],
- ['china','globe','طلب من الصين','توصيل خلال ١٥–٢٠ يوماً تقريباً','الدفع المسبق بالبطاقة فقط']
-].map(([source,symbol,title,delivery,payment])=>`<button type="button" class="src47-shop" data-go="collection/${source}"><span class="src47-shop-icon">${icon(symbol)}</span><b>${title}</b><span class="src47-shop-time">${delivery}</span><small>${payment}</small><span class="src47-shop-link">عرض المنتجات ${icon('arrow')}</span></button>`).join('')}</div></section>`;
+M.sourceSections=()=>{const en=language()==='en';return `<section class="src47-shops" aria-labelledby="src47-heading"><div class="src47-heading"><h2 id="src47-heading">${en?'Delivery Options':'خيارات التوصيل'}</h2><p>${en?'Choose the delivery option that suits you':'اختر طريقة التوصيل المناسبة لك'}</p></div><div class="src47-shop-grid">${[
+ ['iraq','box',en?'Express Delivery':'توصيل سريع',en?'Delivered in 3–4 days':'توصيل خلال ٣ إلى ٤ أيام',en?'Online payment by Visa or Mastercard':'الدفع الإلكتروني ببطاقة Visa أو Mastercard'],
+ ['china','globe',en?'International Shipping from Our Warehouse':'شحن دولي من مستودعنا',en?'Air freight: 15–20 days':'شحن جوي: 15 إلى 20 يوماً',en?'Secure card payment':'الدفع الآمن بالبطاقة']
+].map(([source,symbol,title,delivery,payment])=>`<button type="button" class="src47-shop" data-go="collection/${source}"><span class="src47-shop-icon">${icon(symbol)}</span><b>${title}</b><span class="src47-shop-time">${delivery}</span><small>${payment}</small><span class="src47-shop-link">${en?'View products':'عرض المنتجات'} ${icon('arrow')}</span></button>`).join('')}</div></section>`;};
 function menuView(){
  const entries=[['user','الحساب','account'],['box','الطلبات','orders'],['pin','عناوين التوصيل','addresses'],['chat','الدعم والتواصل','support'],['globe','اللغة','region'],['settings','الإعدادات','settings']];
  return `${top('القائمة')}<div class="page-content mn46-page"><div class="mn46-brand" role="img" aria-label="Monarca"></div><nav class="mn46-list" aria-label="القائمة الرئيسية">${entries.map(([symbol,label,route])=>`<button type="button" data-go="${route}">${icon(symbol)}<span>${label}</span>${route==='region'?`<small>${language()==='en'?'English':'العربية'}</small>`:''}${icon('arrow')}</button>`).join('')}</nav></div>`;

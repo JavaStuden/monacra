@@ -18,6 +18,7 @@
     <properties>
         <java.version>21</java.version>
         <springdoc.version>2.6.0</springdoc.version>
+        <stripe.version>34.1.0</stripe.version>
     </properties>
 
     <dependencies>
@@ -37,6 +38,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Stripe-hosted Checkout and signed webhook verification -->
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>${stripe.version}</version>
         </dependency>
 
         <!-- Embedded Persistent H2 Database -->

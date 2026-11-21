@@ -103,18 +103,18 @@ public class FulfillmentService {
         if (iraqCount > 0) {
             groups.add(new DeliveryGroupDTO(
                     "iraq",
-                    "متوفر في العراق",
-                    "حوالي يومين",
-                    2,
-                    2,
+                    "توصيل سريع",
+                    "٣–٤ أيام",
+                    3,
+                    4,
                     iraqCount,
-                    true
+                    false
             ));
         }
         if (chinaCount > 0) {
             groups.add(new DeliveryGroupDTO(
                     "china",
-                    "طلب من الصين",
+                    "شحن دولي",
                     "١٥–٢٠ يوماً",
                     15,
                     20,
@@ -124,14 +124,8 @@ public class FulfillmentService {
         }
         response.setDeliveryGroups(groups);
 
-        // COD Eligibility: If order contains any China pre-order items, COD is strictly prohibited!
-        if (chinaCount > 0) {
-            response.setCodEligible(false);
-            response.setCodReason("طلبات الصين تتطلب الدفع المسبق ببطاقة Visa أو Mastercard. الدفع عند الاستلام متاح لقطع العراق الجاهزة فقط.");
-        } else {
-            response.setCodEligible(true);
-            response.setCodReason("الدفع عند الاستلام متاح لقطع العراق الجاهزة في هذا الطلب.");
-        }
+        response.setCodEligible(false);
+        response.setCodReason("الدفع الإلكتروني بالبطاقة مطلوب.");
 
         return response;
     }

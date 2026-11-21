@@ -48,6 +48,17 @@ add(`
 العراق|Iraq
 بلد التوصيل|Delivery country
 عملة العرض والدفع التجريبي|Display and demo payment currency
+عملة العرض|Display currency
+عملة الدفع الإلكتروني عبر Stripe|Stripe payment currency
+الدرهم الإماراتي|UAE dirham
+يُعرض السعر بالدولار الأمريكي، ويُحصّل الدفع عبر Stripe بالدرهم الإماراتي بسعر ثابت 3.67 AED لكل USD.|Prices are displayed in US dollars. Stripe charges in UAE dirhams at a fixed rate of 3.67 AED per USD.
+المبلغ المدفوع عبر Stripe|Amount charged by Stripe
+المبلغ الذي سيخصم عبر Stripe|Amount to be charged by Stripe
+المبلغ المتوقع عبر Stripe|Expected Stripe amount
+قيمة الطلب بالدولار الأمريكي|USD order value
+سعر التحويل الثابت|Fixed exchange rate
+ملخص طلب · ليس فاتورة ضريبية|Order summary · not a tax invoice
+الأسعار التجارية معروضة بالدولار الأمريكي. يظهر مبلغ الخصم الفعلي بعملة AED عند استخدام Stripe.|Prices are displayed in US dollars. The actual amount charged in AED appears above when Stripe is used.
 الدينار العراقي|Iraqi dinar
 رجوع|Back
 العودة|Back
@@ -263,8 +274,8 @@ add(`
 صورة أخرى|Another photo
 الصور للون المرجعي؛ الألوان الأخرى موضحة بعينة اللون.|Photos show the reference colour; other colours are shown as swatches.
 عن صور ومعلومات المنتج|About product photos and details
-قد يختلف اللون باختلاف الشاشة والإضاءة. صورة هذه القطعة من مرجع العميل. الألوان الإضافية ممثلة بعينات لونية، وتُعتمد صور المورد قبل البيع.|Colour may vary with screens and lighting. This image comes from the client reference. Additional colours use swatches; supplier photos must be confirmed before sale.
-قد يختلف اللون باختلاف الشاشة والإضاءة. صورة هذه القطعة مولّدة بالذكاء الاصطناعي لعرض النموذج، وليست تصويراً لمنتج فعلي موثّق. الألوان الإضافية ممثلة بعينات لونية، وتُعتمد صور المورد قبل البيع.|Colour may vary with screens and lighting. This is an AI-generated prototype image rather than a verified product photo. Additional colours use swatches; supplier photos must be confirmed before sale.
+قد يختلف اللون باختلاف الشاشة والإضاءة. صورة هذه القطعة من مرجع العميل. الألوان الإضافية ممثلة بعينات لونية، وتُراجع تفاصيل المنتج قبل البيع.|Colour may vary with screens and lighting. This image comes from the client reference. Additional colours use swatches; product details should be reviewed before sale.
+قد يختلف اللون باختلاف الشاشة والإضاءة. صورة هذه القطعة مولّدة بالذكاء الاصطناعي لعرض النموذج، وليست تصويراً لمنتج فعلي موثّق. الألوان الإضافية ممثلة بعينات لونية، وتُراجع تفاصيل المنتج قبل البيع.|Colour may vary with screens and lighting. This is an AI-generated prototype image rather than a verified product photo. Additional colours use swatches; product details should be reviewed before sale.
 مجموعة عرض توضيحية · صور من مرجع العميل، وصور عرض مولّدة بالذكاء الاصطناعي للأحذية والأقراط.|Demo collection · client reference images with AI-generated shoe and earring images.
 اختيار جميل.|A lovely choice.
 مشاركة القطعة|Share this piece
@@ -867,7 +878,7 @@ Monarca نموذج تفاعلي للسوق العراقي لعرض التصمي�
 أين تُحفظ بياناتي؟|Where is my data stored?
 لم يصلني رمز تسجيل الدخول|I did not receive a sign-in code
 افتحي حسابي ← طلباتي ← اختاري الطلب ← تتبّع الطلب. تُعرض مراحل تجهيز الطلب والشحن والتسليم. جميع تحديثات الشحنة في هذه النسخة محاكاة.|Open My account → My orders → choose an order → Track order. Preparation, shipping and delivery stages are shown. Every shipment update is simulated.
-افتحي دليل المقاسات في صفحة المنتج، ثم اختاري المقاس واللون قبل الإضافة. المقاسات غير المتاحة لا يمكن اختيارها. جداول هذه النسخة توضيحية وتحتاج تأكيد بيانات المورّد.|Open the size guide on the product page, then choose size and colour. Unavailable sizes cannot be selected. These demo charts need supplier confirmation.
+افتحي دليل المقاسات في صفحة المنتج، ثم اختاري المقاس واللون قبل الإضافة. المقاسات غير المتاحة لا يمكن اختيارها. جداول هذه النسخة توضيحية وتُراجع قبل الإطلاق.|Open the size guide on the product page, then choose size and colour. Unavailable sizes cannot be selected. These demo charts are reviewed before launch.
 من حسابي ← قسائمك، استلمي القسيمة واضغطي «استخدام في السلة». يُطبق رمز واحد لكل طلب عند بلوغ الحد الأدنى، ويُحسب الخصم قبل الدفع. لا تُستخدم القسيمة المنتهية أو المستخدمة.|Open My account → Your coupons, claim a coupon and choose Use in bag. One code applies per order when minimum spend is met, before payment. Expired or used coupons cannot be applied.
 بعد وصول الطلب إلى «تم التسليم»، افتحي تفاصيله واختاري طلب إرجاع. حدّدي القطعة والكمية والسبب، ثم تابعي حالة الطلب. الإرجاع في هذه النسخة محاكاة، ومدته وشروطه بانتظار اعتماد المتجر.|Once an order is Delivered, open its details and request a return. Choose item, quantity and reason, then follow the status. Returns are simulated; timing and terms await store approval.
 تُتاح تجربة إلغاء الطلب قبل الشحن. بعد بدء الشحن توجهي إلى الدعم، وبعد التسليم استخدمي طلب الإرجاع. راجعي الحالة الظاهرة في تفاصيل طلبك لمعرفة الإجراء المتاح.|Demo cancellation is available before shipping. Contact support once shipping starts and request returns after delivery. The status in order details shows available actions.
@@ -948,10 +959,10 @@ Monarca نموذج تفاعلي للسوق العراقي لعرض التصمي�
 ضعي قدمك على ورقة وقفي باستقامة.|Place your foot on paper and stand straight.
 علّمي موضع الكعب وأطول إصبع.|Mark the heel and longest toe.
 قيسي المسافة وقارنيها بالجدول؛ قيسي القدمين وخذي الأكبر.|Measure the distance and compare it with the chart. Measure both feet and use the larger result.
-قارني قياساتك بجدول القطعة، ثم تواصلي مع خدمة العملاء عند التردد. الجداول الحالية للعرض وتحتاج اعتماد المورد.|Compare your measurements with the chart and ask care if unsure. These demo charts need supplier approval.
+قارني قياساتك بجدول القطعة، ثم تواصلي مع خدمة العملاء عند التردد. الجداول الحالية توضيحية وتُراجع قبل الإطلاق.|Compare your measurements with the chart and ask care if unsure. These demo charts are reviewed before launch.
 بين مقاسين؟ اطلبي المساعدة قبل الشراء؛ قد تختلف القصّة بين القطع.|Between sizes? Ask for help before buying; fit varies between pieces.
 افتحي دليل المقاسات|Open size guide
-جدول توضيحي لتجربة التصميم. تُعتمد قياسات المورد الفعلية قبل الإطلاق.|Demo size chart. Actual supplier measurements must be confirmed before launch.
+جدول توضيحي لتجربة التصميم. تُراجع القياسات النهائية قبل الإطلاق.|Demo size chart. Final measurements must be reviewed before launch.
 عرض تقريبي|Approximate view
 مقاسكِ غير متوفر؟ احفظي طلب تنبيه|Size unavailable? Save an alert request
 لاحقاً|Later
@@ -1005,10 +1016,10 @@ add(`
 يبدأ تجهيز وشحن الطلب بعد إتمام الدفع بالبطاقة.|Preparation and shipping start after card payment is complete.
 لا توجد عملية دفع ناجحة|No successful payment
 يمكن فتح الطلب من قائمة الطلبات.|Open this order from your orders list.
-تُستخدم القسيمة عند تأكيد طلب الدفع عند الاستلام أو نجاح دفع البطاقة. فشل دفع البطاقة لا يستهلكها.|Coupons are used when a cash-on-delivery order is confirmed or a card payment succeeds. Failed card payments do not use a coupon.
+تُستخدم القسيمة بعد نجاح الدفع بالبطاقة. فشل دفع البطاقة لا يستهلكها.|The coupon is used after card payment succeeds.
 الدفع ببطاقات Visa و Mastercard أو الدفع عند الاستلام للمنتجات المتوفرة في المتجر فقط. المنتجات بطلب مسبق تحتاج بطاقة. هذه محاكاة لا تخصم أموالاً ولا تتصل بمصرف أو مندوب. معلومات العنوان والدفع في صفحة واحدة. لا تُدخل بيانات بطاقة حقيقية أو رموز مصرفية.|Use Visa or Mastercard test cards, or cash on delivery for in-stock items only. Preorders require a card. This simulation makes no charge and contacts no bank or courier. Address and payment appear on one page. Use no real card details or bank codes.
 الدفع ببطاقات Visa و Mastercard متاح لجميع المنتجات. الدفع عند الاستلام متاح لمنتجات المتجر المتوفرة فقط، وليس للطلب المسبق أو الطلبات المختلطة. جميع عمليات الدفع في هذه النسخة محاكاة.|Visa and Mastercard are available for all items. Cash on delivery is available for in-stock items only, excluding preorders and mixed orders. Every payment in this version is simulated.
-الدفع عند الاستلام متاح للمنتجات المتوفرة في المتجر فقط. الطلب المسبق يحتاج بطاقة. بوابة الدفع والتحقق الفعلي لم يُربطا بعد.|Cash on delivery is available for in-stock items only. Preorders require a card. The live payment gateway and verification are not connected yet.
+الدفع الإلكتروني مطلوب لكل الطلبات. الطلب المسبق يحتاج بطاقة. بوابة الدفع والتحقق الفعلي لم يُربطا بعد.|Cash on delivery is available for in-stock items only. Preorders require a card. The live payment gateway and verification are not connected yet.
 يدعم التطبيق العربية والإنجليزية. تبقى منطقة التوصيل العراق والعملة الدينار العراقي، دون تحويل عملات.|The app supports Arabic and English. Delivery remains in Iraq and the currency is the Iraqi dinar, with no currency conversion.
 بحسب عدد القطع في الطلبات المؤكدة غير الملغاة على هذا الجهاز، وتشمل الدفع عند الاستلام. هذا ليس إحصاءً حقيقياً لكل مستخدمات المتجر.|Based on quantities in confirmed, non-cancelled orders on this device, including cash on delivery. This does not represent store-wide sales.
 `);
@@ -1084,7 +1095,7 @@ Monarca · أناقة في كل تفصيلة|Monarca · Elegance in every detail
 السريع|Express
 الشارع|Street
 الصورة المرجعية التي قدّمها العميل.|Reference image supplied by the client.
-الصورة مأخوذة من مرجع العميل. قد تختلف تفاصيل الخامة واللون في المنتج النهائي؛ تُعتمد صور المورد قبل البيع.|Image from the client reference. Material and colour may differ in the final product; supplier photos must be approved before sale.
+الصورة مأخوذة من مرجع العميل. قد تختلف تفاصيل الخامة واللون في المنتج النهائي؛ تُراجع تفاصيل المنتج قبل البيع.|Image from the client reference. Material and colour may differ in the final product; product details should be reviewed before sale.
 العناية · رد آلي|Care · automated reply
 العودة إلى حسابي|Back to my account
 العودة للحساب|Back to account
@@ -1097,7 +1108,7 @@ Monarca · أناقة في كل تفصيلة|Monarca · Elegance in every detail
 المتوفر فقط|In stock only
 المدينة / القضاء / الناحية|City / district / subdistrict
 المنطقة / الحي|Area / neighbourhood
-المواصفات والخامة الموضحة بيانات تصميم تجريبية؛ تُستبدل ببطاقة المورد الفعلية قبل الإطلاق.|The shown specifications and material are demo data; replace them with the supplier's actual details before launch.
+المواصفات والخامة الموضحة بيانات تصميم تجريبية؛ تُستكمل بتفاصيل المنتج النهائية قبل الإطلاق.|The shown specifications and material are demo data; final product details will be added before launch.
 امسحيها بقطعة ناعمة وجافة. احتفظي بها داخل كيس قماشي، بعيداً عن الحرارة والرطوبة.|Wipe with a soft dry cloth. Store in a fabric bag away from heat and moisture.
 انتظري قليلاً قبل طلب رمز آخر. رمز الاختبار 123456.|Wait a moment before requesting another code. The test code is 123456.
 انتهت صلاحية الرمز. أعيدي تجهيز رمز جديد.|Code expired. Request a new one.
@@ -1173,13 +1184,13 @@ Monarca · أناقة في كل تفصيلة|Monarca · Elegance in every detail
 جارٍ تأكيد الطلب…|Confirming order…
 جاكيت بقصّة محددة وحزام يبرز الخصر. جيوب أمامية وتفاصيل كلاسيكية للنهار والمساء.|A fitted jacket with a waist belt, front pockets and classic details for day and evening.
 جلد طبيعي · بطانة قماشية (مواصفات تجريبية)|Natural leather · fabric lining (demo specifications)
-جلد طبيعي بحسب تصميم العينة؛ بطانة قماشية وإغلاق معدني. الخامة النهائية تحتاج اعتماد المورد.|Sample design: natural leather, fabric lining and metal closure. Final material requires supplier approval.
+جلد طبيعي بحسب تصميم العينة؛ بطانة قماشية وإغلاق معدني. وصف الخامة توضيحي ويخضع للمراجعة النهائية.|Sample design: natural leather, fabric lining and metal closure. The material description is illustrative and subject to final review.
 حددي القطع أولاً|Select items first
 حرير ناعم بحسب تصميم العينة|Soft silk in the sample design
 حقائب كتف|Shoulder bags
 حقائب يد|Handbags
 حُفظت القطعة لوقت لاحق|Item saved for later
-خامة علوية ناعمة مع بطانة مبطنة ونعل ثابت. هذه مواصفات توضيحية قبل اعتماد المورد.|Soft upper, padded lining and a stable sole. Demo specifications awaiting supplier approval.
+خامة علوية ناعمة مع بطانة مبطنة ونعل ثابت. هذه مواصفات توضيحية وتخضع للمراجعة النهائية.|Soft upper, padded lining and a stable sole. These illustrative specifications are subject to final review.
 خامة ناعمة · نعل ثابت (مواصفات تجريبية)|Soft upper · stable sole (demo specifications)
 خصر مرتفع · طول داخلي ٧٦ سم للمقاس M (توضيحي)|High rise · 76 cm inseam for size M (demo)
 خطوة صغيرة وتصلين|One small step closer
@@ -1196,7 +1207,7 @@ Monarca · أناقة في كل تفصيلة|Monarca · Elegance in every detail
 سجّلي الدخول التجريبي لحفظ الاسم وبيانات ملفك على هذا الجهاز.|Sign in to the demo to save your name and profile on this device.
 سيظهر حفظ التقييم في تفاصيل الطلب.|The saved review will appear in order details.
 صمّمي اختياراتك|Curate your choices
-صورة عرض عالية الدقة مولّدة بالذكاء الاصطناعي بالاستناد إلى مرجع التصميم، وليست تصويراً لمنتج فعلي موثّق. تُعتمد صور المورد وتفاصيل المنتج قبل البيع.|High-resolution AI-generated demo image based on the design reference, not a verified product photo. Supplier photos and details must be approved before sale.
+صورة عرض عالية الدقة مولّدة بالذكاء الاصطناعي بالاستناد إلى مرجع التصميم، وليست تصويراً لمنتج فعلي موثّق. تُراجع صور المنتج وتفاصيله قبل البيع.|High-resolution AI-generated demo image based on the design reference, not a verified product photo. Product images and details should be reviewed before sale.
 صورة عرض مولّدة بالذكاء الاصطناعي بالاستناد إلى مرجع التصميم، وليست تصويراً لمنتج فعلي موثّق.|AI-generated demo image based on the design reference, not a verified product photo.
 صورة هذه القطعة من مرجع العميل.|This item's image comes from the client reference.
 صورة هذه القطعة مولّدة بالذكاء الاصطناعي لعرض النموذج، وليست تصويراً لمنتج فعلي موثّق.|This is an AI-generated prototype image, not a verified product photo.
@@ -1303,7 +1314,7 @@ Monarca · أناقة في كل تفصيلة|Monarca · Elegance in every detail
 يمكنك الاستمرار بالتسوق كضيفة. تسجيل الدخول لا يرسل رمزاً حقيقياً.|Continue shopping as a guest. Sign-in sends no real code.
 يوجد طلب تنبيه محفوظ لهذا المقاس. يمكنك تحديث رقم التواصل.|An alert is saved for this size. You can update the contact number.
 يوجد عيب أو تلف|Fault or damage
-١–٢ يوم|1–2 days
+١–٢ يوم|1–3–4 days
 ٢–٤ أيام|2–4 days
 ١–٢ يوم عمل · إضافة ٥٬٠٠٠ د.ع|1–2 working days · add 5,000 IQD
 ١–٢ يوم عمل · تقدير تجريبي|1–2 working days · demo estimate
@@ -1453,7 +1464,7 @@ add(`
 محادثة تجريبية · الردود آلية لتوضيح التصميم|Demo conversation · automated replies illustrate the design
 محلي|Local
 مقاس موحّد للعرض. أبعاد الحقيبة والمواد بانتظار اعتماد المنتج من العميل.|One-size demo. Bag dimensions and materials await client approval.
-مقاسات توضيحية؛ تُستبدل بجدول المورّد قبل الإطلاق.|Demo measurements; replace with the supplier chart before launch.
+مقاسات توضيحية؛ تُراجع القياسات النهائية قبل الإطلاق.|Demo measurements; final sizing is reviewed before launch.
 ملاحظات التوصيل (اختياري)|Delivery notes (optional)
 ملاحظة للمندوب (اختياري)|Courier note (optional)
 من|From
@@ -1823,38 +1834,38 @@ add(`
 ساعدينا بفهم السبب, خاصة في حال وجود عيب أو اختلاف.|Help us understand the reason, especially for a fault or mismatch.
 `);
 add(`
-متوفر في العراق|In stock in Iraq
-طلب من الصين|Order from China
+توصيل سريع|Express
+شحن دولي|International
 العراق|Iraq
 الصين|China
-جهة التوريد|Supply source
-اختيار جهة التوريد|Choose supply source
+موقع المخزون|Stock location
+اختيار موقع المخزون|Choose stock location
 جميع المنتجات|All products
 رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم، ولا يحتاج قسيمة.|Demo delivery is 4 USD per order and free from 75 USD before discounts, with no coupon needed.
 خصم ١٠٪ بالرمز M10 للطلبات من ٤٠ USD.|Get 10% off with M10 on orders from 40 USD.
-المتوفر في العراق يصل خلال نحو يومين، ويمكن الدفع عند الاستلام أو بالبطاقة. الطلب من الصين يحتاج ١٥–٢٠ يوماً ودفعاً مسبقاً بالبطاقة. الطلب المختلط يصل على شحنتين ويحتاج بطاقة. رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم.|In-stock items in Iraq arrive in about 2 days and support cash on delivery or card. China orders take 15–20 days and require prepaid card payment. Mixed orders arrive in two shipments and require a card. Demo delivery is 4 USD per order and free from 75 USD before discounts.
-توصيل خلال يومين تقريباً|Delivery in about 2 days
+المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، ويمكن الدفع الإلكتروني ببطاقة Visa أو Mastercard. الطلب من الصين يحتاج ١٥–٢٠ يوماً ودفعاً مسبقاً بالبطاقة. الطلب المختلط يصل على شحنتين ويحتاج بطاقة. رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم.|In-stock items in Iraq arrive in 3–4 days and support online payment by Visa or Mastercard. China orders take 15–20 days and require prepaid card payment. Mixed orders arrive in two shipments and require a card. Demo delivery is 4 USD per order and free from 75 USD before discounts.
+توصيل خلال ٣ إلى ٤ أيام|Delivery in 3–4 days
 توصيل خلال ١٥–٢٠ يوماً تقريباً|Delivery in about 15–20 days
-حوالي يومين|About 2 days
+٣ إلى ٤ أيام|3–4 days
 ١٥–٢٠ يوماً|15–20 days
-الدفع عند الاستلام أو بالبطاقة|Cash on delivery or card
+الدفع الإلكتروني ببطاقة Visa أو Mastercard|Online payment by Visa or Mastercard
+الدفع الإلكتروني ببطاقة Visa أو Mastercard مطلوب للطلبات التي تتضمن منتجات متوفرة محلياً. للطلبات التي تضم منتجات المستودع الدولي فقط، يتوفر الدفع الآمن بالبطاقة عبر الإنترنت.|Orders that include locally stocked items require online payment by Visa or Mastercard. Orders containing only international warehouse items can be paid securely online by card.
 الدفع المسبق بالبطاقة فقط|Prepaid by card only
-التوصيل والدفع حسب جهة التوريد|Delivery and payment by supply source
+التوصيل والدفع حسب موقع المخزون|Delivery and payment depend on stock location
 نفس الأناقة، بطريقتين للتسوّق|The same elegance, two ways to shop
 شحنات منفصلة بمواعيد مختلفة|Separate shipments with different delivery times
 عرض المنتجات|View products
 عرض القطع المتوفرة في العراق فقط|Show in-stock items in Iraq only
-توصيل خلال يومين تقريباً · الدفع عند الاستلام أو بالبطاقة|Delivery in about 2 days · cash on delivery or card
+توصيل خلال ٣ إلى ٤ أيام · الدفع الإلكتروني ببطاقة Visa أو Mastercard|Delivery in 3–4 days · online payment by Visa or Mastercard
 توصيل خلال ١٥–٢٠ يوماً تقريباً · الدفع المسبق بالبطاقة فقط|Delivery in about 15–20 days · prepaid by card only
-متوفر في العراق · توصيل خلال يومين تقريباً|In stock in Iraq · delivery in about 2 days
-طلب من الصين · توصيل خلال ١٥–٢٠ يوماً تقريباً|Order from China · delivery in about 15–20 days
-رسوم التوصيل التجريبية ٤ دولارات، ومجاناً للطلبات من ٧٥ دولاراً قبل الخصم. المتوفر في العراق يصل خلال يومين تقريباً، والطلب من الصين خلال ١٥–٢٠ يوماً تقريباً.|Demo delivery is 4 USD and free from 75 USD before discounts. In-stock items in Iraq arrive in about 2 days; orders from China take about 15–20 days.
+توصيل سريع · خلال ٣–٤ أيام|Express · 3–4 days
+شحن دولي · ١٥–٢٠ يوماً|International · 15–20 days
+رسوم التوصيل التجريبية ٤ دولارات، ومجاناً للطلبات من ٧٥ دولاراً قبل الخصم. المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً تقريباً.|Demo delivery is 4 USD and free from 75 USD before discounts. In-stock items in Iraq arrive in 3–4 days; orders from China take about 15–20 days.
 دفع مسبق ببطاقة Visa أو Mastercard|Prepaid by Visa or Mastercard
 طلبات الصين تتطلب الدفع المسبق ببطاقة Visa أو Mastercard. الدفع عند الاستلام متاح لقطع العراق الجاهزة فقط.|China orders require prepaid Visa or Mastercard payment. Cash on delivery is available only for ready-stock items in Iraq.
 الدفع عند الاستلام متاح لقطع العراق الجاهزة في هذا الطلب.|Cash on delivery is available for the ready-stock items in Iraq in this order.
-المتوفر في العراق يمكن دفعه عند الاستلام أو ببطاقات Visa و Mastercard. الطلب من الصين والطلب المختلط يحتاجان دفعاً مسبقاً بالبطاقة. جميع عمليات الدفع في هذه النسخة محاكاة.|Ready-stock items in Iraq support cash on delivery or Visa and Mastercard. China and mixed orders require prepaid card payment. Every payment in this version is simulated.
 تصل قطع العراق وقطع الصين في شحنتين بموعدين مختلفين. يتطلب الطلب المختلط الدفع المسبق بالبطاقة.|Items from Iraq and China arrive in two shipments at different times. Mixed orders require prepaid card payment.
-مدة التوصيل حسب مصدر القطع: العراق حوالي يومين، والصين ١٥–٢٠ يوماً.|Delivery depends on the item source: about 2 days from Iraq and 15–20 days from China.
+مدة التوصيل حسب مصدر القطع: العراق ٣ إلى ٤ أيام، والصين ١٥–٢٠ يوماً.|Delivery depends on the item source: 3–4 days from Iraq and 15–20 days from China.
 التوصيل مجاني للطلبات من ٧٥ دولاراً قبل الخصم؛ وإلا ٤ دولارات.|Delivery is free from 75 USD before discounts; otherwise it costs 4 USD.
 من ٤٠ دولاراً|From 40 USD
 شحنات من العراق والصين|Shipments from Iraq and China
@@ -1866,16 +1877,14 @@ add(`
 M10 تخصم ١٠٪ من المنتجات المؤهلة من ٤٠ USD.|M10 takes 10% off eligible items from 40 USD.
 توصيل مجاني للطلبات من ٧٥ USD.|Free delivery from 75 USD.
 خصم ١٠٪ على المنتجات عند شراء ٤٠ USD أو أكثر.|10% off eligible items on purchases of 40 USD or more.
-التوصيل حسب مصدر القطع: العراق نحو يومين، الصين ١٥–٢٠ يوماً (تقديري)|Delivery by item source: about 2 days from Iraq and 15–20 days from China (estimated)
-المتوفر في العراق: نحو يومين. الطلب من الصين: ١٥–٢٠ يوماً · الدفع حسب مصدر القطعة|In stock in Iraq: about 2 days. Orders from China: 15–20 days · payment depends on the item source
-المتوفر في العراق: نحو يومين. الطلب من الصين: ١٥–٢٠ يوماً. الأسعار والشحن بيانات تجريبية.|In stock in Iraq: about 2 days. Orders from China: 15–20 days. Prices and delivery details are demo data.
-المتوفر في العراق يصل خلال نحو يومين، والطلب من الصين خلال ١٥–٢٠ يوماً. رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم.|In-stock items in Iraq arrive in about 2 days; orders from China take 15–20 days. Demo delivery is 4 USD per order and free from 75 USD before discounts.
-اختيار منطقة التوصيل ثم إدخال المدينة أو القضاء أو الناحية في دفتر العناوين. المتوفر في العراق يصل خلال نحو يومين، والطلب من الصين خلال ١٥–٢٠ يوماً. رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم.|Choose an Iraqi delivery region, then enter the city, district or subdistrict in the address book. In-stock items in Iraq arrive in about 2 days; China orders take 15–20 days. Demo delivery is 4 USD per order and free from 75 USD before discounts.
-رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم. المتوفر في العراق يصل خلال نحو يومين، والطلب من الصين خلال ١٥–٢٠ يوماً.|Demo delivery is 4 USD per order and free from 75 USD before discounts. In-stock items in Iraq arrive in about 2 days; China orders take 15–20 days.
-متابعة التجهيز والشحن من «حسابي ← طلباتي». المتوفر في العراق يصل خلال نحو يومين، والطلب من الصين خلال ١٥–٢٠ يوماً. الطلب المختلط يصل على شحنتين. تحديثات التتبع محاكاة.|Follow preparation and delivery under My account → My orders. In-stock items in Iraq arrive in about 2 days; China orders take 15–20 days. Mixed orders arrive in two shipments. Tracking updates are simulated.
-الدفع ببطاقات Visa و Mastercard للقسمين، أو الدفع عند الاستلام للمتوفر في العراق فقط. الطلب من الصين والطلب المختلط يحتاجان دفعاً مسبقاً بالبطاقة. هذه محاكاة لا تخصم أموالاً ولا تتصل بمصرف أو مندوب. معلومات العنوان والدفع في صفحة واحدة. لا تُدخل بيانات بطاقة حقيقية أو رموز مصرفية.|Visa and Mastercard work for both sections, while cash on delivery is available only for ready-stock items in Iraq. China orders and mixed orders require prepaid card payment. This simulation makes no charge and does not contact a bank or courier. Address and payment details are on one page. Do not enter real card details or bank codes.
-يمكن اختيار Visa أو Mastercard للقسمين، أو الدفع عند الاستلام للمتوفر في العراق فقط. الطلب من الصين والطلب المختلط يحتاجان دفعاً مسبقاً بالبطاقة. معلومات التوصيل والدفع في صفحة واحدة. البطاقة تستخدم بيانات الاختبار فقط، ولا يتم خصم أموال.|Choose Visa or Mastercard for either section, or cash on delivery for ready-stock items in Iraq only. China and mixed orders require prepaid card payment. Delivery and payment are on one page. Use test card details only; no money is charged.
-يسعدنا مساعدتك. المتوفر في العراق يصل خلال نحو يومين، والطلب من الصين خلال ١٥–٢٠ يوماً. رسوم التوصيل التجريبية ٤ USD، والتوصيل المجاني من ٧٥ USD.|Happy to help. In-stock items in Iraq arrive in about 2 days; China orders take 15–20 days. Demo delivery is 4 USD and free from 75 USD.
+التوصيل حسب مصدر القطع: العراق ٣ إلى ٤ أيام، الصين ١٥–٢٠ يوماً (تقديري)|Delivery by item source: 3–4 days from Iraq and 15–20 days from China (estimated)
+المتوفر في العراق: ٣ إلى ٤ أيام. الطلب من الصين: ١٥–٢٠ يوماً · الدفع حسب مصدر القطعة|In stock in Iraq: 3–4 days. Orders from China: 15–20 days · payment depends on the item source
+المتوفر في العراق: ٣ إلى ٤ أيام. الطلب من الصين: ١٥–٢٠ يوماً. الأسعار والشحن بيانات تجريبية.|In stock in Iraq: 3–4 days. Orders from China: 15–20 days. Prices and delivery details are demo data.
+المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً. رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم.|In-stock items in Iraq arrive in 3–4 days; orders from China take 15–20 days. Demo delivery is 4 USD per order and free from 75 USD before discounts.
+اختيار منطقة التوصيل ثم إدخال المدينة أو القضاء أو الناحية في دفتر العناوين. المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً. رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم.|Choose an Iraqi delivery region, then enter the city, district or subdistrict in the address book. In-stock items in Iraq arrive in 3–4 days; China orders take 15–20 days. Demo delivery is 4 USD per order and free from 75 USD before discounts.
+رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم. المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً.|Demo delivery is 4 USD per order and free from 75 USD before discounts. In-stock items in Iraq arrive in 3–4 days; China orders take 15–20 days.
+متابعة التجهيز والشحن من «حسابي ← طلباتي». المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً. الطلب المختلط يصل على شحنتين. تحديثات التتبع محاكاة.|Follow preparation and delivery under My account → My orders. In-stock items in Iraq arrive in 3–4 days; China orders take 15–20 days. Mixed orders arrive in two shipments. Tracking updates are simulated.
+يسعدنا مساعدتك. المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً. رسوم التوصيل التجريبية ٤ USD، والتوصيل المجاني من ٧٥ USD.|Happy to help. In-stock items in Iraq arrive in 3–4 days; China orders take 15–20 days. Demo delivery is 4 USD and free from 75 USD.
 الدولار الأمريكي|US dollar
 أسعار بالدولار الأمريكي|Prices in US dollars
 نطاق السعر بالدولار الأمريكي|Price range in US dollars

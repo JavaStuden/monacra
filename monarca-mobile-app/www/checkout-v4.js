@@ -1,4 +1,4 @@
-/* Monarca v4 — basket, address book, checkout and simulated card verification. */
+/* Monarca v4 — basket, address book, checkout and Stripe-hosted card payment. */
 (() => {
 'use strict';
 const A=window.Monarca;if(!A)return;
@@ -12,15 +12,67 @@ let cardDraft={},processing=false;
 A.products.forEach(p=>{p.fulfillment=[2,5].includes(Number(p.id))?'preorder':'in_stock';p.fulfillmentSource=p.fulfillment==='preorder'?'china':'iraq';});
 const fulfillmentFor=l=>l?.fulfillment==='preorder'||l?.fulfillment==='in_stock'?l.fulfillment:(A.products.find(p=>Number(p.id)===Number(l?.id))?.fulfillment||'preorder');
 const fulfillmentSource=l=>l?.fulfillmentSource==='china'||fulfillmentFor(l)==='preorder'?'china':'iraq';
-const sourceLabel=source=>source==='iraq'?'متوفر في العراق':'طلب من الصين';
-const sourceEstimate=source=>source==='iraq'?'حوالي يومين':'١٥–٢٠ يوماً';
-const deliveryGroups=lines=>['iraq','china'].map(source=>{const selected=lines.filter(l=>fulfillmentSource(l)===source);return {source,label:sourceLabel(source),estimate:sourceEstimate(source),minDays:source==='iraq'?2:15,maxDays:source==='iraq'?2:20,count:selected.reduce((n,l)=>n+Number(l.qty||1),0)};}).filter(g=>g.count);
-const orderDeliveryGroups=o=>Array.isArray(o?.deliveryGroups)&&o.deliveryGroups.length?o.deliveryGroups.map(g=>({...g,label:sourceLabel(g.source),estimate:g.estimate||sourceEstimate(g.source)})):deliveryGroups(o?.items||[]);
+const sourceLabel=source=>window.MonarcaI18n?.language()==='en'?(source==='iraq'?'Express':'International'):(source==='iraq'?'توصيل سريع':'شحن دولي');
+const isEnglish=()=>window.MonarcaI18n?.language()==='en';
+const deliveryWindow=source=>source==='iraq'?[3,4]:[15,20];
+const sourceEstimate=(source,min,max)=>{
+ const [defaultMin,defaultMax]=deliveryWindow(source);
+ min=min??defaultMin;
+ max=max??defaultMax;
+ const days=min===max?ar(min):ar(min)+'–'+ar(max);
+ return days+(isEnglish()?' days':source==='iraq'?' أيام':' يوماً');
+};
+const paymentCopy=(hasLocalItems)=>hasLocalItems
+ ? (isEnglish()?'Online payment by Visa or Mastercard':'الدفع الإلكتروني ببطاقة Visa أو Mastercard')
+ : (isEnglish()?'Secure online card payment':'الدفع الآمن بالبطاقة عبر الإنترنت');
+const deliveryGroups=lines=>['iraq','china'].map(source=>{const selected=lines.filter(l=>fulfillmentSource(l)===source);return {source,label:sourceLabel(source),estimate:sourceEstimate(source),minDays:deliveryWindow(source)[0],maxDays:deliveryWindow(source)[1],count:selected.reduce((n,l)=>n+Number(l.qty||1),0)};}).filter(g=>g.count);
+const orderDeliveryGroups=o=>Array.isArray(o?.deliveryGroups)&&o.deliveryGroups.length?o.deliveryGroups.map(g=>({...g,label:sourceLabel(g.source),estimate:sourceEstimate(g.source,g.minDays,g.maxDays)})):deliveryGroups(o?.items||[]);
 const deliverySummary=groups=>groups.map(g=>g.label+' · '+g.estimate).join(' / ');
 const currentProducts=lines=>lines.map(l=>A.products.find(p=>Number(p.id)===Number(l.id))||{id:l.id,fulfillment:'preorder',fulfillmentSource:'china'});
-const fulfillmentBadge=p=>'<span class="fulfillment-badge '+(fulfillmentSource(p)==='china'?'is-preorder':'is-in-stock')+'">'+sourceLabel(fulfillmentSource(p))+' · '+sourceEstimate(fulfillmentSource(p))+'</span>';
-const codEligibility=lines=>{const preorderCount=lines.filter(l=>fulfillmentSource(l)!=='iraq').length;return {ok:!!lines.length&&!preorderCount,preorderCount,reason:preorderCount?'طلبات الصين تتطلب الدفع المسبق ببطاقة Visa أو Mastercard. الدفع عند الاستلام متاح لقطع العراق الجاهزة فقط.':lines.length?'الدفع عند الاستلام متاح لقطع العراق الجاهزة في هذا الطلب.':'يلزم اختيار قطعة واحدة على الأقل.'};};
-Object.assign(A,{fulfillmentFor,fulfillmentSource,fulfillmentBadge,codEligibility,deliveryGroups,orderDeliveryGroups,deliverySummary});
+const usdToAedMinor=value=>Math.floor((Math.round((Number(value)+Number.EPSILON)*100)*367+50)/100);
+const usdToAed=value=>usdToAedMinor(value)/100;
+const aedMoney=value=>'AED '+new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(value)||0);
+const orderLoads=new Map();
+async function loadStripeOrder(id,refresh=false){
+ const existing=S().orders.find(o=>o.id===id||o.serverOrderId===id);
+ if(existing&&(!refresh||!existing.serverOrderId))return existing;
+ if(orderLoads.has(id))return orderLoads.get(id);
+ const request=(async()=>{
+  const saved=await window.MonarcaAPI?.getOrder?.(id);
+  if(!saved||saved.id!==id||!Array.isArray(saved.items))return null;
+  const already=S().orders.find(o=>o.id===id||o.serverOrderId===id);
+  if(already){
+   already.history=Array.isArray(already.history)?already.history:[];
+   already.status=saved.status||already.status;
+   already.paymentStatus=saved.paymentStatus||already.paymentStatus;
+   already.subtotal=Number(saved.subtotal)||already.subtotal;
+   already.discount=Number(saved.discount)||already.discount;
+   already.shipping=Number(saved.shippingFee)||already.shipping;
+   already.total=Number(saved.total)||already.total;
+   already.paidTotal=Number(saved.paidTotal)||already.paidTotal;
+   already.currency=saved.currency||already.currency;
+   already.chargeCurrency=saved.chargeCurrency||already.chargeCurrency;
+   if(saved.chargeAmount!=null)already.chargeAmount=Number(saved.chargeAmount);
+   if(saved.exchangeRate!=null)already.exchangeRate=Number(saved.exchangeRate);
+   already.transactionId=saved.transactionId||already.transactionId;
+   already.updatedAt=saved.updatedAt||already.updatedAt;
+   if(already.paymentStatus==='paid')already.confirmedAt=already.updatedAt||already.createdAt;
+   if(already.status!=='payment_pending'&&!already.history.some(h=>h.status===already.status))already.history.push({status:already.status,date:already.updatedAt||already.createdAt,note:'تم تحديث حالة الطلب من المتجر'});
+   A.save();return already;
+  }
+  const items=saved.items.map(line=>({id:Number(line.productId),name:line.productName||'',color:line.color||'',size:line.size||'',qty:Number(line.qty)||1,price:Number(line.unitPrice)||0,img:line.imgIndex??0,fulfillment:line.fulfillmentSource==='china'?'preorder':'in_stock',fulfillmentSource:line.fulfillmentSource==='china'?'china':'iraq',deliveryMinDays:Number(line.minDeliveryDays)||1,deliveryMaxDays:Number(line.maxDeliveryDays)||1}));
+  const groups=deliveryGroups(items);
+  const hasAddress=Boolean(saved.customerName||saved.customerPhone||saved.city||saved.street);
+  const address=hasAddress?{id:'server-address-'+id,label:'عنوان التوصيل',name:saved.customerName||'',phone:saved.customerPhone||'',city:saved.city||'',locality:saved.locality||saved.city||'',area:saved.area||'',street:saved.street||'',landmark:saved.landmark||'',building:saved.building||'',apartment:saved.apartment||''}:null;
+  const order={id,serverOrderId:id,payment:'stripe',paymentStatus:saved.paymentStatus||'pending',status:saved.status||'payment_pending',subtotal:Number(saved.subtotal)||0,discount:Number(saved.discount)||0,shipping:Number(saved.shippingFee)||0,total:Number(saved.total)||0,paidTotal:Number(saved.paidTotal)||0,currency:saved.currency||'USD',chargeCurrency:saved.chargeCurrency||'',chargeAmount:saved.chargeAmount==null?null:Number(saved.chargeAmount),exchangeRate:saved.exchangeRate==null?null:Number(saved.exchangeRate),couponCode:saved.couponCode||'',transactionId:saved.transactionId||'',createdAt:saved.createdAt||'',updatedAt:saved.updatedAt||'',confirmedAt:saved.paymentStatus==='paid'?(saved.updatedAt||saved.createdAt):'',address,items,source:'server',sourceLines:clone(items),cartConsumed:true,deliveryGroups:groups,deliverySummary:saved.deliverySummary||deliverySummary(groups),hasChinaItem:!!saved.hasChinaItem,history:[]};
+  if(order.status!=='payment_pending')order.history.push({status:order.status,date:order.updatedAt||order.createdAt,note:'تم تحديث حالة الطلب من المتجر'});
+  S().orders.unshift(order);A.save();return order;
+ })();
+ orderLoads.set(id,request);
+ try{return await request;}finally{if(orderLoads.get(id)===request)orderLoads.delete(id);}
+}
+const fulfillmentBadge=p=>{const source=fulfillmentSource(p),badge='<span class="fulfillment-badge '+(source==='china'?'is-preorder':'is-in-stock')+'">'+sourceLabel(source)+' · '+sourceEstimate(source)+'</span>';if(source!=='china'||ui.route!=='product/'+p.id)return badge;return badge+'<p class="china-stock-disclosure">'+(window.MonarcaI18n?.language()==='en'?'In stock at our warehouse · Shipped by air, delivered in 15–20 days':'متوفر في مستودعنا · يُشحن جواً ويصل خلال 15 إلى 20 يوماً')+'</p>';};
+Object.assign(A,{fulfillmentFor,fulfillmentSource,fulfillmentBadge,deliveryGroups,orderDeliveryGroups,deliverySummary,aedMoney,usdToAed});
 const roundMoney=value=>A.roundMoney?A.roundMoney(value):Math.round((Number(value)+Number.EPSILON)*100)/100;
 const freeDeliveryText='التوصيل مجاني للطلبات من ٧٥ دولاراً قبل الخصم؛ وإلا ٤ دولارات.';
 const text=message=>window.MonarcaI18n?.text(message)||message;
@@ -61,7 +113,11 @@ function calculate(lines,options={}){
 }
 function pricing(){const o=['checkout','payment','payment-auth','payment-failed'].includes(ui.route.split('/')[0])&&pending();return o?{subtotal:o.subtotal,discount:o.discount,shipping:o.shipping,total:o.total,couponCode:o.couponCode||'',shippingMode:o.shippingMode||'standard'}:calculate(activeLines());}
 function priceBox(t=pricing()){
- return `<section class="ck-summary"><div><span>المجموع الفرعي</span><b>${money(t.subtotal)}</b></div><div><span>خصم القسيمة ${t.couponCode?`<em class="ltr">${esc(t.couponCode)}</em>`:''}</span><b>${t.discount?'- '+money(t.discount):'—'}</b></div><div><span>التوصيل</span><b>${t.shipping?money(t.shipping):'مجاناً'}</b></div><div class="ck-grand"><span>الإجمالي</span><b>${money(t.total)}</b></div></section>`;
+ const showAed=['checkout','payment','payment-auth'].includes(ui.route.split('/')[0])||t.chargeCurrency==='AED';
+ const chargeAmount=t.chargeCurrency==='AED'&&Number.isFinite(Number(t.chargeAmount))?Number(t.chargeAmount):usdToAed(t.total);
+ const rate=Number(t.exchangeRate)||3.67;
+ const chargeNote=showAed?`<div class="info-box ck-currency-note">${icon('card')}<span>${isEnglish()?'Amount charged by Stripe: ':'المبلغ الذي سيخصم عبر Stripe: '}<bdi dir="ltr">${aedMoney(chargeAmount)}</bdi><br><small>${isEnglish()?'Fixed exchange rate: ':'سعر التحويل الثابت: '}<bdi dir="ltr">1 USD = AED ${rate.toFixed(2)}</bdi></small></span></div>`:'';
+ return `<section class="ck-summary"><div><span>المجموع الفرعي</span><b>${money(t.subtotal)}</b></div><div><span>خصم القسيمة ${t.couponCode?`<em class="ltr">${esc(t.couponCode)}</em>`:''}</span><b>${t.discount?'- '+money(t.discount):'—'}</b></div><div><span>التوصيل</span><b>${t.shipping?money(t.shipping):'مجاناً'}</b></div><div class="ck-grand"><span>الإجمالي</span><b>${money(t.total)}</b></div></section>${chargeNote}`;
 }
 function error(id,message){const e=$(id);if(e){e.textContent=text(message);e.hidden=false;e.scrollIntoView({block:'center',behavior:'smooth'});}else A.toast(message);}
 function persist(){A.save();A.render(true);}
@@ -72,7 +128,7 @@ function basket(){
  return `${top('حقيبة التسوّق',`<button class="icon-btn" data-go="saved" aria-label="المحفوظة لوقت لاحق">${icon('clock')}</button>`)}<div class="ck-content"><div class="ck-basket-intro"><p>قطع اخترتِها بعناية</p><span>${ar(s.cart.reduce((n,l)=>n+l.qty,0))} قطع</span></div><div class="ck-select-all"><label><input type="checkbox" id="ck-select-all" ${s.cart.every(l=>l.selected!==false)?'checked':''}> تحديد الكل</label><span>${ar(count)} قطع محددة</span></div>${s.cart.map((l,i)=>{
  const p=product(l.id),valid=p.stock>0&&l.size!==p.unavailable;
  return `<article class="ck-cart-item ${l.selected===false?'not-selected':''}"><div class="ck-cart-top"><label class="ck-checkbox"><input type="checkbox" data-ck-select="${i}" ${l.selected!==false?'checked':''} aria-label="تحديد ${esc(p.name)}"></label><button class="ck-cart-photo product-photo img-${p.img}" data-go="product/${p.id}" aria-label="${esc(p.name)}">${A.photoArt(p.img)}</button><div class="ck-cart-info"><button class="ck-item-name" data-go="product/${p.id}">${p.name}</button><p>${esc(A.colors[l.color]?.[0]||l.color)} · ${esc(l.size)}</p><button class="ck-edit-variant" data-action="ck-edit" data-index="${i}">تعديل اللون والمقاس ${icon('edit')}</button><strong>${money(p.price*l.qty)}</strong>${fulfillmentBadge(p)}<small>${valid?'الكمية التجريبية المتاحة: '+ar(p.stock):'هذا الخيار غير متوفر حالياً'}</small></div></div><div class="ck-cart-bottom"><div class="quantity"><button data-action="qty-minus" data-index="${i}" aria-label="تقليل الكمية" ${l.qty<=1?'disabled':''}>−</button><span>${ar(l.qty)}</span><button data-action="qty-plus" data-index="${i}" aria-label="زيادة الكمية" ${l.qty>=p.stock?'disabled':''}>+</button></div><div>${btn('لاحقاً','ck-save-later','text-btn',`data-index="${i}"`)}${btn('نقل للمفضلة','ck-move-wish','text-btn',`data-index="${i}"`)}${btn(icon('trash'),'remove-cart','icon-btn',`data-index="${i}" aria-label="حذف ${esc(p.name)}"`)}</div></div></article>`;
- }).join('')}<button class="ck-row-link" data-go="saved">${icon('clock')} المحفوظة لوقت لاحق <b>${ar(s.savedItems.length)}</b>${icon('arrow')}</button><button class="ck-row-link" data-go="coupon-select">${icon('tag')} ${t.couponCode?'القسيمة المطبقة: '+esc(t.couponCode):'إضافة قسيمة خصم'}${icon('arrow')}</button><form id="ck-coupon-form" class="coupon-inline"><input name="code" aria-label="رمز القسيمة" value="${esc(s.coupon||'')}" placeholder="M10" maxlength="30"><button type="submit">تطبيق</button></form>${s.coupon?btn('إزالة القسيمة','remove-coupon','text-btn'):''}${priceBox(t)}<div class="ck-assurances"><span>${icon('shield')} دفع تجريبي آمن</span><span>${icon('card')} Visa / Mastercard</span></div><p class="field-note">يتم احتساب القطع المحددة فقط. القطع غير المحددة تبقى في الحقيبة بعد الشراء.</p></div><div class="checkout-bar">${btn(`متابعة الطلب · ${money(t.total)}`,'ck-checkout','primary',!selected().length?'disabled':'')}</div>`;
+ }).join('')}<button class="ck-row-link" data-go="saved">${icon('clock')} المحفوظة لوقت لاحق <b>${ar(s.savedItems.length)}</b>${icon('arrow')}</button><button class="ck-row-link" data-go="coupon-select">${icon('tag')} ${t.couponCode?'القسيمة المطبقة: '+esc(t.couponCode):'إضافة قسيمة خصم'}${icon('arrow')}</button><form id="ck-coupon-form" class="coupon-inline"><input name="code" aria-label="رمز القسيمة" value="${esc(s.coupon||'')}" placeholder="M10" maxlength="30"><button type="submit">تطبيق</button></form>${s.coupon?btn('إزالة القسيمة','remove-coupon','text-btn'):''}${priceBox(t)}<div class="ck-assurances"><span>${icon('shield')} الدفع الآمن بالبطاقة</span><span>${icon('card')} ${paymentCopy(currentProducts(selected()).some(l=>fulfillmentSource(l)==='iraq'))}</span></div><p class="field-note">يتم احتساب القطع المحددة فقط. القطع غير المحددة تبقى في الحقيبة بعد الشراء.</p></div><div class="checkout-bar">${btn(`متابعة الطلب · ${money(t.total)}`,'ck-checkout','primary',!selected().length?'disabled':'')}</div>`;
 }
 function saved(){return `${top('المحفوظة لوقت لاحق')}<div class="ck-content">${S().savedItems.length?S().savedItems.map((l,i)=>{const p=product(l.id);return `<article class="ck-saved-item">${photo(p)}<div><h3>${p.name}</h3><p>${esc(A.colors[l.color]?.[0]||'')} · ${esc(l.size)}</p><b>${money(p.price)}</b><div>${btn('نقل إلى الحقيبة','ck-restore','text-btn',`data-index="${i}"`)}${btn('حذف','ck-delete-saved','text-btn',`data-index="${i}"`)}</div></div></article>`;}).join(''):empty('لا توجد قطع محفوظة','يمكنك نقل القطع من الحقيبة إلى هنا والعودة إليها لاحقاً.','clock','استكشفي المجموعة','categories')}</div>`;}
 function editVariant(index){const l=S().cart[index];if(!l)return;const p=product(l.id);A.sheet('تعديل اختياراتك',`<form id="ck-variant-form" data-index="${index}"><div class="mini-product">${photo(p)}<div>${p.name}<small>${money(p.price)}</small></div></div><div class="ck-form-error" id="ck-variant-error" role="alert" tabindex="-1" hidden></div><label class="field"><span>اللون</span><select name="color">${p.colors.map(c=>`<option value="${c}" ${l.color===c?'selected':''}>${A.colors[c][0]}</option>`).join('')}</select></label><label class="field"><span>المقاس</span><select name="size">${p.sizes.map(z=>`<option ${z===p.unavailable?'disabled':''} ${l.size===z?'selected':''}>${esc(z)}</option>`).join('')}</select></label><label class="field"><span>الكمية</span><select name="qty">${Array.from({length:p.stock},(_,i)=>`<option value="${i+1}" ${l.qty===i+1?'selected':''}>${ar(i+1)}</option>`).join('')}</select></label><button class="primary" type="submit">حفظ التعديلات</button></form>`);}
@@ -80,8 +136,8 @@ function addressCard(a,selecting=false){const s=S();return `<article class="ck-a
 function addressStep(){return '';}
 function addresses(){ensure();return `${top(ui.addressReturn==='checkout'?'اختيار عنوان التوصيل':'دفتر العناوين')}<div class="ck-content">${addressStep()}<div class="ck-heading"><div><span class="overline">YOUR PLACES</span><h2>إلى حيث تكونين.</h2></div>${btn(icon('plus'),'ck-address-new','icon-btn','aria-label="إضافة عنوان"')}</div><p class="page-intro">${ui.addressReturn==='checkout'?'اختاري عنوان التوصيل لهذا الطلب أو أضيفي عنواناً جديداً قبل المراجعة والدفع.':'احفظي عنوان المنزل أو العمل، واختاري العنوان المناسب لكل طلب.'}</p>${S().addresses.length?S().addresses.map(a=>addressCard(a,ui.addressReturn==='checkout')).join(''):empty('أضيفي عنوانك الأول','ستظهر عناوينك المحفوظة هنا.','pin','إضافة عنوان','address')}<div class="button-stack">${btn(icon('plus')+' إضافة عنوان جديد','ck-address-new','secondary')}</div></div>`;}
 function addressForm(){ensure();const a={...(ui.editAddressId?S().addresses.find(x=>x.id===ui.editAddressId):{}),...(ui.addressDraft||{})};return `${top(ui.editAddressId?'تعديل العنوان':'عنوان جديد')}<div class="ck-content">${addressStep()}<p class="page-intro">تفاصيل واضحة تساعد في توصيل اختياراتك. الحقول بعلامة * مطلوبة.</p><form id="ck-address-form" novalidate><div class="ck-form-error" id="ck-address-error" role="alert" tabindex="-1" hidden></div><label class="field"><span>تسمية العنوان</span><select name="label">${['المنزل','العمل','عنوان آخر'].map(x=>`<option ${a.label===x?'selected':''}>${x}</option>`).join('')}</select></label><label class="field"><span>اسم المستلم الكامل *</span><input name="name" value="${esc(a.name||S().user?.name||'')}" autocomplete="name" placeholder="الاسم واسم العائلة" maxlength="80"></label><label class="field"><span>رقم الهاتف العراقي *</span><input name="phone" type="tel" dir="ltr" value="${esc(a.phone||S().user?.phone||'')}" placeholder="+964 7XX XXX XXXX" autocomplete="tel"></label><label class="field"><span>مدينة / منطقة التوصيل *</span><select name="city"><option value="">اختاري منطقة التوصيل</option>${A.cities.map(c=>`<option ${a.city===c?'selected':''}>${c}</option>`).join('')}</select><small class="field-note">منطقة مرجعية لحساب رسوم العرض؛ حدّدي موقعك الفعلي أدناه.</small></label><label class="field"><span>المدينة / القضاء / الناحية *</span><input name="locality" value="${esc(a.locality||'')}" placeholder="اكتبي المدينة أو القضاء أو الناحية" autocomplete="address-level2" maxlength="80" required></label><div class="field-row"><label class="field"><span>المنطقة / الحي *</span><input name="area" value="${esc(a.area||'')}" placeholder="مثال: المنصور" maxlength="70"></label><label class="field"><span>الشارع *</span><input name="street" value="${esc(a.street||'')}" placeholder="اسم الشارع" maxlength="100"></label></div><label class="field"><span>أقرب نقطة دالة *</span><input name="landmark" value="${esc(a.landmark||'')}" placeholder="مثال: قرب مول المنصور" maxlength="120"></label><div class="field-row"><label class="field"><span>رقم المبنى</span><input name="building" value="${esc(a.building||'')}" maxlength="25"></label><label class="field"><span>الطابق / الشقة</span><input name="apartment" value="${esc(a.apartment||'')}" maxlength="40"></label></div><label class="field"><span>ملاحظات للمندوب</span><textarea name="note" maxlength="300" placeholder="تفاصيل إضافية لتسهيل الوصول">${esc(a.note||'')}</textarea></label><label class="checkbox-row"><input type="checkbox" name="default" ${!S().addresses.length||a.id===S().defaultAddressId?'checked':''}>تعيين كعنوان افتراضي</label><div class="info-box">${icon('info')}استخدمي بيانات وهمية خلال مراجعة النموذج. العناوين محفوظة على هذا الجهاز فقط.</div><div class="button-stack"><button type="submit" class="primary">${ui.addressReturn==='checkout'?'حفظ واستخدام للطلب':'حفظ العنوان'}</button>${btn('تعبئة عنوان تجريبي','ck-address-fill','secondary')}</div></form><div class="store-contact-address-help"><p>تحتاجين مساعدة في كتابة عنوان التوصيل؟</p>${A.contactButton('مساعدة عبر واتساب','address','','text-btn')}</div></div>`;}
-function deliveryGroupMarkup(groups){return '<div class="ck-delivery-groups">'+groups.map(g=>'<article class="ck-delivery-group">'+icon('truck')+'<div><h3>'+g.label+'</h3><p>'+g.estimate+'</p><small>'+(g.source==='iraq'?'الدفع عند الاستلام أو بالبطاقة':'دفع مسبق ببطاقة Visa أو Mastercard')+'</small></div></article>').join('')+'</div>'+(groups.length>1?'<p class="field-note">تصل قطع العراق وقطع الصين في شحنتين بموعدين مختلفين. يتطلب الطلب المختلط الدفع المسبق بالبطاقة.</p>':'');}
-function deliveryOptions(){return `${top('خيارات التوصيل')}<div class="ck-content"><p class="page-intro">مدة التوصيل حسب مصدر القطع: العراق حوالي يومين، والصين ١٥–٢٠ يوماً.</p>${shippingCards()}<div class="info-box">${icon('truck')}${freeDeliveryText}</div><div class="button-stack">${goto('العودة لإتمام الطلب','checkout')}</div></div>`;}
+function deliveryGroupMarkup(groups){return '<div class="ck-delivery-groups">'+groups.map(g=>'<article class="ck-delivery-group">'+icon('truck')+'<div><h3>'+g.label+'</h3><p>'+g.estimate+'</p><small>'+paymentCopy(g.source==='iraq')+'</small></div></article>').join('')+'</div>'+(groups.length>1?'<p class="field-note">تصل قطع العراق وقطع الصين في شحنتين بموعدين مختلفين. يتطلب الطلب المختلط الدفع المسبق بالبطاقة.</p>':'');}
+function deliveryOptions(){return `${top('خيارات التوصيل')}<div class="ck-content"><p class="page-intro">مدة التوصيل حسب مصدر القطع: العراق ٣ إلى ٤ أيام، والصين ١٥–٢٠ يوماً.</p>${shippingCards()}<div class="info-box">${icon('truck')}${freeDeliveryText}</div><div class="button-stack">${goto('العودة لإتمام الطلب','checkout')}</div></div>`;}
 function shippingCards(lines=activeLines(),groups){return deliveryGroupMarkup(groups||deliveryGroups(currentProducts(lines).map((p,i)=>({...p,qty:lines[i]?.qty||1}))))+'<p class="field-note">'+freeDeliveryText+'</p>';}
 function couponSelect(){const sub=calculate(activeLines(),{code:''}).subtotal;return `${top('اختيار قسيمة')}<div class="ck-content"><p class="page-intro">قسيمة واحدة لكل طلب. تتحدث الأهلية بحسب القطع المحددة.</p>${[['M10','خصم ١٠٪','من ٤٠ دولاراً']].map(([c,t,d])=>{const r=couponRule(c,sub);return `<article class="ck-coupon"><span class="overline ltr">${c}</span><h3>${t}</h3><p>${d}</p>${btn(r.ok?'تطبيق على الطلب':r.reason||'غير متاحة لهذا الطلب','ck-coupon-select','secondary',`data-value="${c}" ${r.ok?'':'disabled'}`)}</article>`;}).join('')}<form id="ck-coupon-form" class="coupon-inline"><input name="code" placeholder="رمز القسيمة" aria-label="رمز القسيمة"><button type="submit">تطبيق</button></form><div class="info-box">${icon('truck')}التوصيل مجاني للطلبات من ٧٥ دولاراً قبل الخصم؛ وإلا ٤ دولارات.</div>${goto('مركز القسائم','coupons','text-btn')}</div>`;}
 function inlineAddressFields(a={}){
@@ -105,12 +161,12 @@ function checkout(id){
  if(o&&o.status!=='payment_pending')return top('إتمام الطلب')+empty('تمت معالجة هذا الطلب','يمكن مراجعة حالة الطلب والدفع.','check','تفاصيل الطلب','order/'+o.id);
  const lines=o?o.items:activeLines(),s=S();
  if(!lines.length)return top('إتمام الطلب')+empty('لا توجد قطع محددة','يلزم تحديد القطع في حقيبة التسوق.','bag','العودة للحقيبة','cart');
- const newAddress=!o&&(!s.address||ui.checkoutNewAddress||!validAddress(s.address)),a=o?.address||(newAddress?(ui.checkoutAddressDraft||{}):s.address),t=o||calculate(lines,{city:a?.city||''}),eligibility=codEligibility(o?lines:currentProducts(lines)),method=['visa','mastercard','cod'].includes(ui.payment)?ui.payment:'visa';
+ const newAddress=!o&&(!s.address||ui.checkoutNewAddress||!validAddress(s.address)),a=o?.address||(newAddress?(ui.checkoutAddressDraft||{}):s.address),t=o||calculate(lines,{city:a?.city||''}),hasLocalItems=(o?lines:currentProducts(lines)).some(l=>fulfillmentSource(l)==='iraq');
  const addressSelector=o?'<p class="field-note">عنوان ومبالغ محفوظة لهذا الطلب. المتابعة تستخدم رقم الطلب نفسه.</p>':'<label class="field"><span>عنوان التوصيل</span><select id="ck-address-choice" name="addressChoice">'+s.addresses.map(v=>'<option value="'+esc(v.id)+'" '+(!newAddress&&v.id===s.selectedAddressId?'selected':'')+'>'+esc(v.label||'عنوان محفوظ')+' · '+esc(v.name)+' · '+esc(addressPlace(v))+'</option>').join('')+'<option value="new" '+(newAddress?'selected':'')+'>عنوان جديد</option></select></label>';
  const addressDisplay=newAddress?inlineAddressFields(a):'<div class="ck-checkout-address">'+icon('pin')+'<div><b data-user-text>'+esc(a?.name||'')+'</b><p data-user-text>'+esc(addressPlace(a))+' · '+esc(a?.area||'')+' · '+esc(a?.street||'')+'<br>'+esc(a?.landmark||'')+'<br><span class="ltr">'+esc(a?.phone||'')+'</span></p></div></div>';
  const delivery=shippingCards(lines,o?orderDeliveryGroups(o):undefined);
- const methods=['visa','mastercard','cod'].map(n=>'<button type="button" class="payment-option '+(method===n?'active':'')+'" data-action="payment-method" data-value="'+n+'" aria-pressed="'+(method===n)+'" '+(n==='cod'&&!eligibility.ok?'disabled aria-describedby="ck-cod-reason"':'')+'>'+(n==='cod'?icon('truck'):cardBrand(n))+'<span>'+(n==='cod'?'الدفع عند الاستلام':cardName(n))+'</span><i class="radio"></i></button>').join('');
- return top('إتمام الطلب')+'<div class="ck-content ck-onepage"><p class="page-intro">العنوان والتوصيل والدفع في صفحة واحدة.</p><form id="ck-checkout-form" data-order="'+esc(id||'')+'" novalidate><div class="ck-form-error" id="ck-checkout-error" role="alert" tabindex="-1" hidden></div><section class="ck-onepage-section"><h2>عنوان التوصيل</h2>'+addressSelector+addressDisplay+'</section><section class="ck-onepage-section"><h2>طريقة التوصيل</h2>'+delivery+'</section><section class="ck-onepage-section"><h2>طريقة الدفع</h2><div class="ck-payment-networks">'+methods+'</div><p class="ck-cod-note" id="ck-cod-reason">'+esc(eligibility.reason)+'</p>'+(method==='cod'?'<div class="info-box">'+icon('info')+'المبلغ مستحق عند الاستلام. لم يُحصّل أي مبلغ نقدي.</div>':inlineCardFields(method))+'</section><section class="ck-onepage-section"><div class="ck-block-title"><h2>ملخص الطلب · '+ar(lines.reduce((n,l)=>n+l.qty,0))+'</h2>'+(!o?goto('تعديل',ui.buyNow?'product/'+lines[0].id:'cart','text-btn'):'')+'</div>'+lines.map(l=>'<div class="ck-mini-line">'+photo({...product(l.id),name:l.name||product(l.id).name,img:l.img??product(l.id).img})+'<div><h3>'+esc(l.name||product(l.id).name)+'</h3><p>'+esc(A.colors[l.color]?.[0]||'')+' · '+esc(l.size)+' · '+ar(l.qty)+'</p>'+fulfillmentBadge(l)+'<b>'+money((l.price??product(l.id).price)*l.qty)+'</b></div></div>').join('')+(!o?'<button type="button" class="ck-row-link" data-go="coupon-select">'+icon('tag')+(t.couponCode?'القسيمة: '+esc(t.couponCode):'اختيار قسيمة خصم')+icon('arrow')+'</button><label class="field"><span>ملاحظات الطلب (اختياري)</span><textarea id="ck-order-note" maxlength="300">'+esc(ui.orderNote||'')+'</textarea></label><label class="checkbox-row"><input id="ck-gift" type="checkbox" '+(ui.gift?'checked':'')+'>الطلب هدية · تغليف تجريبي مجاني</label>'+(ui.gift?'<label class="field"><span>رسالة الهدية (اختياري)</span><textarea id="ck-gift-message" maxlength="180">'+esc(ui.giftMessage||'')+'</textarea></label>':''):'')+priceBox(t)+'</section><label class="checkbox-row"><input id="ck-terms" type="checkbox" name="terms" '+(ui.termsAccepted?'checked':'')+'>أوافق على '+goto('شروط التجربة وسياسة الإرجاع','policy','text-btn')+'</label><p class="field-note">لن تُرسل رسالة أو شحنة ولن يُخصم أي مبلغ.</p><div class="ck-inline-submit"><button class="primary" type="submit" '+(processing||o?.requiresRequote?'disabled':'')+'>'+(processing?'جارٍ تأكيد الطلب…':'تأكيد الطلب التجريبي · '+money(t.total))+'</button></div>'+(o?.requiresRequote?btn('مراجعة الطلب وتحديث الخصم','ck-requote','secondary','type="button" data-id="'+esc(o.id)+'"'):'')+'</form></div>';
+ const payHint=window.MonarcaI18n?.language()==='en'?'You will be redirected to Stripe to complete card payment.':'سيتم تحويلك إلى Stripe لإتمام الدفع بالبطاقة.';
+ return top('إتمام الطلب')+'<div class="ck-content ck-onepage"><p class="page-intro">العنوان والتوصيل والدفع في صفحة واحدة.</p><form id="ck-checkout-form" data-order="'+esc(id||'')+'" novalidate><div class="ck-form-error" id="ck-checkout-error" role="alert" tabindex="-1" hidden></div><section class="ck-onepage-section"><h2>عنوان التوصيل</h2>'+addressSelector+addressDisplay+'</section><section class="ck-onepage-section"><h2>طريقة التوصيل</h2>'+delivery+'</section><section class="ck-onepage-section"><h2>طريقة الدفع</h2><div class="info-box">'+icon('shield')+paymentCopy(hasLocalItems)+'</div></section><section class="ck-onepage-section"><div class="ck-block-title"><h2>ملخص الطلب · '+ar(lines.reduce((n,l)=>n+l.qty,0))+'</h2>'+(!o?goto('تعديل',ui.buyNow?'product/'+lines[0].id:'cart','text-btn'):'')+'</div>'+lines.map(l=>'<div class="ck-mini-line">'+photo({...product(l.id),name:l.name||product(l.id).name,img:l.img??product(l.id).img})+'<div><h3>'+esc(l.name||product(l.id).name)+'</h3><p>'+esc(A.colors[l.color]?.[0]||'')+' · '+esc(l.size)+' · '+ar(l.qty)+'</p>'+fulfillmentBadge(l)+'<b>'+money((l.price??product(l.id).price)*l.qty)+'</b></div></div>').join('')+(!o?'<button type="button" class="ck-row-link" data-go="coupon-select">'+icon('tag')+(t.couponCode?'القسيمة: '+esc(t.couponCode):'اختيار قسيمة خصم')+icon('arrow')+'</button><label class="field"><span>ملاحظات الطلب (اختياري)</span><textarea id="ck-order-note" maxlength="300">'+esc(ui.orderNote||'')+'</textarea></label><label class="checkbox-row"><input id="ck-gift" type="checkbox" '+(ui.gift?'checked':'')+'>الطلب هدية · تغليف تجريبي مجاني</label>'+(ui.gift?'<label class="field"><span>رسالة الهدية (اختياري)</span><textarea id="ck-gift-message" maxlength="180">'+esc(ui.giftMessage||'')+'</textarea></label>':''):'')+priceBox(t)+'</section><label class="checkbox-row"><input id="ck-terms" type="checkbox" name="terms" '+(ui.termsAccepted?'checked':'')+'>أوافق على '+goto('الشروط والأحكام','policy/terms','text-btn')+'</label><p class="field-note">'+payHint+'</p><div class="ck-inline-submit"><button class="primary" type="submit" '+(processing||o?.requiresRequote?'disabled':'')+'>'+(processing?'جارٍ التحويل إلى الدفع…':(isEnglish()?'Pay by card':'الدفع بالبطاقة')+' · '+money(t.total))+'</button></div>'+(o?.requiresRequote?btn('مراجعة الطلب وتحديث الخصم','ck-requote','secondary','type="button" data-id="'+esc(o.id)+'"'):'')+'</form></div>';
 }
 function validAddress(a){return !!(a&&String(a.name||'').trim().length>=3&&A.normalizePhone(a.phone)&&A.cities.includes(a.city)&&['locality','area','street','landmark'].every(k=>String(a[k]||'').trim()));}
 function payment(id){return checkout(id);}
@@ -118,12 +174,11 @@ function makePending(){
  if(!ui.termsAccepted)throw new Error('يرجى الموافقة على شروط التجربة قبل تأكيد الطلب.');
  const lines=activeLines();if(!lines.length||!validAddress(S().address))throw new Error('يلزم إكمال القطع وعنوان التوصيل.');
  for(const l of lines){const p=A.products.find(p=>Number(p.id)===Number(l.id));if(!p||!p.colors.includes(l.color)||!p.sizes.includes(l.size)||p.unavailable===l.size||!Number.isInteger(Number(l.qty))||l.qty<1||l.qty>p.stock||p.stock<1)throw new Error('إحدى القطع غير متوفرة بالكمية أو المقاس المختار. يمكن مراجعة الحقيبة.');}
- if(ui.payment==='cod'&&!codEligibility(currentProducts(lines)).ok)throw new Error(codEligibility(currentProducts(lines)).reason);
- const t=calculate(lines),items=lines.map(l=>({...clone(l),price:product(l.id).price,name:product(l.id).name,img:product(l.id).img,fulfillment:fulfillmentFor(product(l.id)),fulfillmentSource:fulfillmentSource(product(l.id)),deliveryMinDays:fulfillmentSource(product(l.id))==='iraq'?2:15,deliveryMaxDays:fulfillmentSource(product(l.id))==='iraq'?2:20})),source=ui.requoteSource||(ui.buyNow?'direct':'cart');
+ const t=calculate(lines),items=lines.map(l=>({...clone(l),price:product(l.id).price,name:product(l.id).name,img:product(l.id).img,fulfillment:fulfillmentFor(product(l.id)),fulfillmentSource:fulfillmentSource(product(l.id)),deliveryMinDays:deliveryWindow(fulfillmentSource(product(l.id)))[0],deliveryMaxDays:deliveryWindow(fulfillmentSource(product(l.id)))[1]})),source=ui.requoteSource||(ui.buyNow?'direct':'cart');
  const signature=JSON.stringify({items:items.map(l=>[l.id,l.color,l.size,l.qty,l.price,l.fulfillment,l.fulfillmentSource,l.deliveryMinDays,l.deliveryMaxDays]),address:S().address,total:t.total,coupon:t.couponCode,mode:ui.shippingMode,source,note:ui.orderNote||'',gift:!!ui.gift,giftMessage:ui.giftMessage||''});
  let o=S().orders.find(x=>x.status==='payment_pending'&&x.signature===signature);
- if(!o){const now=new Date();o={id:'M-DEMO-'+Date.now().toString().slice(-9)+'-'+Math.random().toString(36).slice(2,5),date:new Intl.DateTimeFormat('ar-IQ',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Baghdad'}).format(now),createdAt:now.toISOString(),status:'payment_pending',paymentStatus:'pending',paidTotal:0,items,address:clone(S().address),...t,payment:ui.payment,source,sourceLines:clone(lines),signature,orderNote:ui.orderNote||'',gift:!!ui.gift,giftMessage:ui.giftMessage||'',currency:'USD',deliveryGroups:deliveryGroups(items),history:[],cartConsumed:false};S().orders.unshift(o);}
- o.payment=ui.payment;ui.requoteSource=null;ui.pendingOrderId=o.id;A.save();return o;
+ if(!o){const now=new Date();o={id:'M-DEMO-'+Date.now().toString().slice(-9)+'-'+Math.random().toString(36).slice(2,5),date:new Intl.DateTimeFormat('ar-IQ',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Baghdad'}).format(now),createdAt:now.toISOString(),status:'payment_pending',paymentStatus:'pending',paidTotal:0,items,address:clone(S().address),...t,payment:'stripe',source,sourceLines:clone(lines),signature,orderNote:ui.orderNote||'',gift:!!ui.gift,giftMessage:ui.giftMessage||'',currency:'USD',deliveryGroups:deliveryGroups(items),history:[],cartConsumed:false};S().orders.unshift(o);}
+ o.payment='stripe';ui.requoteSource=null;ui.pendingOrderId=o.id;A.save();return o;
 }
 function auth(id){return checkout(id);}
 function addressValidation(a){
@@ -144,49 +199,85 @@ function submitCheckout(form,d,legacy=false){
  const addressError=addressValidation(a);if(addressError){error('#ck-checkout-error',addressError);return;}
  ui.termsAccepted=!!d.terms||ui.termsAccepted||(legacy&&!!o);
  if(!ui.termsAccepted){error('#ck-checkout-error','يرجى الموافقة على شروط التجربة قبل تأكيد الطلب.');return;}
- const method=['visa','mastercard','cod'].includes(ui.payment)?ui.payment:'visa',lines=o?o.items:activeLines(),eligibility=codEligibility(o?lines:currentProducts(lines));
+ const lines=o?o.items:activeLines();
  if(!lines.length){error('#ck-checkout-error','يلزم اختيار قطعة واحدة على الأقل.');return;}
- if(method==='cod'&&!eligibility.ok){error('#ck-checkout-error',eligibility.reason);return;}
- if(method!=='cod'){
-  const num=String(d.number||'').replace(/\D/g,''),expected=method==='mastercard'?'5555555555554444':'4242424242424242';cardDraft={holder:d.holder||'',number:d.number||'',expiry:d.expiry||'',cvv:d.cvv||'',saveCard:d.saveCard,demoDecline:d.demoDecline};
-  const message=String(d.holder||'').trim().length<3?'يلزم اسم حامل بطاقة الاختبار.':num!==expected?'تقبل النسخة رقم بطاقة الاختبار المعروض فقط. لا تُستخدم بطاقة حقيقية.':d.expiry!=='12/30'?'تاريخ الانتهاء التجريبي هو 12/30.':d.cvv!=='123'?'رمز CVV التجريبي هو 123.':'';
-  if(message){error('#ck-checkout-error',message);return;}
- }
  if(newAddress){const saved={id:'addr-'+Date.now(),label:'المنزل',phone:A.normalizePhone(a.phone)};for(const k of ['name','city','locality','area','street','landmark'])saved[k]=String(a[k]||'').trim();S().addresses.push(saved);S().address=clone(saved);S().selectedAddressId=saved.id;if(!S().defaultAddressId)S().defaultAddressId=saved.id;ui.checkoutNewAddress=false;ui.checkoutAddressDraft={};}
  else if(!o){S().address=clone(a);S().selectedAddressId=a.id;}
  if(!o){ui.deliveryCity=S().address.city;S().deliveryCity=S().address.city;}
  let order=o;try{if(!order)order=makePending();}catch(e){error('#ck-checkout-error',e.message);return;}
- order.payment=method;order.paymentStatus='pending';order.paymentError='';
- if(method!=='cod'){order.cardHolder=String(d.holder).trim();order.cardLast4=method==='mastercard'?'4444':'4242';order.saveDemoCard=!!d.saveCard;}
- else {delete order.cardHolder;delete order.cardLast4;delete order.saveDemoCard;}
+ order.payment='stripe';order.paymentStatus='pending';order.paymentError='';
+ delete order.cardHolder;delete order.cardLast4;delete order.saveDemoCard;
  ui.pendingOrderId=order.id;
- if(method!=='cod'&&d.demoDecline){order.paymentStatus='failed';order.paymentError='رفض تجريبي من جهة إصدار البطاقة. لا يوجد خصم حقيقي.';cardDraft={};A.save();A.go('payment-failed/'+order.id);return;}
- finish(order,method);
+ startStripeCheckout(order);
 }
-function failed(id){const o=pending(id);if(!o)return top('الدفع')+empty('لم نجد الطلب','راجعي طلباتك.','card','طلباتي','orders');if(o.status!=='payment_pending')return checkout(id);return `${top('تعذّر الدفع')}<div class="ck-content ck-payment-result"><div class="ck-result-icon failed">${icon('card')}</div><span class="overline">LET’S TRY THAT AGAIN</span><h1>لم يكتمل الدفع.</h1><p>لم يتم خصم أي مبلغ في هذه التجربة. طلبك وبيانات التوصيل محفوظة، ويمكنك المحاولة مجدداً.</p><div class="order-id ltr">${o.id}</div><div class="ck-error-reason"><b>سبب توضيحي</b><p>${esc(o.paymentError||'تم رفض المعاملة التجريبية. استخدمي بيانات بطاقة الاختبار ثم أعيدي المحاولة.')}</p></div>${priceBox(o)}<div class="button-stack">${o.requiresRequote?btn('مراجعة الطلب وتحديث الخصم','ck-requote','primary',`data-id="${o.id}"`):goto('إعادة المحاولة بنفس الطلب','payment/'+o.id)}${btn('تجربة نوع بطاقة آخر','ck-switch-card','secondary',`data-id="${o.id}"`)}${goto('تفاصيل الطلب','order/'+o.id,'text-btn')}${goto('طلب المساعدة','support','text-btn')}</div></div>`;}
-function finish(o,method=o.payment){
+async function startStripeCheckout(order){
+ if(processing)return;processing=true;ui.placing=true;A.render(true);
+ try{
+  const api=window.MonarcaAPI;if(!api)throw new Error('تعذّر الاتصال بخدمة الدفع. حاول مرة أخرى.');
+  let session;
+  if(order.serverOrderId){session=await api.createStripeCheckoutSession(order.serverOrderId,'AED');}
+  else{session=await api.createStripeCheckout(order);}
+  const orderId=String(session?.orderId||order.serverOrderId||'');
+  if(!orderId||!session?.url)throw new Error('تعذّر بدء الدفع الآمن. حاول مرة أخرى.');
+  order.id=orderId;order.serverOrderId=orderId;order.payment='stripe';order.paymentStatus='pending';
+  if(Number.isFinite(Number(session.total)))order.total=Number(session.total);
+  order.chargeCurrency=session.chargeCurrency||'AED';
+  order.chargeAmount=Number(session.chargeAmount??usdToAed(order.total));
+  order.exchangeRate=Number(session.exchangeRate)||3.67;
+  A.save();
+  const checkoutUrl=new URL(session.url);
+  if(checkoutUrl.protocol!=='https:'||checkoutUrl.hostname!=='checkout.stripe.com')throw new Error('رابط الدفع الآمن غير صالح.');
+  window.location.assign(checkoutUrl.href);
+ }catch(e){
+  processing=false;ui.placing=false;order.paymentStatus='pending';order.paymentError=String(e?.message||'تعذّر بدء الدفع الآمن.');A.save();A.render(true);
+  error('#ck-checkout-error',order.paymentError);
+ }
+}
+function stripeReturn(id){return `${top('تأكيد الدفع')}<div class="ck-content ck-payment-result"><div class="ck-result-icon">${icon('card')}</div><h1>${ui.stripeReturnFailed?'تعذّر التحقق من الدفع':'جارٍ التحقق من الدفع'}</h1><p>${esc(ui.stripeReturnMessage||'نتحقق من حالة الدفع لدى Stripe. لا تغلق هذه الصفحة الآن.')}</p><div class="order-id ltr">${esc(id)}</div><div class="button-stack">${btn('إعادة التحقق','stripe-check-status','primary',`data-id="${esc(id)}"`)}${goto('العودة إلى المتجر','home','text-btn')}</div></div>`;}
+function stripeCancelled(id){const o=pending(id);return `${top('الدفع')}<div class="ck-content ck-payment-result"><div class="ck-result-icon failed">${icon('card')}</div><h1>${window.MonarcaI18n?.language()==='en'?'Payment not completed':'لم يكتمل الدفع'}</h1><p>${window.MonarcaI18n?.language()==='en'?'No payment was confirmed. You can return to checkout and try again.':'لم نتلق تأكيداً بالدفع. يمكنك العودة إلى إتمام الطلب والمحاولة مجدداً.'}</p>${o?`<div class="order-id ltr">${esc(id)}</div><div class="button-stack">${goto(window.MonarcaI18n?.language()==='en'?'Return to checkout':'العودة لإتمام الطلب','checkout/'+id,'primary')}${goto('متابعة التسوق','home','text-btn')}</div>`:`<div class="button-stack">${goto('متابعة التسوق','home','primary')}</div>`}</div>`;}
+async function verifyStripeReturn(id){
+ const attempt=async count=>{
+  if(ui.route!=='stripe-return/'+id)return;
+  try{
+   const status=await window.MonarcaAPI?.getStripePaymentStatus?.(id);
+   if(status?.paymentStatus==='paid'){
+    const order=await loadStripeOrder(id);if(!order){throw new Error('لم نستطع تحميل تفاصيل الطلب من المتجر بعد.');}
+    order.payment='stripe';order.total=Number(status.paidTotal)||order.total;order.paidTotal=Number(status.paidTotal)||order.total;order.transactionId=status.transactionId||'';order.serverOrderId=id;order.chargeCurrency=status.chargeCurrency||order.chargeCurrency||'';if(status.chargeAmount!=null)order.chargeAmount=Number(status.chargeAmount);if(status.exchangeRate!=null)order.exchangeRate=Number(status.exchangeRate);
+    if(order.status!=='payment_pending'){ui.lastOrder=id;S().lastOrder=id;ui.pendingOrderId=null;A.save();A.go('success');return;}
+    ui.stripeReturnFailed=false;ui.stripeReturnMessage='تم تأكيد الدفع.';finishStripeOrder(order,order.transactionId);return;
+   }
+   if(status?.paymentStatus==='failed'){
+    const order=await loadStripeOrder(id);if(order){order.paymentStatus='failed';order.paymentError='لم يكتمل الدفع. يمكنك المحاولة مجدداً.';A.save();A.go('payment-failed/'+id);return;}
+   }
+  }catch(_){ }
+  if(count<12){ui.stripeReturnMessage='نتحقق من حالة الدفع لدى Stripe. لا تغلق هذه الصفحة الآن.';setTimeout(()=>attempt(count+1),1800);}
+  else{ui.stripeReturnFailed=true;ui.stripeReturnMessage='لم يصل تأكيد الدفع بعد. أعد التحقق بعد قليل أو تواصل مع المتجر.';A.render(true);}
+ };
+ attempt(0);
+}
+function failed(id){const o=pending(id);if(!o)return top('الدفع')+empty('لم نجد الطلب','راجعي طلباتك.','card','طلباتي','orders');if(o.status!=='payment_pending')return checkout(id);return `${top('تعذّر الدفع')}<div class="ck-content ck-payment-result"><div class="ck-result-icon failed">${icon('card')}</div><h1>${window.MonarcaI18n?.language()==='en'?'Payment not completed':'لم يكتمل الدفع'}</h1><p>${esc(o.paymentError||'لم يكتمل الدفع. لم نتلق تأكيداً بالخصم ويمكنك المحاولة مجدداً.')}</p><div class="order-id ltr">${o.id}</div>${priceBox(o)}<div class="button-stack">${goto(window.MonarcaI18n?.language()==='en'?'Try payment again':'إعادة المحاولة','checkout/'+o.id,'primary')}${goto('تفاصيل الطلب','order/'+o.id,'text-btn')}${goto('طلب المساعدة','support','text-btn')}</div></div>`;}
+function finishStripeOrder(o,verifiedTransactionId){
  if(processing||o.paymentStatus==='paid'||o.paymentStatus==='cod_due'||o.status!=='payment_pending')return;processing=true;ui.placing=true;A.render(true);
  setTimeout(()=>{
   if(!S().orders.includes(o)||o.status!=='payment_pending'){processing=false;ui.placing=false;A.render(true);return;}
   const usedCoupon=o.couponCode&&o.couponCode!=='FREE100'&&S().couponWallet?.find(c=>c.code===o.couponCode&&c.usedAt&&c.orderId!==o.id);
   if(usedCoupon){o.paymentStatus='failed';o.paymentError='استُخدمت قسيمة هذا الطلب في طلب آخر. يلزم مراجعة الطلب لتحديث المبلغ.';o.requiresRequote=true;processing=false;ui.placing=false;A.save();A.go('payment-failed/'+o.id);return;}
-  if(method==='cod'&&!codEligibility(o.items).ok){o.paymentStatus='failed';o.paymentError=codEligibility(o.items).reason;processing=false;ui.placing=false;A.save();A.go('payment-failed/'+o.id);return;}
-  o.payment=method;o.status='placed';o.confirmedAt=new Date().toISOString();o.paymentError='';o.history=Array.isArray(o.history)?o.history:[];o.history.push({status:'placed',date:o.confirmedAt,note:method==='cod'?'تم تأكيد الطلب بالدفع عند الاستلام':'تم تأكيد الدفع التجريبي'});
-  if(method==='cod'){o.paymentStatus='cod_due';o.paidTotal=0;delete o.paidAt;delete o.transactionId;}
-  else {o.paymentStatus='paid';o.paidAt=o.confirmedAt;o.paidTotal=o.total;o.transactionId='DEMO-TXN-'+Date.now().toString().slice(-10);}
+  o.payment='stripe';o.status='placed';o.paymentStatus='paid';o.confirmedAt=new Date().toISOString();
+  o.paidAt=o.confirmedAt;o.paymentError='';o.transactionId=verifiedTransactionId;
+  o.history=Array.isArray(o.history)?o.history:[];
+  o.history.push({status:'placed',date:o.confirmedAt,note:'تم تأكيد الدفع عبر Stripe'});
   if(o.source==='cart'&&!o.cartConsumed){for(const l of o.sourceLines||o.items){const found=S().cart.find(x=>lineKey(x)===lineKey(l));if(found)found.qty=Math.max(0,found.qty-l.qty);}S().cart=S().cart.filter(l=>l.qty>0);o.cartConsumed=true;}
   if(o.couponCode&&!o.couponConsumed){window.MonarcaAccountCoupons?.markUsed?.(o.couponCode,o.id);if(S().coupon===o.couponCode)S().coupon='';o.couponConsumed=true;}
-  if(method!=='cod'&&o.saveDemoCard){const last4=o.payment==='mastercard'?'4444':'4242';if(!S().paymentTokens.some(c=>c.network===o.payment&&c.last4===last4))S().paymentTokens.push({id:'demo-card-'+Date.now(),network:o.payment,last4,holder:o.cardHolder||'TEST USER',isDemo:true,default:!S().paymentTokens.length});}
-  cardDraft={};ui.buyNow=null;ui.buyNowCoupon='';ui.paymentUserSelected=false;ui.lastOrder=o.id;S().lastOrder=o.id;ui.pendingOrderId=null;processing=false;ui.placing=false;ui.orderNote='';ui.gift=false;ui.giftMessage='';ui.termsAccepted=false;A.save();try{window.MonarcaAPI?.placeOrder?.(o);}catch(_){}A.go('success');
+  cardDraft={};ui.buyNow=null;ui.buyNowCoupon='';ui.paymentUserSelected=false;ui.lastOrder=o.id;S().lastOrder=o.id;ui.pendingOrderId=null;processing=false;ui.placing=false;ui.orderNote='';ui.gift=false;ui.giftMessage='';ui.termsAccepted=false;A.save();A.go('success');
  },450);
 }
 function success(){
  const o=S().orders.find(x=>x.id===(ui.lastOrder||S().lastOrder));if(!o)return top('تأكيد الطلب')+empty('لا يوجد طلب جديد','يمكن متابعة التسوق.');
- const cod=o.payment==='cod',paymentLabel=cod?'الدفع عند الاستلام':cardName(o.payment)+' ···· '+esc(o.cardLast4||'');
- return top('تم تأكيد الطلب')+'<div class="ck-content ck-payment-result"><div class="ck-result-icon">'+icon('check')+'</div><h1>تم تأكيد الطلب.</h1><p>'+(cod?'تم حفظ الطلب. المبلغ مستحق عند الاستلام ولم يُحصّل أي مبلغ نقدي.':'تم تأكيد دفعة الاختبار وحفظ الطلب.')+'</p><div class="order-id ltr">'+esc(o.id)+'</div><div class="ck-success-facts"><span>'+(cod?icon('truck'):cardBrand(o.payment))+' '+paymentLabel+'</span><span>'+icon('pin')+' '+esc(addressPlace(o.address))+' · '+esc(o.address.area)+'</span><span>'+icon('truck')+' '+esc(deliverySummary(orderDeliveryGroups(o)))+'</span></div>'+priceBox(o)+'<p class="ck-payment-state">'+(cod?'المبلغ المستحق عند الاستلام: '+money(o.total)+'<br>المدفوع: '+money(0):'المدفوع تجريبياً: '+money(o.paidTotal))+'</p>'+(!cod?'<p class="ck-transaction">عملية توضيحية <span class="ltr">'+esc(o.transactionId||'')+'</span></p>':'')+'<div class="button-stack">'+goto('متابعة تفاصيل الطلب','order/'+o.id)+goto('عرض إيصال الطلب','invoice/'+o.id,'secondary')+goto('متابعة التسوق','home','text-btn')+'</div><div class="info-box">'+icon('info')+'لا توجد عملية دفع أو شحن حقيقية. كل الحالات في هذه النسخة للمراجعة التفاعلية.</div></div>';
+ const cod=o.payment==='cod',stripe=o.payment==='stripe',lang=window.MonarcaI18n?.language()==='en',paymentLabel=cod?(lang?'Cash on delivery':'الدفع عند الاستلام'):stripe?'Stripe':cardName(o.payment);
+ return top(lang?'Order confirmed':'تم تأكيد الطلب')+'<div class="ck-content ck-payment-result"><div class="ck-result-icon">'+icon('check')+'</div><h1>'+(lang?'Order confirmed':'تم تأكيد الطلب.')+'</h1><p>'+(cod?(lang?'Your order is confirmed. Payment is due on delivery.':'تم حفظ الطلب. المبلغ مستحق عند الاستلام ولم يُحصّل أي مبلغ نقدي.'):stripe?(lang?'Your card payment has been confirmed securely by Stripe.':'تم تأكيد الدفع بالبطاقة عبر Stripe.'):'تم تأكيد دفعة الاختبار وحفظ الطلب.')+'</p><div class="order-id ltr">'+esc(o.id)+'</div><div class="ck-success-facts"><span>'+(cod?icon('truck'):stripe?icon('card'):cardBrand(o.payment))+' '+paymentLabel+'</span><span>'+icon('pin')+' '+esc(addressPlace(o.address))+' · '+esc(o.address.area)+'</span><span>'+icon('truck')+' '+esc(deliverySummary(orderDeliveryGroups(o)))+'</span></div>'+priceBox(o)+'<p class="ck-payment-state">'+(cod?(lang?'Due on delivery: ':'المبلغ المستحق عند الاستلام: ')+money(o.total)+'<br>'+(lang?'Paid: ':'المدفوع: ')+money(0):(lang?'Paid: ':'المدفوع: ')+money(o.paidTotal))+'</p>'+(stripe?'<p class="ck-transaction">'+(lang?'Stripe payment reference':'مرجع عملية Stripe')+' <span class="ltr">'+esc(o.transactionId||'')+'</span></p>':'')+'<div class="button-stack">'+goto(lang?'View order':'متابعة تفاصيل الطلب','order/'+o.id)+goto(lang?'Continue shopping':'متابعة التسوق','home','text-btn')+'</div></div>';
 }
 const actions={
- 'payment-method':el=>{if(!['visa','mastercard','cod'].includes(el.dataset.value))return;if(el.dataset.value==='cod'&&!codEligibility(activeLines()).ok){A.toast(codEligibility(activeLines()).reason);return;}ui.payment=el.dataset.value;ui.paymentUserSelected=true;ui.selectedPaymentToken=null;cardDraft={};A.render(true);},
+ 'stripe-check-status':el=>{ui.stripeReturnFailed=false;ui.stripeReturnMessage='جارٍ التحقق من حالة الدفع.';A.render(true);verifyStripeReturn(el.dataset.id);},
  'remove-coupon':()=>{if(ui.buyNow)ui.buyNowCoupon='';else S().coupon='';persist();},
  'ck-requote':el=>{const o=pending(el.dataset.id);if(!o||o.status!=='payment_pending')return;o.status='cancelled';o.cancelReason='إعادة المراجعة بعد انتهاء أهلية القسيمة';o.cancelledAt=new Date().toISOString();ui.buyNow=o.items.map(l=>({id:l.id,color:l.color,size:l.size,qty:l.qty,selected:true}));ui.requoteSource=o.source||'direct';ui.buyNowCoupon='';ui.pendingOrderId=null;ui.termsAccepted=false;A.save();A.go('checkout');},
  'ck-edit':el=>editVariant(Number(el.dataset.index)),
@@ -224,17 +315,21 @@ const forms={
  'ck-auth-form':(form,d)=>{const o=pending(form.dataset.id);if(o)A.go('payment/'+o.id);}
 
 };
-A.register({routes:{cart:basket,saved,addresses,address:addressForm,checkout,payment,'payment-auth':auth,'payment-failed':failed,success,'delivery-options':deliveryOptions,'coupon-select':couponSelect},actions,forms,pricing,shoppingLines:activeLines,couponApply:applyCoupon,
+A.loadStripeOrder=loadStripeOrder;
+A.register({routes:{cart:basket,saved,addresses,address:addressForm,checkout,payment,'payment-auth':auth,'payment-failed':failed,'stripe-return':stripeReturn,'stripe-cancelled':stripeCancelled,success,'delivery-options':deliveryOptions,'coupon-select':couponSelect},actions,forms,pricing,shoppingLines:activeLines,couponApply:applyCoupon,
  change:e=>{if(e.target.id==='ck-address-choice'){ui.checkoutNewAddress=e.target.value==='new';if(!ui.checkoutNewAddress){const a=S().addresses.find(x=>x.id===e.target.value);if(a){S().address=clone(a);S().selectedAddressId=a.id;ui.deliveryCity=a.city;S().deliveryCity=a.city;A.save();}}A.render(true);return true;}if(e.target.id==='ck-inline-city'){ui.checkoutAddressDraft={...(ui.checkoutAddressDraft||{}),city:e.target.value};A.render(true);return true;}if(e.target.id==='ck-select-all'){S().cart.forEach(l=>l.selected=e.target.checked);persist();return true;}if(e.target.dataset.ckSelect!==undefined){S().cart[Number(e.target.dataset.ckSelect)].selected=e.target.checked;persist();return true;}if(e.target.id==='ck-gift'){ui.gift=e.target.checked;A.render(true);return true;}if(e.target.id==='ck-terms'){ui.termsAccepted=e.target.checked;return true;}if(e.target.id==='ck-token'){const c=S().paymentTokens.find(x=>x.id===e.target.value&&x.isDemo);if(c){ui.payment=c.network;ui.paymentUserSelected=true;ui.selectedPaymentToken=c.id;cardDraft={holder:c.holder,number:c.network==='mastercard'?'5555 5555 5555 4444':'4242 4242 4242 4242',expiry:'12/30',cvv:'123'};}else{ui.selectedPaymentToken=null;cardDraft={};}A.render(true);return true;}return false;},
  reset:()=>{cardDraft={};processing=false;ui.checkoutAddressDraft={};ui.checkoutNewAddress=false;},
- onRoute:(name,id)=>{
+  onRoute:(name,id)=>{
   ensure();
+  if(['order','tracking'].includes(name)&&id)loadStripeOrder(id,true).then(order=>{if(order&&ui.route===name+'/'+id)A.render(true);}).catch(()=>{});
   if(name==='addresses')ui.addressReturn=id==='checkout'?'checkout':'addresses';
   if(['payment','payment-auth','payment-failed'].includes(name)){ui.pendingOrderId=id||null;const o=id?pending(id):null;if(o&&ui.paymentOrderId!==o.id){ui.payment=o.payment||'visa';ui.paymentOrderId=o.id;cardDraft={};ui.selectedPaymentToken=null;ui.termsAccepted=false;}}
+  if(name==='stripe-return'&&id){ui.pendingOrderId=id;ui.stripeReturnFailed=false;ui.stripeReturnMessage='جارٍ التحقق من حالة الدفع لدى Stripe. لا تغلق هذه الصفحة الآن.';setTimeout(()=>verifyStripeReturn(id),0);}
+  if(name==='stripe-cancelled'&&id)ui.pendingOrderId=id;
   if(name==='checkout'){ui.pendingOrderId=null;ui.paymentOrderId=null;if(!ui.paymentUserSelected){const c=S().paymentTokens.find(t=>t.isDemo&&t.default);ui.payment=c?.network||'visa';ui.selectedPaymentToken=c?.id||null;}}
   if(['checkout','payment','payment-auth'].includes(name)&&ui.payment!=='cod'&&!Object.keys(cardDraft).length){const c=S().paymentTokens.find(t=>t.id===ui.selectedPaymentToken&&t.isDemo&&t.network===ui.payment);if(c)cardDraft={holder:c.holder,number:c.network==='mastercard'?'5555 5555 5555 4444':'4242 4242 4242 4242',expiry:'12/30',cvv:'123'};}
   if(name==='coupon-select')ui.couponReturn=['cart','checkout'].includes(ui.previous)?ui.previous:'checkout';
- }
+}
 
 });
 document.addEventListener('input',e=>{if(e.target.id==='ck-order-note')ui.orderNote=e.target.value;if(e.target.id==='ck-gift-message')ui.giftMessage=e.target.value;if(e.target.closest('#ck-address-form'))ui.addressDraft=Object.fromEntries(new FormData($('#ck-address-form')));if(e.target.closest('#ck-card-form'))cardDraft=Object.fromEntries(new FormData($('#ck-card-form')));if(e.target.closest('#ck-checkout-form')){const form=e.target.closest('#ck-checkout-form'),d=Object.fromEntries(new FormData(form));for(const k of ['holder','number','expiry','cvv','saveCard','demoDecline'])cardDraft[k]=d[k]||'';if(ui.checkoutNewAddress||!S().address){ui.checkoutAddressDraft={};for(const k of ['name','phone','city','locality','area','street','landmark'])ui.checkoutAddressDraft[k]=d[k]||'';}}});

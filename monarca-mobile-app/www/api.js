@@ -11,6 +11,36 @@
   // If running locally or inside native Android/iOS app, use https://itsmonarca.com/api/v1
   const API_BASE = isServerDomain ? '/api/v1' : 'https://itsmonarca.com/api/v1';
 
+  const unwrap = async response => {
+    const json = await response.json().catch(() => ({}));
+    if (!response.ok || json.code !== 200) {
+      throw new Error(json.message || 'Payment service is unavailable');
+    }
+    return json.data;
+  };
+
+  const orderPayload = (orderData, paymentMethod = orderData.payment || 'visa', chargeCurrency) => ({
+    items: (orderData.items || []).map(l => ({
+      productId: l.id,
+      color: l.color || '',
+      size: l.size || '',
+      qty: l.qty || 1
+    })),
+    customerName: orderData.address?.name || '',
+    customerPhone: orderData.address?.phone || '',
+    city: orderData.address?.city || '',
+    locality: orderData.address?.locality || orderData.address?.city || '',
+    area: orderData.address?.area || '',
+    street: orderData.address?.street || '',
+    landmark: orderData.address?.landmark || '',
+    building: orderData.address?.building || '',
+    apartment: orderData.address?.apartment || '',
+    paymentMethod,
+    chargeCurrency: chargeCurrency || orderData.chargeCurrency || undefined,
+    couponCode: orderData.couponCode || '',
+    deliveryNote: orderData.orderNote || ''
+  });
+
   window.MonarcaAPI = {
     baseUrl: API_BASE,
 
@@ -37,7 +67,7 @@
             productId: l.id,
             color: l.color || '',
             size: l.size || '',
-            quantity: l.qty || 1
+            qty: l.qty || 1
           })),
           couponCode: couponCode || ''
         };
@@ -58,31 +88,10 @@
     // 3. Place order and record in backend database
     async placeOrder(orderData) {
       try {
-        const payload = {
-          items: (orderData.items || []).map(l => ({
-            productId: l.id,
-            color: l.color || '',
-            size: l.size || '',
-            quantity: l.qty || 1
-          })),
-          customerName: orderData.address?.name || 'Sara Ahmed',
-          customerPhone: orderData.address?.phone || '+9647700000000',
-          city: orderData.address?.city || 'بغداد',
-          locality: orderData.address?.locality || orderData.address?.city || 'بغداد',
-          area: orderData.address?.area || '',
-          street: orderData.address?.street || '',
-          landmark: orderData.address?.landmark || '',
-          building: orderData.address?.building || '',
-          apartment: orderData.address?.apartment || '',
-          paymentMethod: orderData.payment || 'visa',
-          couponCode: orderData.couponCode || '',
-          deliveryNote: orderData.orderNote || ''
-        };
-
         const res = await fetch(`${API_BASE}/orders`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(orderPayload(orderData))
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const json = await res.json();
@@ -91,6 +100,29 @@
         console.warn('[MonarcaAPI] placeOrder offline fallback:', e.message);
         return null;
       }
+    },
+
+    async createStripeCheckout(orderData) {
+      const res = await fetch(`${API_BASE}/payments/stripe/checkout-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderPayload(orderData, 'stripe', 'AED'))
+      });
+      return unwrap(res);
+    },
+
+    async createStripeCheckoutSession(orderId, chargeCurrency = 'AED') {
+      const query = new URLSearchParams({ chargeCurrency }).toString();
+      const res = await fetch(`${API_BASE}/payments/stripe/orders/${encodeURIComponent(orderId)}/checkout-session?${query}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      return unwrap(res);
+    },
+
+    async getStripePaymentStatus(orderId) {
+      const res = await fetch(`${API_BASE}/payments/stripe/orders/${encodeURIComponent(orderId)}/status`);
+      return unwrap(res);
     },
 
     // 4. Fetch latest status of an order

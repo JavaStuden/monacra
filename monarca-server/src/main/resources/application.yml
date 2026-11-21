@@ -37,6 +37,7 @@ spring:
 # Monarca Business Rules Configuration (v4.7.0)
 monarca:
   currency: USD
+  public-base-url: "${MONARCA_PUBLIC_BASE_URL:https://itsmonarca.com}"
   shipping:
     standard-fee: 4.00
     free-shipping-threshold: 75.00
@@ -47,16 +48,20 @@ monarca:
       minimum-spend: 40.00
   fulfillment:
     iraq:
-      min-days: 2
-      max-days: 2
-      allow-cod: true
+      min-days: 3
+      max-days: 4
+      allow-cod: false
     china:
       min-days: 15
       max-days: 20
-      allow-cod: false # China pre-orders strictly prohibit COD
+      allow-cod: false
   security:
     demo-otp: "1234"
     admin-token: "${MONARCA_ADMIN_TOKEN:}"
+
+stripe:
+  secret-key: "${STRIPE_SECRET_KEY:}"
+  webhook-secret: "${STRIPE_WEBHOOK_SECRET:}"
 
 springdoc:
   api-docs:

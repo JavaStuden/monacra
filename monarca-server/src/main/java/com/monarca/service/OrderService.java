@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,26 +49,21 @@ public class OrderService {
             throw new IllegalArgumentException("Cart cannot be empty");
         }
 
+        if (!"stripe".equalsIgnoreCase(req.getPaymentMethod())) {
+            throw new IllegalArgumentException("Online card payment through Stripe is required.");
+        }
         QuoteResponse quote = fulfillmentService.calculateQuote(req.getItems(), req.getCouponCode());
 
-        // Strict validation: if payment method is COD and order contains China pre-order items, block immediately
-        String payment = req.getPaymentMethod() != null ? req.getPaymentMethod().toLowerCase() : "visa";
-        if ("cod".equalsIgnoreCase(payment)) {
-            if (!Boolean.TRUE.equals(quote.getCodEligible())) {
-                throw new IllegalStateException("China pre-order products require prepaid card. COD is not permitted.");
-            }
-        }
-
         Order order = new Order();
-        // Generate order ID formatted as M-ORD-XXXX
-        String orderId = "M-ORD-" + (System.currentTimeMillis() % 10000000);
+        String orderId = "M-ORD-" + UUID.randomUUID().toString().substring(0, 12).toUpperCase();
         order.setId(orderId);
-        order.setPaymentMethod(payment);
+        order.setPaymentMethod("stripe");
         order.setSubtotal(quote.getSubtotal());
         order.setDiscount(quote.getDiscount());
         order.setShippingFee(quote.getShippingFee());
         order.setTotal(quote.getTotal());
         order.setCurrency(quote.getCurrency());
+        order.setChargeCurrency(normalizeChargeCurrency(req.getChargeCurrency()));
         order.setCouponCode(quote.getAppliedCoupon());
 
         // Delivery address details
@@ -89,22 +85,9 @@ public class OrderService {
         order.setDeliverySummary(summary);
         order.setHasChinaItem(quote.getDeliveryGroups().stream().anyMatch(g -> "china".equals(g.getSource())));
 
-        // Payment status assignment
-        if ("cod".equalsIgnoreCase(payment)) {
-            order.setStatus("placed");
-            order.setPaymentStatus("cod_due");
-            order.setPaidTotal(BigDecimal.ZERO);
-        } else if (Boolean.TRUE.equals(req.getSimulateDecline())) {
-            order.setStatus("payment_pending");
-            order.setPaymentStatus("failed");
-            order.setPaidTotal(BigDecimal.ZERO);
-        } else {
-            // Simulated Visa / Mastercard payment success
-            order.setStatus("placed");
-            order.setPaymentStatus("paid");
-            order.setPaidTotal(quote.getTotal());
-            order.setTransactionId("TXN-" + System.currentTimeMillis());
-        }
+        order.setStatus("payment_pending");
+        order.setPaymentStatus("pending");
+        order.setPaidTotal(BigDecimal.ZERO);
 
         // Save order items and decrement stock
         for (CartLineDTO line : req.getItems()) {
@@ -122,18 +105,136 @@ public class OrderService {
             item.setFulfillmentSource(p.getFulfillmentSource());
 
             boolean isChina = "china".equalsIgnoreCase(p.getFulfillmentSource());
-            item.setMinDeliveryDays(isChina ? 15 : 2);
-            item.setMaxDeliveryDays(isChina ? 20 : 2);
+            item.setMinDeliveryDays(isChina ? 15 : 3);
+            item.setMaxDeliveryDays(isChina ? 20 : 4);
 
             order.addItem(item);
 
-            // Deduct stock
-            if (p.getStock() != null && p.getStock() > 0) {
-                p.setStock(Math.max(0, p.getStock() - line.getQty()));
+            if (p.getStock() != null) {
+                int quantity = line.getQty() == null || line.getQty() < 1 ? 1 : line.getQty();
+                if (p.getStock() < quantity) {
+                    throw new IllegalStateException("Insufficient stock for product " + p.getId());
+                }
+                p.setStock(p.getStock() - quantity);
                 productRepository.save(p);
             }
         }
+        order.setInventoryReserved(true);
 
+        return orderRepository.save(order);
+    }
+
+    @Transactional
+    public Order reserveStripeInventory(String orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        if (!"stripe".equalsIgnoreCase(order.getPaymentMethod())
+                || !"payment_pending".equalsIgnoreCase(order.getStatus())
+                || "paid".equalsIgnoreCase(order.getPaymentStatus())) {
+            throw new IllegalStateException("Order is not awaiting Stripe payment");
+        }
+        if (Boolean.TRUE.equals(order.getInventoryReserved())) {
+            return order;
+        }
+        for (OrderItem item : order.getItems()) {
+            Product product = productRepository.findById(item.getProductId())
+                    .orElseThrow(() -> new IllegalStateException("Product is no longer available"));
+            int quantity = item.getQty() == null || item.getQty() < 1 ? 1 : item.getQty();
+            if (product.getStock() != null && product.getStock() < quantity) {
+                throw new IllegalStateException("Insufficient stock for product " + product.getId());
+            }
+            if (product.getStock() != null) {
+                product.setStock(product.getStock() - quantity);
+                productRepository.save(product);
+            }
+        }
+        order.setInventoryReserved(true);
+        order.setPaymentStatus("pending");
+        order.setUpdatedAt(LocalDateTime.now());
+        return orderRepository.save(order);
+    }
+
+    @Transactional
+    public Order recordStripeSession(String orderId, String sessionId, String chargeCurrency,
+                                     BigDecimal chargeAmount, BigDecimal exchangeRate) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        if (!"stripe".equalsIgnoreCase(order.getPaymentMethod())
+                || !"payment_pending".equalsIgnoreCase(order.getStatus())) {
+            throw new IllegalStateException("Order is not awaiting Stripe payment");
+        }
+        order.setTransactionId(sessionId);
+        order.setChargeCurrency(chargeCurrency);
+        order.setChargeAmount(chargeAmount);
+        order.setExchangeRate(exchangeRate);
+        order.setUpdatedAt(LocalDateTime.now());
+        return orderRepository.save(order);
+    }
+
+    private String normalizeChargeCurrency(String requestedCurrency) {
+        if (requestedCurrency == null || requestedCurrency.isBlank()) return "USD";
+        String currency = requestedCurrency.trim().toUpperCase(Locale.ROOT);
+        if (!"USD".equals(currency) && !"AED".equals(currency)) {
+            throw new IllegalArgumentException("Unsupported payment currency");
+        }
+        return currency;
+    }
+
+    @Transactional
+    public int nextStripeCheckoutAttempt(String orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        int attempt = order.getStripeCheckoutAttempt() == null ? 1 : order.getStripeCheckoutAttempt() + 1;
+        order.setStripeCheckoutAttempt(attempt);
+        order.setUpdatedAt(LocalDateTime.now());
+        orderRepository.save(order);
+        return attempt;
+    }
+
+    @Transactional
+    public Order markStripePaid(String orderId, String transactionId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        if (!"stripe".equalsIgnoreCase(order.getPaymentMethod())) {
+            throw new IllegalStateException("Order does not use Stripe");
+        }
+        if ("paid".equalsIgnoreCase(order.getPaymentStatus())) {
+            return order;
+        }
+        if (!Boolean.TRUE.equals(order.getInventoryReserved())) {
+            throw new IllegalStateException("Order inventory reservation is missing");
+        }
+        order.setStatus("placed");
+        order.setPaymentStatus("paid");
+        order.setPaidTotal(order.getTotal());
+        order.setTransactionId(transactionId);
+        order.setUpdatedAt(LocalDateTime.now());
+        return orderRepository.save(order);
+    }
+
+    @Transactional
+    public Order markStripeExpired(String orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        if (!"stripe".equalsIgnoreCase(order.getPaymentMethod())
+                || "paid".equalsIgnoreCase(order.getPaymentStatus())
+                || !"payment_pending".equalsIgnoreCase(order.getStatus())) {
+            return order;
+        }
+        if (Boolean.TRUE.equals(order.getInventoryReserved())) {
+            for (OrderItem item : order.getItems()) {
+                productRepository.findById(item.getProductId()).ifPresent(product -> {
+                    if (product.getStock() != null) {
+                        int quantity = item.getQty() == null || item.getQty() < 1 ? 1 : item.getQty();
+                        product.setStock(product.getStock() + quantity);
+                        productRepository.save(product);
+                    }
+                });
+            }
+            order.setInventoryReserved(false);
+        }
+        order.setPaymentStatus("failed");
+        order.setUpdatedAt(LocalDateTime.now());
         return orderRepository.save(order);
     }
 
@@ -214,6 +315,10 @@ public class OrderService {
 
     public Order getOrder(String orderId) {
         return orderRepository.findById(orderId).orElse(null);
+    }
+
+    Order getOrderForStripeUpdate(String orderId) {
+        return orderRepository.findOneById(orderId).orElse(null);
     }
 
     public List<Order> listOrders(String phone) {

@@ -1,0 +1,85 @@
+.site-policy-footer {
+  width: 100%;
+  margin-top: 42px;
+  padding: 28px 20px 32px;
+  color: #f6f2ec;
+  background: #28221e;
+  box-sizing: border-box;
+}
+.site-policy-footer-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(240px, 1fr);
+  gap: 24px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.site-policy-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 20px;
+  align-content: start;
+}
+.site-policy-links a {
+  color: #f6f2ec;
+  font-size: 13px;
+  line-height: 1.6;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+.site-policy-company {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  font-size: 12px;
+  line-height: 1.7;
+  font-style: normal;
+}
+.site-policy-company span,
+.site-policy-company a {
+  color: #d1c8bf;
+}
+.site-policy-company a {
+  overflow-wrap: anywhere;
+}
+.site-policy-document {
+  max-width: 860px;
+  margin-inline: auto;
+  padding-bottom: 36px;
+}
+.site-policy-document h1 {
+  margin: 6px 0 20px;
+  font-size: 24px;
+  line-height: 1.45;
+}
+.site-policy-document .site-policy-company { margin-top: 24px; }
+.site-policy-document .site-policy-company :is(span,a) { color: inherit; }
+.site-policy-document p {
+  margin: 0 0 16px;
+  font-size: 15px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.china-stock-disclosure {
+  margin: 9px 0 0;
+  color: #4d5944;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.stripe-card-brands {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  color: #3b3028;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .site-policy-footer { padding: 24px 16px 28px; }
+  .site-policy-footer-inner { grid-template-columns: 1fr; gap: 22px; }
+  .site-policy-document h1 { font-size: 21px; }
+  .site-policy-document .site-policy-company { margin-top: 24px; }
+.site-policy-document .site-policy-company :is(span,a) { color: inherit; }
+.site-policy-document p { font-size: 14px; }
+}

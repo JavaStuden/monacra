@@ -40,6 +40,15 @@ public class Order {
     @Column(length = 10)
     private String currency = "USD";
 
+    @Column(length = 10)
+    private String chargeCurrency;
+
+    @Column(precision = 14, scale = 2)
+    private BigDecimal chargeAmount;
+
+    @Column(precision = 10, scale = 4)
+    private BigDecimal exchangeRate;
+
     @Column(length = 50)
     private String couponCode;
 
@@ -79,8 +88,12 @@ public class Order {
 
     private Boolean hasChinaItem = false;
 
+    private Boolean inventoryReserved = false;
+
     @Column(length = 100)
     private String transactionId;
+
+    private Integer stripeCheckoutAttempt = 0;
 
     @Column(length = 200)
     private String cancelReason;
@@ -126,6 +139,15 @@ public class Order {
     public String getCurrency() { return currency; }
     public void setCurrency(String currency) { this.currency = currency; }
 
+    public String getChargeCurrency() { return chargeCurrency; }
+    public void setChargeCurrency(String chargeCurrency) { this.chargeCurrency = chargeCurrency; }
+
+    public BigDecimal getChargeAmount() { return chargeAmount; }
+    public void setChargeAmount(BigDecimal chargeAmount) { this.chargeAmount = chargeAmount; }
+
+    public BigDecimal getExchangeRate() { return exchangeRate; }
+    public void setExchangeRate(BigDecimal exchangeRate) { this.exchangeRate = exchangeRate; }
+
     public String getCouponCode() { return couponCode; }
     public void setCouponCode(String couponCode) { this.couponCode = couponCode; }
 
@@ -165,8 +187,14 @@ public class Order {
     public Boolean getHasChinaItem() { return hasChinaItem; }
     public void setHasChinaItem(Boolean hasChinaItem) { this.hasChinaItem = hasChinaItem; }
 
+    public Boolean getInventoryReserved() { return inventoryReserved; }
+    public void setInventoryReserved(Boolean inventoryReserved) { this.inventoryReserved = inventoryReserved; }
+
     public String getTransactionId() { return transactionId; }
     public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
+
+    public Integer getStripeCheckoutAttempt() { return stripeCheckoutAttempt; }
+    public void setStripeCheckoutAttempt(Integer stripeCheckoutAttempt) { this.stripeCheckoutAttempt = stripeCheckoutAttempt; }
 
     public String getCancelReason() { return cancelReason; }
     public void setCancelReason(String cancelReason) { this.cancelReason = cancelReason; }
