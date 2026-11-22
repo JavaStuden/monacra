@@ -13,6 +13,7 @@
 ## 可核对的版本
 
 - `prod-20261122-colorphotos`：实际正式发布源码快照；后端与已部署 JAR 的归档源码一致，79 个网站文件与服务器 SHA-256 一致。
+- `prod-20261122-webhook-modes`：后续 Stripe 测试/正式回调验签与模式隔离修复后的当前后端源码。网页仍沿用图片颜色版本，详见 [Stripe 回调记录](monarca-server/STRIPE-WEBHOOK-GUIDE.md)。
 - `apk-preview-20261122`：已生成的 Capacitor 安卓预览源码，包含纵向图库，保留线上支付与运费规则。包名 `com.monarca.boutique.preview`，版本 `4.7.27-preview` / `2026112201`，可与旧 App 同时安装。
 - `main`：后端、网站与 uni-app 的完整最新开发代码，保留用户原有改动和已填写的 DCloud AppID。
 
@@ -26,12 +27,13 @@ APK 文件 `Monarca-4.7.27-preview-20261122.apk` 未提交 Git。SHA-256：`5551
 - 本次图片颜色发布仅改动后端图片映射、商品编辑器和三个网页文件，支付、订单和配送类与上一版逐字节一致；三组结账报价发布前后一致。
 - 商品管理 token 仅由服务器 `/etc/monarca-product-images.env` 的 `MONARCA_PRODUCT_ADMIN_TOKEN` 提供。临时 token 已按店家要求在服务器修改；其值、旧值及备份不提交 Git。代码继续要求 token，并拒绝缺失或错误值。
 - Stripe 配置仍由 `/etc/monarca-stripe.env` 加载，密钥不进入源码或安装包。
+- 20:47（北京时间）追加独立测试模式回调签名配置，保留正式 API key 与签名密钥。测试事件验签成功后返回 200，禁止修改正式订单或库存；Stripe Dashboard 重发完成/过期事件均返回 200。当前后端备份为 `/opt/monarca-server/backups/webhook-modes-20261122-124709`。
 
 不要用旧数据库直接覆盖已有新订单的数据库。上线前备份数据库、JAR 和网页；新增可空字段回退程序时可以保留。
 
 ## 验证
 
-- 完整后端源码：Maven 12 项测试通过。
+- 完整后端源码：Maven 23 项测试通过，其中新增 Stripe webhook 验证 11 项。
 - uni-app：15 项测试通过，H5 与 App 资源构建通过。
 - 网站与管理页 JavaScript 语法检查通过。
 - 公网已检查男女切换、图片颜色选择框、资源哈希与服务状态；公开订单列表匿名及只带手机号仍为 401。

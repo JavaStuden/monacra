@@ -7,6 +7,7 @@ import com.monarca.dto.StripeCheckoutSessionResponse;
 import com.monarca.dto.StripePaymentStatusResponse;
 import com.monarca.entity.Order;
 import com.stripe.exception.StripeException;
+import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.RequestOptions;
@@ -43,6 +44,9 @@ public class StripePaymentService {
 
     @Value("${stripe.webhook-secret:}")
     private String webhookSecret;
+
+    @Value("${stripe.test-webhook-secret:}")
+    private String testWebhookSecret;
 
     @Value("${monarca.public-base-url:https://itsmonarca.com}")
     private String publicBaseUrl;
@@ -195,7 +199,28 @@ public class StripePaymentService {
         if (webhookSecret == null || webhookSecret.isBlank()) {
             throw new IllegalStateException("Stripe webhook is not configured");
         }
-        Event event = Webhook.constructEvent(payload, signature, webhookSecret);
+        Event event;
+        boolean verifiedWithTestSecret = false;
+        try {
+            event = Webhook.constructEvent(payload, signature, webhookSecret);
+        } catch (SignatureVerificationException primaryFailure) {
+            if (testWebhookSecret == null || testWebhookSecret.isBlank()) throw primaryFailure;
+            event = Webhook.constructEvent(payload, signature, testWebhookSecret);
+            verifiedWithTestSecret = true;
+        }
+        if (event.getLivemode() == null || (verifiedWithTestSecret && event.getLivemode())) {
+            throw new IllegalArgumentException("Stripe event mode does not match its signing configuration");
+        }
+        boolean liveBackend = secretKey != null && (secretKey.startsWith("sk_live_")
+                || secretKey.startsWith("rk_live_"));
+        boolean testBackend = secretKey != null && (secretKey.startsWith("sk_test_")
+                || secretKey.startsWith("rk_test_"));
+        if ((!liveBackend && !testBackend) || event.getLivemode() != liveBackend) {
+            // Both destinations may use the public URL, but test events must never mutate live orders.
+            log.info("Acknowledged Stripe event {} ({}) outside the configured payment mode",
+                    event.getId(), event.getType());
+            return;
+        }
         JsonNode object = objectMapper.readTree(payload).path("data").path("object");
         String orderId = object.path("metadata").path("orderId").asText("");
         if (orderId.isBlank()) {
