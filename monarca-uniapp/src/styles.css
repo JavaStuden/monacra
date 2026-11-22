@@ -286,3 +286,21 @@ view,text,button,uni-button,image,input,textarea{box-sizing:border-box;-webkit-t
 @media(max-width:360px){.shell .hero-title{font-size:29px}.shell .hero-note{font-size:12px;line-height:1.4;margin-block:4px 7px}.shell .hero-cta{font-size:12px;padding:7px 12px;min-height:35px}.shell .round-categories{gap:8px;padding-inline:12px}.shell .round-categories text{font-size:12px}.shell .category-tiles{gap:9px;margin-inline:12px}.shell .category-name{font-size:15px}.shell .header-title{font-size:16px}.shell .source-section{margin-inline:12px}.shell .source-title{font-size:17px}.shell .product-name{font-size:13.5px}.shell .bottom-nav button{font-size:11px}.shell .card-networks{gap:6px}}
 @media(min-width:600px){.shell .hero-title{font-size:46px}.shell .hero-note{font-size:18px;margin:12px 0 20px}.shell .product-image-wrap{height:230px}.shell .hero-copy{padding:22px 28px}.shell .product-stage,.shell .detail-gallery{height:460px}}
 @media(prefers-reduced-motion:reduce){.shell *{scroll-behavior:auto!important;transition:none!important}}
+
+.shell .department-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));background:var(--white);border-bottom:1px solid var(--line)}
+.shell .department-tabs button{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:10px;font-size:19px;color:var(--muted)}
+.shell .department-tabs button.selected{color:var(--brown);font-weight:700}
+.shell .department-tabs button.selected:after{content:"";position:absolute;top:auto;right:auto;transform:none;bottom:0;left:30%;width:40%;height:3px;border-radius:3px;background:var(--brown)}
+.shell .department-english{font:10px Arial,sans-serif;letter-spacing:1px}
+.shell .round-categories .category-circle-icon{background:var(--soft);border-radius:50%}
+.shell .category-circle-icon .line-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.shell .hero.hero-men{display:flex;align-items:center;min-height:195px;background:#e9e1d6;aspect-ratio:auto}
+.shell .hero.hero-men:before{display:none}
+.shell .hero-men .hero-copy{position:relative;inset:auto;width:60%;padding:22px 18px;color:var(--brown)}
+.shell .hero-men .hero-title{font-size:29px}
+.shell .hero-men-photo{position:absolute;inset:0 0 0 auto;width:45%;height:100%;opacity:.85}
+.shell.rtl .hero-men-photo{inset:0 auto 0 0}
+.shell .hero-men .hero-copy{margin-inline-end:auto}
+.shell .hero-men .hero-note{font-size:14px}
+.shell .department-empty{padding:30px 18px;text-align:center;color:var(--muted);line-height:1.9}
+@media(max-width:360px){.shell .department-tabs button{font-size:17px}.shell .hero-men .hero-title{font-size:25px}.shell .hero-men .hero-copy{padding-inline:14px}}

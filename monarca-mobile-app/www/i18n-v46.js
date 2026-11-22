@@ -55,6 +55,7 @@ add(`
 المبلغ المدفوع عبر Stripe|Amount charged by Stripe
 المبلغ الذي سيخصم عبر Stripe|Amount to be charged by Stripe
 المبلغ المتوقع عبر Stripe|Expected Stripe amount
+تُعرض الأسعار بالدولار الأمريكي. يمكنك الدفع عبر Stripe بالدولار الأمريكي أو الدرهم الإماراتي.|Prices are displayed in US dollars. You can pay in USD or AED through Stripe.
 قيمة الطلب بالدولار الأمريكي|USD order value
 سعر التحويل الثابت|Fixed exchange rate
 ملخص طلب · ليس فاتورة ضريبية|Order summary · not a tax invoice
@@ -1841,9 +1842,9 @@ add(`
 موقع المخزون|Stock location
 اختيار موقع المخزون|Choose stock location
 جميع المنتجات|All products
-رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم، ولا يحتاج قسيمة.|Demo delivery is 4 USD per order and free from 75 USD before discounts, with no coupon needed.
+أجرة التوصيل المحلي ٤ دولارات، ومجاناً إذا بلغت قيمة المنتجات المحلية ٧٥ دولاراً قبل الخصم.|Local delivery is $4, or free when local items total at least $75 before discounts.
 خصم ١٠٪ بالرمز M10 للطلبات من ٤٠ USD.|Get 10% off with M10 on orders from 40 USD.
-المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، ويمكن الدفع الإلكتروني ببطاقة Visa أو Mastercard. الطلب من الصين يحتاج ١٥–٢٠ يوماً ودفعاً مسبقاً بالبطاقة. الطلب المختلط يصل على شحنتين ويحتاج بطاقة. رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم.|In-stock items in Iraq arrive in 3–4 days and support online payment by Visa or Mastercard. China orders take 15–20 days and require prepaid card payment. Mixed orders arrive in two shipments and require a card. Demo delivery is 4 USD per order and free from 75 USD before discounts.
+المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، ويمكن الدفع الإلكتروني ببطاقة Visa أو Mastercard. الطلب من الصين يحتاج ١٥–٢٠ يوماً ودفعاً مسبقاً بالبطاقة. الطلب المختلط يصل على شحنتين ويحتاج بطاقة. أجرة التوصيل المحلي ٤ دولارات، ومجاناً إذا بلغت قيمة المنتجات المحلية ٧٥ دولاراً قبل الخصم. أجرة الشحن الجوي من الصين إلى العراق 9.50 دولار للكيلوغرام وتُحسب حسب الوزن.|In-stock items in Iraq arrive in 3–4 days and support online payment by Visa or Mastercard. China orders take 15–20 days and require prepaid card payment. Mixed orders arrive in two shipments and require a card. Local delivery is $4, or free when local items total at least $75 before discounts. International air shipping from China to Iraq is $9.50 per kg, billed by weight.
 توصيل خلال ٣ إلى ٤ أيام|Delivery in 3–4 days
 توصيل خلال ١٥–٢٠ يوماً تقريباً|Delivery in about 15–20 days
 ٣ إلى ٤ أيام|3–4 days
@@ -1875,14 +1876,14 @@ add(`
 عملة العرض: الدولار الأمريكي (USD)|Display currency: US dollar (USD)
 يدعم التطبيق العربية والإنجليزية. بلد التوصيل العراق، والأسعار بالدولار الأمريكي USD.|The app supports Arabic and English. Delivery is in Iraq and prices are in US dollars (USD).
 M10 تخصم ١٠٪ من المنتجات المؤهلة من ٤٠ USD.|M10 takes 10% off eligible items from 40 USD.
-توصيل مجاني للطلبات من ٧٥ USD.|Free delivery from 75 USD.
+توصيل محلي مجاني عند شراء منتجات محلية بقيمة ٧٥ دولاراً أو أكثر.|Free local delivery on $75 or more of locally stocked items.
 خصم ١٠٪ على المنتجات عند شراء ٤٠ USD أو أكثر.|10% off eligible items on purchases of 40 USD or more.
 التوصيل حسب مصدر القطع: العراق ٣ إلى ٤ أيام، الصين ١٥–٢٠ يوماً (تقديري)|Delivery by item source: 3–4 days from Iraq and 15–20 days from China (estimated)
 المتوفر في العراق: ٣ إلى ٤ أيام. الطلب من الصين: ١٥–٢٠ يوماً · الدفع حسب مصدر القطعة|In stock in Iraq: 3–4 days. Orders from China: 15–20 days · payment depends on the item source
 المتوفر في العراق: ٣ إلى ٤ أيام. الطلب من الصين: ١٥–٢٠ يوماً. الأسعار والشحن بيانات تجريبية.|In stock in Iraq: 3–4 days. Orders from China: 15–20 days. Prices and delivery details are demo data.
-المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً. رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم.|In-stock items in Iraq arrive in 3–4 days; orders from China take 15–20 days. Demo delivery is 4 USD per order and free from 75 USD before discounts.
-اختيار منطقة التوصيل ثم إدخال المدينة أو القضاء أو الناحية في دفتر العناوين. المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً. رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم.|Choose an Iraqi delivery region, then enter the city, district or subdistrict in the address book. In-stock items in Iraq arrive in 3–4 days; China orders take 15–20 days. Demo delivery is 4 USD per order and free from 75 USD before discounts.
-رسوم التوصيل التجريبية ٤ USD للطلب، والتوصيل مجاني من ٧٥ USD قبل الخصم. المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً.|Demo delivery is 4 USD per order and free from 75 USD before discounts. In-stock items in Iraq arrive in 3–4 days; China orders take 15–20 days.
+المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً. أجرة التوصيل المحلي ٤ دولارات، ومجاناً إذا بلغت قيمة المنتجات المحلية ٧٥ دولاراً قبل الخصم. أجرة الشحن الجوي من الصين إلى العراق 9.50 دولار للكيلوغرام وتُحسب حسب الوزن.|In-stock items in Iraq arrive in 3–4 days; orders from China take 15–20 days. Local delivery is $4, or free when local items total at least $75 before discounts. International air shipping from China to Iraq is $9.50 per kg, billed by weight.
+اختيار منطقة التوصيل ثم إدخال المدينة أو القضاء أو الناحية في دفتر العناوين. المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً. أجرة التوصيل المحلي ٤ دولارات، ومجاناً إذا بلغت قيمة المنتجات المحلية ٧٥ دولاراً قبل الخصم. أجرة الشحن الجوي من الصين إلى العراق 9.50 دولار للكيلوغرام وتُحسب حسب الوزن.|Choose an Iraqi delivery region, then enter the city, district or subdistrict in the address book. In-stock items in Iraq arrive in 3–4 days; China orders take 15–20 days. Local delivery is $4, or free when local items total at least $75 before discounts. International air shipping from China to Iraq is $9.50 per kg, billed by weight.
+أجرة التوصيل المحلي ٤ دولارات، ومجاناً إذا بلغت قيمة المنتجات المحلية ٧٥ دولاراً قبل الخصم. أجرة الشحن الجوي من الصين إلى العراق 9.50 دولار للكيلوغرام وتُحسب حسب الوزن. المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً.|Local delivery is $4, or free when local items total at least $75 before discounts. International air shipping from China to Iraq is $9.50 per kg, billed by weight. In-stock items in Iraq arrive in 3–4 days; China orders take 15–20 days.
 متابعة التجهيز والشحن من «حسابي ← طلباتي». المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً. الطلب المختلط يصل على شحنتين. تحديثات التتبع محاكاة.|Follow preparation and delivery under My account → My orders. In-stock items in Iraq arrive in 3–4 days; China orders take 15–20 days. Mixed orders arrive in two shipments. Tracking updates are simulated.
 يسعدنا مساعدتك. المتوفر في العراق يصل خلال ٣ إلى ٤ أيام، والطلب من الصين خلال ١٥–٢٠ يوماً. رسوم التوصيل التجريبية ٤ USD، والتوصيل المجاني من ٧٥ USD.|Happy to help. In-stock items in Iraq arrive in 3–4 days; China orders take 15–20 days. Demo delivery is 4 USD and free from 75 USD.
 الدولار الأمريكي|US dollar

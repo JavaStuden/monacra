@@ -1,5 +1,6 @@
 package com.monarca.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class PlaceOrderRequest {
@@ -17,6 +18,7 @@ public class PlaceOrderRequest {
     private String paymentMethod; // visa, mastercard, cod
     private String chargeCurrency;
     private String couponCode;
+    private BigDecimal expectedTotal;
     private Boolean simulateDecline = false;
 
     public PlaceOrderRequest() {}
@@ -62,6 +64,9 @@ public class PlaceOrderRequest {
 
     public String getCouponCode() { return couponCode; }
     public void setCouponCode(String couponCode) { this.couponCode = couponCode; }
+
+    public BigDecimal getExpectedTotal() { return expectedTotal; }
+    public void setExpectedTotal(BigDecimal expectedTotal) { this.expectedTotal = expectedTotal; }
 
     public Boolean getSimulateDecline() { return simulateDecline; }
     public void setSimulateDecline(Boolean simulateDecline) { this.simulateDecline = simulateDecline; }

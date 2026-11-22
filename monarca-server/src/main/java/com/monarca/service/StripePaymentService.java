@@ -102,7 +102,9 @@ public class StripePaymentService {
                 boolean sameCharge = chargeCurrency.equalsIgnoreCase(existing.getCurrency())
                         && existing.getAmountTotal() != null
                         && existing.getAmountTotal().longValue() == chargeMinor;
-                if (!sameCharge || existing.getUrl() == null
+                boolean fixedCurrency = existing.getAdaptivePricing() != null
+                        && Boolean.FALSE.equals(existing.getAdaptivePricing().getEnabled());
+                if (!sameCharge || !fixedCurrency || existing.getUrl() == null
                         || (hasLocalItems && !matchesLocalCardPolicy(existing))) {
                     existing.expire(apiOptions);
                 } else {
@@ -120,6 +122,7 @@ public class StripePaymentService {
         String baseUrl = publicBaseUrl.replaceAll("/+$", "");
         SessionCreateParams.Builder params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
+                .setAdaptivePricing(SessionCreateParams.AdaptivePricing.builder().setEnabled(false).build())
                 .addAllowedPaymentMethodType(SessionCreateParams.AllowedPaymentMethodType.CARD)
                 .setClientReferenceId(orderId)
                 .putMetadata("orderId", orderId)

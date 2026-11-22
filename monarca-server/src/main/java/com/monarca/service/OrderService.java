@@ -53,6 +53,9 @@ public class OrderService {
             throw new IllegalArgumentException("Online card payment through Stripe is required.");
         }
         QuoteResponse quote = fulfillmentService.calculateQuote(req.getItems(), req.getCouponCode());
+        if (req.getExpectedTotal() != null && quote.getTotal().compareTo(req.getExpectedTotal()) != 0) {
+            throw new IllegalArgumentException("CHECKOUT_TOTAL_CHANGED");
+        }
 
         Order order = new Order();
         String orderId = "M-ORD-" + UUID.randomUUID().toString().substring(0, 12).toUpperCase();
@@ -91,7 +94,7 @@ public class OrderService {
 
         // Save order items and decrement stock
         for (CartLineDTO line : req.getItems()) {
-            Product p = productRepository.findById(line.getProductId())
+            Product p = productRepository.findByIdAndDeletedAtIsNull(line.getProductId())
                     .orElseThrow(() -> new IllegalArgumentException("Product not found: " + line.getProductId()));
             OrderItem item = new OrderItem();
             item.setProductId(p.getId());
@@ -137,7 +140,7 @@ public class OrderService {
             return order;
         }
         for (OrderItem item : order.getItems()) {
-            Product product = productRepository.findById(item.getProductId())
+            Product product = productRepository.findByIdAndDeletedAtIsNull(item.getProductId())
                     .orElseThrow(() -> new IllegalStateException("Product is no longer available"));
             int quantity = item.getQty() == null || item.getQty() < 1 ? 1 : item.getQty();
             if (product.getStock() != null && product.getStock() < quantity) {

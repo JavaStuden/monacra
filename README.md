@@ -7,6 +7,8 @@
 
 ## 目录结构
 
+**当前代码与线上差异（2026-11-22）**：男女专区、图片颜色关联已上线；国际按重量计费与完整纵向图库仍有待发布改动。构建、部署及安卓预览对应版本见 [源码与部署状态](DEPLOYMENT-20261122.md)。
+
 **uni-app 手机端迁移（2026-11-22）**：独立 Vue 3 工程 [monarca-uniapp](monarca-uniapp/README.md) 现有 19 个页面，已按提供的 Android APK 重建主要页面版式，复用品牌、字体和图标，并接入现有后端/Stripe。参见 [APK 版式迁移说明](monarca-uniapp/APK-VISUAL-MIGRATION.md)。可在 HBuilderX 中继续开发和云打包；App 资源编译通过不等于签名 IPA 或 App Store 发布完成。
 
 ```

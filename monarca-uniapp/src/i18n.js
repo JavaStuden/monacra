@@ -1,5 +1,9 @@
 import { state } from './store.js';
 const dictionary = {
+  women: ['للنساء', 'Women'], men: ['للرجال', 'Men'], chooseDepartment: ['اختيار المجموعة', 'Choose a department'],
+  womenEdit: ['مختارات النساء', "Women's edit"], menEdit: ['مختارات الرجال', "Men's edit"],
+  menHero: ['أسلوبك، كل يوم', 'Style for every day'], menHeroNote: ['اكتشف مجموعة الرجال من Monarca.', 'Discover the Monarca menswear collection.'],
+  departmentEmpty: ['قريباً، اختيارات جديدة', 'New pieces coming soon'], departmentEmptyNote: ['لا توجد قطع في هذه المجموعة حالياً.', 'There are no pieces in this collection yet.'],
   share: ['مشاركة القطعة', 'Share piece'], photoSearch: ['البحث بالصورة', 'Photo inspiration'],
   bagTitle: ['حقيبة التسوّق', 'Shopping bag'], selectAll: ['تحديد الكل', 'Select all'], saveForLater: ['نقل للمفضلة', 'Move to wishlist'],
   categories: ['الأقسام', 'Categories'], menu: ['القائمة', 'Menu'], viewAll: ['عرض الكل', 'View all'], selectedProducts: ['منتجات مختارة', 'Selected pieces'], shopCategory: ['التسوّق', 'Shop'], browseEdit: ['المختارات', 'The edit'], localTime: ['توصيل خلال ٣–٤ أيام', 'Delivery in 3–4 days'], internationalTime: ['توصيل خلال ١٥–٢٠ يوماً', 'Delivery in 15–20 days'],

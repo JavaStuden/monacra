@@ -17,6 +17,8 @@ import java.util.*;
 @Service
 public class FulfillmentService {
 
+    private static final BigDecimal INTERNATIONAL_USD_PER_KG = new BigDecimal("9.50");
+
     private final ProductRepository productRepository;
     private final CouponRepository couponRepository;
 
@@ -48,21 +50,28 @@ public class FulfillmentService {
         }
 
         BigDecimal subtotal = BigDecimal.ZERO;
+        BigDecimal iraqSubtotal = BigDecimal.ZERO;
+        long chinaWeightGrams = 0;
         int iraqCount = 0;
         int chinaCount = 0;
 
         for (CartLineDTO line : items) {
-            Product p = productRepository.findById(line.getProductId()).orElse(null);
-            if (p != null) {
-                int qty = line.getQty() != null && line.getQty() > 0 ? line.getQty() : 1;
-                BigDecimal linePrice = p.getPrice().multiply(BigDecimal.valueOf(qty));
-                subtotal = subtotal.add(linePrice);
+            Product p = productRepository.findByIdAndDeletedAtIsNull(line.getProductId())
+                    .orElseThrow(() -> new IllegalArgumentException("Product not found: " + line.getProductId()));
+            int qty = line.getQty() != null && line.getQty() > 0 ? line.getQty() : 1;
+            BigDecimal linePrice = p.getPrice().multiply(BigDecimal.valueOf(qty));
+            subtotal = subtotal.add(linePrice);
 
-                if ("china".equalsIgnoreCase(p.getFulfillmentSource())) {
-                    chinaCount += qty;
-                } else {
-                    iraqCount += qty;
+            if ("china".equalsIgnoreCase(p.getFulfillmentSource())) {
+                Integer weight = p.getShippingWeightGrams();
+                if (weight == null || weight <= 0) {
+                    throw new IllegalArgumentException("INTERNATIONAL_SHIPPING_UNAVAILABLE");
                 }
+                chinaCount += qty;
+                chinaWeightGrams += (long) weight * qty;
+            } else {
+                iraqCount += qty;
+                iraqSubtotal = iraqSubtotal.add(linePrice);
             }
         }
 
@@ -87,11 +96,11 @@ public class FulfillmentService {
         response.setDiscount(discount);
         response.setAppliedCoupon(appliedCoupon);
 
-        // Shipping fee rules: Free shipping for subtotal >= $75, otherwise $4.00
-        BigDecimal shippingFee = BigDecimal.ZERO;
-        if (subtotal.compareTo(BigDecimal.ZERO) > 0 && subtotal.compareTo(freeShippingThreshold) < 0) {
-            shippingFee = standardShippingFee;
-        }
+        BigDecimal localFee = iraqSubtotal.signum() > 0 && iraqSubtotal.compareTo(freeShippingThreshold) < 0
+                ? standardShippingFee : BigDecimal.ZERO;
+        BigDecimal internationalFee = INTERNATIONAL_USD_PER_KG.multiply(BigDecimal.valueOf(chinaWeightGrams, 3))
+                .setScale(2, RoundingMode.HALF_UP);
+        BigDecimal shippingFee = localFee.add(internationalFee);
         response.setShippingFee(shippingFee);
 
         // Total = Subtotal - Discount + Shipping Fee

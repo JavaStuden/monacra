@@ -15,10 +15,17 @@ monarca-mobile-app/ios/App/App/public/
 monarca-mobile-app/ios/App/App/capacitor.config.json
 
 # Signing credentials and private provisioning material
+.env
+.env.*
+!.env.example
+*.env
 *.keystore
 *.jks
 *.p12
 *.p8
+*.pfx
+*.pem
+*.key
 *.mobileprovision
 .ios-signing/
 google-services.json

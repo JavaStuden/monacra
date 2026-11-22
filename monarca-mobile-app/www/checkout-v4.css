@@ -22,3 +22,9 @@
 .ck-onepage .ck-payment-networks .stripe-card-brands{display:inline-flex;flex:0 0 auto;direction:ltr;unicode-bidi:isolate;white-space:nowrap;font:600 12px/1 Arial,sans-serif}
 .ck-onepage .ck-payment-networks .payment-option>span:not(.visa-mark):not(.mastercard-mark):not(.stripe-card-brands){flex:1 1 auto;min-width:0;line-height:1.6;overflow-wrap:anywhere}
 .ck-onepage .ck-payment-networks .payment-option .radio{flex:0 0 12px}
+
+.ck-currency-options{display:grid;gap:8px;margin-top:16px;padding:12px;border:1px solid var(--line);min-width:0}
+.ck-currency-options legend{font-weight:600;padding-inline:6px}
+.ck-currency-options label{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;min-height:42px;cursor:pointer}
+.ck-currency-options input{accent-color:var(--brown)}
+.ck-currency-options small{color:var(--muted)}

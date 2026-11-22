@@ -16,7 +16,7 @@ globalThis.uni = {
     queueMicrotask(() => options.success({ statusCode: 200, data: { code: 200, data } }));
   }
 };
-const { state, syncOrder, persist, addCart } = await import('../src/store.js');
+const { state, syncOrder, persist, addCart, setDepartment, browseProducts } = await import('../src/store.js');
 
 test('Server confirmation consumes checkout quantities once, including after restoring app storage', async () => {
   state.cart = [{ productId: 3, color: 'cream', size: 'M', qty: 3 }];
@@ -49,6 +49,22 @@ test('Cart selections survive restart and adding a variant selects only that var
   assert.equal(restored.state.cart[1].selected, false);
   // Older saved carts without a selected field remain included at checkout.
   assert.deepEqual(restored.state.cart.filter(line => line.selected !== false).map(line => line.qty), [2, 1]);
+});
+
+test('Department choice survives restart and leaves basket, orders and saved pieces intact', async () => {
+  state.products = [{ id: 1, gender: 'women' }, { id: 2, gender: 'men' }, { id: 3, gender: 'unisex' }];
+  state.wish = [1, 2];
+  const basket = JSON.stringify(state.cart), orders = JSON.stringify(state.orders);
+  setDepartment('men');
+  assert.deepEqual(browseProducts().map(p => p.id), [2, 3]);
+  assert.equal(JSON.stringify(state.cart), basket);
+  assert.equal(JSON.stringify(state.orders), orders);
+  const restored = await import('../src/store.js?department-restart');
+  assert.equal(restored.state.department, 'men');
+  assert.deepEqual([...restored.state.wish], [1, 2]);
+  assert.equal(JSON.stringify(restored.state.cart), basket);
+  setDepartment('invalid');
+  assert.equal(state.department, 'men');
 });
 
 test('Storage errors are surfaced; the app does not claim an order was saved', () => {

@@ -8,6 +8,10 @@ server:
       enabled: true
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 31MB
   application:
     name: monarca-server
   datasource:
@@ -58,6 +62,7 @@ monarca:
   security:
     demo-otp: "1234"
     admin-token: "${MONARCA_ADMIN_TOKEN:}"
+    product-admin-token: "${MONARCA_PRODUCT_ADMIN_TOKEN:${MONARCA_ADMIN_TOKEN:}}"
 
 stripe:
   secret-key: "${STRIPE_SECRET_KEY:}"

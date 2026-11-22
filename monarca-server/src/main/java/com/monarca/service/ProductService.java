@@ -5,7 +5,7 @@ import com.monarca.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,18 +19,30 @@ public class ProductService {
     }
 
     public List<Product> getAll() {
-        return productRepository.findAll();
+        return productRepository.findAllByDeletedAtIsNull();
     }
 
     public Product getById(Long id) {
-        return productRepository.findById(id).orElse(null);
+        return productRepository.findByIdAndDeletedAtIsNull(id).orElse(null);
     }
 
     public List<Product> filter(String category, String source, BigDecimal minPrice, BigDecimal maxPrice, String query, String sort) {
-        List<Product> list = productRepository.findAll();
+        return filter(category, source, minPrice, maxPrice, query, sort, null);
+    }
+
+    public List<Product> filter(String category, String source, BigDecimal minPrice, BigDecimal maxPrice, String query, String sort, String gender) {
+        if (gender != null && !List.of("all", "women", "men", "unisex").contains(gender)) {
+            throw new IllegalArgumentException("INVALID_PRODUCT_GENDER");
+        }
+        List<Product> list = getAll();
 
         return list.stream()
                 .filter(p -> {
+                    String audience = p.getGender() == null ? "women" : p.getGender();
+                    if (gender != null && !"all".equals(gender)
+                            && !gender.equals(audience) && !("unisex".equals(audience) && !"unisex".equals(gender))) {
+                        return false;
+                    }
                     if (category != null && !category.isEmpty() && !"all".equalsIgnoreCase(category)) {
                         if ("offers".equalsIgnoreCase(category)) {
                             if (p.getOldPrice() == null) return false;
@@ -74,6 +86,6 @@ public class ProductService {
     }
 
     public void delete(Long id) {
-        productRepository.deleteById(id);
+        productRepository.markDeleted(id, LocalDateTime.now());
     }
 }

@@ -6,6 +6,10 @@ export const lineKey = line => JSON.stringify([Number(line.productId), line.colo
 export const toMinor = value => Math.round((Number(value) + Number.EPSILON) * 100);
 export const aedAmount = usd => Math.round(toMinor(usd) * 367 / 100) / 100;
 export const validOrderId = id => /^M-ORD-[A-Z0-9-]{4,64}$/.test(String(id));
+export function matchesDepartment(product, department) {
+  const gender = product?.gender ?? 'women';
+  return ['women', 'men'].includes(department) && (gender === department || gender === 'unisex');
+}
 export function safeImage(value) {
   if (typeof value !== 'string') return '';
   return /^\/api\/v1\/product-images\/[a-f0-9-]{36}\.(jpg|png)$/.test(value) ? ORIGIN + value : '';
@@ -14,7 +18,18 @@ export function normalizeProduct(p) {
   const remote = csv(p.imageUrls?.length ? p.imageUrls : p.imageUrl).map(safeImage).filter(Boolean);
   const index = p.imgIndex == null ? -1 : Number(p.imgIndex);
   const fallback = Number.isInteger(index) && index >= 0 && index <= 6 ? `/static/products/${index}.jpg` : '/static/product-placeholder.png';
-  return { ...p, id: Number(p.id), price: Number(p.price), colors: csv(p.colors), sizes: csv(p.sizes), images: remote.length ? remote : [fallback] };
+  const colors = csv(p.colors), imageColors = {};
+  for (const [path, color] of Object.entries(p.imageColors || {})) {
+    const url = safeImage(path);
+    if (remote.includes(url) && colors.includes(color)) imageColors[url] = color;
+  }
+  return { ...p, id: Number(p.id), price: Number(p.price), colors, sizes: csv(p.sizes), images: remote.length ? remote : [fallback], imageColors };
+}
+export function imagesForColor(product, color) {
+  const images = product?.images || [], assignments = product?.imageColors || {};
+  const matched = images.filter(url => assignments[url] === color);
+  const general = images.filter(url => !assignments[url]);
+  return matched.length ? [...matched, ...general] : general.length ? general : images;
 }
 export function validateVariant(product, line) {
   if (!product || !Number.isSafeInteger(line.qty) || line.qty < 1 || line.qty > 99) return false;
