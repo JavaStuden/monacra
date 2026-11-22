@@ -67,6 +67,7 @@ monarca:
 stripe:
   secret-key: "${STRIPE_SECRET_KEY:}"
   webhook-secret: "${STRIPE_WEBHOOK_SECRET:}"
+  test-webhook-secret: "${STRIPE_TEST_WEBHOOK_SECRET:}"
 
 springdoc:
   api-docs:
