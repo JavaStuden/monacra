@@ -43,7 +43,9 @@ view,text,button,uni-button,image,input,textarea{box-sizing:border-box}
 .shell .bottom-nav button.active .line-icon{opacity:1}
 .shell .bottom-nav button.active:after{content:'';position:absolute;bottom:1px;left:50%;width:18px;height:2.5px;transform:translateX(-50%);background:var(--accent);border-radius:2px}
 .shell .bottom-nav .badge{position:absolute;top:-4px;left:54%;min-width:15px;height:15px;padding:0 3px;border-radius:50%;background:#9c7053;color:white;font-size:9px;line-height:15px;text-align:center}
-.shell .hero{height:auto;aspect-ratio:2/1;position:relative;overflow:hidden;background:#d8c7b0}
+.shell .hero{height:auto;position:relative;overflow:hidden;background:#d8c7b0}
+/* Ratio spacers also work on iOS 13/14, which lack CSS aspect-ratio. */
+.shell .hero:before{content:"";display:block;padding-top:50%}
 .shell .hero-image{position:absolute;inset:0;width:100%;height:100%}
 .shell .hero-copy{position:absolute;inset:0 auto 0 4%;width:50%;height:100%;padding:18px 24px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0;color:#301f14;text-align:start}
 .shell.rtl .hero-copy{direction:rtl;text-align:right}
@@ -53,7 +55,8 @@ view,text,button,uni-button,image,input,textarea{box-sizing:border-box}
 .shell .hero-cta .line-icon{filter:brightness(0) invert(1)}
 .shell .round-categories{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:16px 18px 21px}
 .shell .round-categories button{display:flex;flex-direction:column;align-items:center;min-width:0;gap:8px}
-.shell .round-categories image{width:100%;height:auto;aspect-ratio:1;border-radius:50%;border:1px solid #ded6cc;background:#ece6de;box-shadow:0 2px 8px #61452d0d}
+.shell .category-circle{position:relative;width:100%;height:0;padding-top:100%;flex-shrink:0}
+.shell .round-categories image{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;border:1px solid #ded6cc;background:#ece6de;box-shadow:0 2px 8px #61452d0d}
 .shell .round-categories text{font-size:13.5px;line-height:1.7;font-weight:700;white-space:nowrap;color:#38291e}
 .shell .source-section{margin:20px 16px 26px}
 .shell .section-title{display:block;font-size:21px;line-height:1.6;font-weight:700;color:#302218;margin-bottom:7px}
