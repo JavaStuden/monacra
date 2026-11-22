@@ -1,0 +1,72 @@
+{
+  "ar": {
+    "shipping": {
+      "title": "سياسة الشحن",
+      "sections": [
+        "نوفّر خيارين للتوصيل:",
+        "التوصيل السريع: للمنتجات المتوفرة محلياً، وتصل خلال ٣ إلى ٤ أيام. الدفع الإلكتروني ببطاقة Visa أو Mastercard.",
+        "الشحن الدولي: للمنتجات المخزّنة في مستودعنا الدولي، وتُشحن جواً وتصل خلال 15 إلى 20 يوماً. يتم الدفع بالبطاقة بشكل آمن. أجرة الشحن الجوي من الصين إلى العراق 9.50 دولار للكيلوغرام وتُحسب حسب الوزن.",
+        "جميع منتجاتنا من مخزوننا الخاص، ونتحمّل مسؤولية الطلب كاملة حتى وصوله إليك."
+      ]
+    },
+    "returns": {
+      "title": "سياسة الاسترداد والإرجاع",
+      "sections": [
+        "تواصل معنا مع رقم الطلب وسبب طلب الإرجاع أو الاستبدال.",
+        "يرجى انتظار تعليمات الإرجاع المكتوبة قبل إرسال القطعة. نراجع حالتها ونؤكد أهلية الإرجاع كتابةً.",
+        "تُعاد المبالغ المعتمدة للمدفوعات بالبطاقة إلى وسيلة الدفع الأصلية."
+      ]
+    },
+    "terms": {
+      "title": "الشروط والأحكام",
+      "sections": [
+        "تخضع الطلبات للتأكيد وتوفر القطعة. الأسعار معروضة بالدولار الأمريكي.",
+        "تُعالج المدفوعات الإلكترونية عبر Stripe. تتطلب الطلبات التي تتضمن منتجات متوفرة محلياً الدفع الإلكتروني ببطاقة Visa أو Mastercard، وتتطلب الطلبات التي تضم منتجات المستودع الدولي فقط الدفع الآمن بالبطاقة عبر الإنترنت. نؤكد الطلب بعد نجاح الدفع.",
+        "توضح سياسة الشحن المدد التقديرية. تخضع الإلغاءات والإرجاعات والاستردادات لسياسات المتجر والقوانين المعمول بها."
+      ]
+    },
+    "privacy": {
+      "title": "سياسة الخصوصية",
+      "sections": [
+        "عند تقديم الطلب، نجمع اسمك ورقم هاتفك وعنوان التوصيل وتفاصيل الطلب لمعالجته وتوصيله وتقديم خدمة العملاء.",
+        "تُدخل بيانات البطاقة في صفحة Stripe Checkout. لا يستلم المتجر رقم بطاقتك الكامل أو رمز الأمان ولا يخزنهما.",
+        "نشارك المعلومات اللازمة لمعالجة الدفع مع Stripe، والمعلومات اللازمة للتسليم مع خدمة التوصيل. نحتفظ بسجلات الطلبات حسب متطلبات تشغيل المتجر والالتزامات القانونية."
+      ]
+    }
+  },
+  "en": {
+    "shipping": {
+      "title": "Shipping Policy",
+      "sections": [
+        "We offer two delivery options:",
+        "Express Delivery: For locally stocked items, delivered in 3–4 days. Online payment by Visa or Mastercard.",
+        "International Shipping: For items stored in our international warehouse, shipped by air and delivered in 15–20 days. Secure card payment. International air shipping from China to Iraq is $9.50 per kg, billed by weight.",
+        "All products are from our own inventory, and we take full responsibility for your order until it reaches you."
+      ]
+    },
+    "returns": {
+      "title": "Refund & Return Policy",
+      "sections": [
+        "Contact the store with your order number and the reason for your return or exchange request.",
+        "Please wait for written return instructions before sending an item back. We will review its condition and confirm eligibility in writing.",
+        "Approved card refunds are sent to the original payment method."
+      ]
+    },
+    "terms": {
+      "title": "Terms & Conditions",
+      "sections": [
+        "Orders are subject to confirmation and item availability. Prices are shown in US dollars.",
+        "Stripe processes online payments. Orders that include locally stocked items require online payment by Visa or Mastercard. Orders containing only international warehouse items require secure online card payment. We confirm orders after payment succeeds.",
+        "Delivery estimates are described in the Shipping Policy. Cancellations, returns and refunds follow the applicable store policies and local law."
+      ]
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "sections": [
+        "When you place an order, we collect your name, phone number, delivery address and order details to process and deliver it and provide customer care.",
+        "Card details are entered on Stripe Checkout. The store does not receive or store your full card number or security code.",
+        "We share the information needed to process payment with Stripe and the information needed for delivery with the delivery service. We retain order records as required for store operations and legal obligations."
+      ]
+    }
+  }
+}

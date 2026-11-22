@@ -1,0 +1,20 @@
+{
+  "pages": [
+    { "path": "pages/home/index" },
+    { "path": "pages/catalog/index" },
+    { "path": "pages/product/index" },
+    { "path": "pages/cart/index" },
+    { "path": "pages/checkout/index" },
+    { "path": "pages/payment/index" },
+    { "path": "pages/orders/index" },
+    { "path": "pages/order/index" },
+    { "path": "pages/address/index" },
+    { "path": "pages/account/index" },
+    { "path": "pages/wishlist/index" },
+    { "path": "pages/support/index" },
+    { "path": "pages/policy/index" },
+    { "path": "pages/returns/index" },
+    { "path": "pages/settings/index" }
+  ],
+  "globalStyle": { "navigationStyle": "custom", "backgroundColor": "#fcfaf6", "backgroundTextStyle": "dark" }
+}

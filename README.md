@@ -7,6 +7,8 @@
 
 ## 目录结构
 
+**uni-app 手机端迁移（2026-11-22）**：新增独立 Vue 3 工程 [monarca-uniapp](monarca-uniapp/README.md)，包含 15 个主要页面及现有后端/Stripe 接口接入，可在 HBuilderX 中继续开发和云打包。原 Capacitor 工程保留；App 资源编译通过不等于签名 IPA 或 App Store 发布完成。
+
 ```
 代码/
 ├── monarca-server/                 # [后端系统] Spring Boot 3.3.4 + Java 21 + JPA

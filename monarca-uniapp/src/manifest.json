@@ -1,0 +1,22 @@
+{
+  "name": "Monarca",
+  "appid": "",
+  "description": "Monarca Iraq shopping app",
+  "versionName": "4.7.0",
+  "versionCode": "47000",
+  "vueVersion": "3",
+  "transformPx": false,
+  "app-plus": {
+    "usingComponents": true,
+    "compilerVersion": 3,
+    "splashscreen": { "alwaysShowBeforeRender": true, "waiting": true, "autoclose": true, "delay": 0 },
+    "modules": {},
+    "distribute": {
+      "ios": { "appid": "com.monarca.boutique", "deploymentTarget": "13.0", "idfa": false },
+      "android": { "packagename": "com.monarca.boutique", "permissions": [] },
+      "icons": { "ios": { "appstore": "static/icon.png" } }
+    }
+  },
+  "h5": { "title": "Monarca", "router": { "mode": "hash" } },
+  "uniStatistics": { "enable": false }
+}
