@@ -55,6 +55,7 @@ add(`
 المبلغ المدفوع عبر Stripe|Amount charged by Stripe
 المبلغ الذي سيخصم عبر Stripe|Amount to be charged by Stripe
 المبلغ المتوقع عبر Stripe|Expected Stripe amount
+تُعرض الأسعار بالدولار الأمريكي. يمكنك الدفع عبر Stripe بالدولار الأمريكي أو الدرهم الإماراتي.|Prices are displayed in US dollars. You can pay in USD or AED through Stripe.
 قيمة الطلب بالدولار الأمريكي|USD order value
 سعر التحويل الثابت|Fixed exchange rate
 ملخص طلب · ليس فاتورة ضريبية|Order summary · not a tax invoice

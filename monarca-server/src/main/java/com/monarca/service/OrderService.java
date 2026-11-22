@@ -91,7 +91,7 @@ public class OrderService {
 
         // Save order items and decrement stock
         for (CartLineDTO line : req.getItems()) {
-            Product p = productRepository.findById(line.getProductId())
+            Product p = productRepository.findByIdAndDeletedAtIsNull(line.getProductId())
                     .orElseThrow(() -> new IllegalArgumentException("Product not found: " + line.getProductId()));
             OrderItem item = new OrderItem();
             item.setProductId(p.getId());
@@ -137,7 +137,7 @@ public class OrderService {
             return order;
         }
         for (OrderItem item : order.getItems()) {
-            Product product = productRepository.findById(item.getProductId())
+            Product product = productRepository.findByIdAndDeletedAtIsNull(item.getProductId())
                     .orElseThrow(() -> new IllegalStateException("Product is no longer available"));
             int quantity = item.getQty() == null || item.getQty() < 1 ? 1 : item.getQty();
             if (product.getStock() != null && product.getStock() < quantity) {

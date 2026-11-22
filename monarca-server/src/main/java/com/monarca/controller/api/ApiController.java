@@ -55,8 +55,13 @@ public class ApiController {
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) String query,
-            @RequestParam(required = false) String sort) {
-        return R.ok(productService.filter(category, source, minPrice, maxPrice, query, sort));
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String gender) {
+        try {
+            return R.ok(productService.filter(category, source, minPrice, maxPrice, query, sort, gender));
+        } catch (IllegalArgumentException e) {
+            return R.fail(400, e.getMessage());
+        }
     }
 
     @GetMapping("/products/{id}")
@@ -72,8 +77,11 @@ public class ApiController {
     @PostMapping("/checkout/quote")
     @Operation(summary = "Calculate Checkout Quote & Delivery Groups", description = "Calculates shipping fees ($75 free shipping threshold), discounts and delivery times for orders paid online")
     public R<QuoteResponse> getQuote(@RequestBody QuoteRequest request) {
-        QuoteResponse quote = fulfillmentService.calculateQuote(request.getItems(), request.getCouponCode());
-        return R.ok(quote);
+        try {
+            return R.ok(fulfillmentService.calculateQuote(request.getItems(), request.getCouponCode()));
+        } catch (IllegalArgumentException e) {
+            return R.fail(400, e.getMessage());
+        }
     }
 
     @PostMapping("/orders")

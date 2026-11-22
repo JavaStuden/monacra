@@ -52,17 +52,15 @@ public class FulfillmentService {
         int chinaCount = 0;
 
         for (CartLineDTO line : items) {
-            Product p = productRepository.findById(line.getProductId()).orElse(null);
-            if (p != null) {
-                int qty = line.getQty() != null && line.getQty() > 0 ? line.getQty() : 1;
-                BigDecimal linePrice = p.getPrice().multiply(BigDecimal.valueOf(qty));
-                subtotal = subtotal.add(linePrice);
-
-                if ("china".equalsIgnoreCase(p.getFulfillmentSource())) {
-                    chinaCount += qty;
-                } else {
-                    iraqCount += qty;
-                }
+            Product p = productRepository.findByIdAndDeletedAtIsNull(line.getProductId())
+                    .orElseThrow(() -> new IllegalArgumentException("Product not found: " + line.getProductId()));
+            int qty = line.getQty() != null && line.getQty() > 0 ? line.getQty() : 1;
+            BigDecimal linePrice = p.getPrice().multiply(BigDecimal.valueOf(qty));
+            subtotal = subtotal.add(linePrice);
+            if ("china".equalsIgnoreCase(p.getFulfillmentSource())) {
+                chinaCount += qty;
+            } else {
+                iraqCount += qty;
             }
         }
 

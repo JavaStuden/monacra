@@ -282,6 +282,77 @@
             gap: 8px;
         }
 
+        .product-colors {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            margin: 0 0 16px;
+            padding: 10px 12px;
+        }
+        .product-color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+        }
+        .product-color-options label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .product-color-swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid var(--line);
+        }
+        #prod-color-error {
+            color: var(--red);
+            margin-top: 6px;
+        }
+        .product-image-picker {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+        }
+        .product-image-count {
+            color: var(--muted);
+        }
+        .product-image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(126px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .product-image-tile {
+            min-width: 0;
+            padding: 6px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+        }
+        .product-image-tile img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .product-image-tile small {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-block: 4px;
+        }
+        .product-image-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+        .product-image-actions .btn { padding-inline: 6px; }
+        .product-image-color { display: block; margin: 8px 0; font-size: 12px; }
+        .product-image-color select { margin-top: 4px; padding: 6px; font-size: 13px; }
+
         /* Data Tables */
         .table-responsive {
             width: 100%;
@@ -397,6 +468,28 @@
             margin-bottom: 20px;
             padding-bottom: 12px;
             border-bottom: 1px solid var(--line);
+        }
+        .product-row-actions, .product-delete-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .product-delete-actions {
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        .btn-delete {
+            color: var(--red);
+            background: var(--red-bg);
+        }
+        #product-delete-modal {
+            border: 0;
+        }
+        #product-delete-modal::backdrop {
+            background: rgba(48, 41, 35, 0.45);
+        }
+        #product-delete-error {
+            color: var(--red);
         }
         .modal-close {
             background: none;
@@ -732,11 +825,11 @@
                 <input type="hidden" id="prod-id">
                 <div class="form-row">
                     <label data-i18n="lbl_prod_name_ar">Product Name (Arabic) *</label>
-                    <input id="prod-name" class="form-control" required placeholder="حقيبة جلد طبيعي">
+                    <input id="prod-name" class="form-control" maxlength="100" required placeholder="حقيبة جلد طبيعي">
                 </div>
                 <div class="form-row">
                     <label data-i18n="lbl_prod_name_en">English Name</label>
-                    <input id="prod-en" class="form-control" placeholder="The everyday shoulder bag" dir="ltr">
+                    <input id="prod-en" class="form-control" maxlength="100" placeholder="The everyday shoulder bag" dir="ltr">
                 </div>
                 <div class="grid-2">
                     <div class="form-row">
@@ -749,13 +842,41 @@
                         </select>
                     </div>
                     <div class="form-row">
-                        <label data-i18n="lbl_prod_source">Fulfillment Channel (v4.7.0 Core) *</label>
+                        <label for="prod-source" data-i18n="lbl_prod_source">Stock location *</label>
                         <select id="prod-source" class="form-control" required>
-                            <option value="iraq">Iraq In-Stock (~2 Days Delivery, COD & Card Allowed)</option>
-                            <option value="china">China Pre-order (15–20 Days Delivery, Prepaid Card Only, Strict No-COD)</option>
+                            <option value="iraq" data-i18n="opt_prod_local">Iraq · Local stock</option>
+                            <option value="china" data-i18n="opt_prod_international">China · International warehouse</option>
                         </select>
                     </div>
                 </div>
+                <div class="form-row">
+                    <label for="prod-gender" data-i18n="lbl_prod_gender">Product audience *</label>
+                    <select id="prod-gender" class="form-control" required>
+                        <option value="women" data-i18n="opt_gender_women">Women</option>
+                        <option value="men" data-i18n="opt_gender_men">Men</option>
+                        <option value="unisex" data-i18n="opt_gender_unisex">Unisex · both departments</option>
+                    </select>
+                    <small data-i18n="hint_prod_gender">Unisex products appear in both departments and share the same stock. Legacy products stay in Women until reviewed.</small>
+                </div>
+                <div id="prod-weight-row" hidden>
+                    <div class="form-row">
+                        <label for="prod-weight" data-i18n="lbl_prod_weight">Chargeable weight per item (g)</label>
+                        <input id="prod-weight" class="form-control" type="number" min="1" max="2147483647" step="1" dir="ltr" aria-describedby="prod-weight-hint">
+                        <small id="prod-weight-hint" data-i18n="hint_prod_weight">Use the carrier's chargeable weight per item in grams. 0.8 kg = 800 g.</small>
+                    </div>
+                </div>
+                <fieldset class="product-colors" id="prod-colors" aria-describedby="prod-color-error">
+                    <legend data-i18n="lbl_prod_colors">Available colors</legend>
+                    <div class="product-color-options">
+                        <label><input type="checkbox" name="product-color" value="black" checked><span class="product-color-swatch" style="background:#2f2c2a" aria-hidden="true"></span><span data-i18n="opt_color_black">Black</span></label>
+                        <label><input type="checkbox" name="product-color" value="brown"><span class="product-color-swatch" style="background:#9b6b43" aria-hidden="true"></span><span data-i18n="opt_color_brown">Brown</span></label>
+                        <label><input type="checkbox" name="product-color" value="cream"><span class="product-color-swatch" style="background:#e7ddc9" aria-hidden="true"></span><span data-i18n="opt_color_cream">Ivory</span></label>
+                        <label><input type="checkbox" name="product-color" value="olive"><span class="product-color-swatch" style="background:#666a4f" aria-hidden="true"></span><span data-i18n="opt_color_olive">Olive</span></label>
+                        <label><input type="checkbox" name="product-color" value="taupe"><span class="product-color-swatch" style="background:#9b8e7b" aria-hidden="true"></span><span data-i18n="opt_color_taupe">Warm taupe</span></label>
+                        <label><input type="checkbox" name="product-color" value="gold"><span class="product-color-swatch" style="background:#c3a365" aria-hidden="true"></span><span data-i18n="opt_color_gold">Gold</span></label>
+                    </div>
+                    <p id="prod-color-error" role="alert" hidden></p>
+                </fieldset>
                 <div class="grid-2">
                     <div class="form-row">
                         <label data-i18n="lbl_prod_price">Selling Price (USD) *</label>
@@ -773,16 +894,51 @@
                     </div>
                     <div class="form-row">
                         <label data-i18n="lbl_prod_badge">Badge Label (Optional)</label>
-                        <input id="prod-badge" class="form-control" placeholder="Best Seller / الأكثر طلباً">
+                        <input id="prod-badge" class="form-control" maxlength="50" placeholder="Best Seller / الأكثر طلباً">
                     </div>
                 </div>
+                <div class="form-row">
+                    <label id="prod-image-label" for="prod-image" data-i18n="lbl_prod_image">Product images</label>
+                    <div class="form-control product-image-picker" role="group" aria-labelledby="prod-image-label">
+                        <input id="prod-image" type="file" accept="image/jpeg,image/png,.jpg,.jpeg,.png" multiple hidden>
+                        <button id="prod-image-button" class="btn btn-secondary btn-sm" type="button" data-i18n="btn_choose_prod_image" aria-describedby="prod-image-hint">Add images</button>
+                        <span id="prod-image-count" class="product-image-count" role="status"></span>
+                    </div>
+                    <small id="prod-image-hint" data-i18n="hint_prod_image">Up to 6 JPG or PNG images, 5 MB each. The first image is the cover.</small>
+                    <p class="product-image-color" data-i18n="hint_prod_image_color">Assign a color to each photo. Choosing that color in the store shows its photos first, followed by general photos.</p>
+                    <div id="prod-image-gallery" class="product-image-gallery"></div>
+                </div>
+                <div class="form-row">
+                    <label for="prod-token" data-i18n="lbl_prod_token">Product management token</label>
+                    <input id="prod-token" class="form-control" type="password" autocomplete="off" dir="ltr" required>
+                </div>
+                <p id="prod-save-error" role="alert" style="color:#a0382f"></p>
                 <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('product-modal')" data-i18n="modal_cancel">Cancel</button>
-                    <button type="submit" class="btn btn-primary" data-i18n="modal_save">Save Product</button>
+                    <button id="prod-save" type="submit" class="btn btn-primary" data-i18n="modal_save">Save Product</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <dialog id="product-delete-modal" class="modal-box" aria-labelledby="product-delete-title">
+        <div class="modal-head">
+            <h3 id="product-delete-title" data-i18n="btn_delete_product">Delete product</h3>
+        </div>
+        <form id="product-delete-form">
+            <p data-i18n="prod_delete_description">This removes the product from the store. Past orders are kept.</p>
+            <p><strong id="product-delete-name" dir="auto"></strong></p>
+            <div class="form-row">
+                <label for="product-delete-token" data-i18n="lbl_prod_token">Product management token</label>
+                <input id="product-delete-token" class="form-control" type="password" autocomplete="off" dir="ltr" required autofocus>
+            </div>
+            <p id="product-delete-error" role="alert"></p>
+            <div class="product-delete-actions">
+                <button type="button" id="product-delete-cancel" class="btn btn-secondary" data-i18n="modal_cancel">Cancel</button>
+                <button type="submit" id="product-delete-confirm" class="btn btn-delete" data-i18n="btn_delete_product">Delete product</button>
+            </div>
+        </form>
+    </dialog>
 
     <!-- Order Detail Modal -->
     <div id="order-detail-modal" class="modal-overlay">
@@ -885,7 +1041,47 @@
                 btn_dispatch: 'Dispatch',
                 btn_mark_delivered: 'Mark Delivered',
                 btn_add_product: 'Add Product',
+                lbl_prod_weight: 'Chargeable weight per item (g)',
+                hint_prod_weight: "Use the carrier's chargeable weight per item in grams. 0.8 kg = 800 g.",
+                prod_weight_invalid: 'Enter a positive whole number of grams.',
+                lbl_prod_colors: 'Available colors',
+                lbl_prod_gender: 'Product audience *',
+                opt_gender_women: 'Women',
+                opt_gender_men: 'Men',
+                opt_gender_unisex: 'Unisex · both departments',
+                hint_prod_gender: 'Unisex products appear in both departments and share the same stock. Legacy products stay in Women until reviewed.',
+                prod_gender_invalid: 'Choose Women, Men or Unisex.',
+                prod_color_invalid: 'Select at least one available color.',
+                opt_color_black: 'Black',
+                opt_color_brown: 'Brown',
+                opt_color_cream: 'Ivory',
+                opt_color_olive: 'Olive',
+                opt_color_taupe: 'Warm taupe',
+                opt_color_gold: 'Gold',
+                lbl_prod_image: 'Product images',
+                btn_choose_prod_image: 'Add images',
+                hint_prod_image: 'Up to 6 JPG or PNG images, 5 MB each. The first image is the cover.',
+                prod_image_limit: 'Each product can have up to 6 images. Remove an image before adding more.',
+                prod_image_cover: 'Cover',
+                prod_image_photo: 'Photo',
+                prod_image_earlier: 'Move earlier',
+                prod_image_later: 'Move later',
+                prod_image_remove: 'Remove',
+                prod_image_color: 'Photo color',
+                prod_image_general: 'General / all colors',
+                hint_prod_image_color: 'Assign a color to each photo. Choosing that color in the store shows its photos first, followed by general photos.',
+                prod_image_color_invalid: 'A photo uses a color that is not available. Enable that color or change the photo to General.',
+                prod_image_color_unavailable: '(not available)',
+                lbl_prod_token: 'Product management token',
+                prod_image_invalid: 'Choose a valid JPG or PNG image up to 5 MB and 6,000 pixels per side (20 megapixels max).',
+                prod_token_invalid: 'Enter the correct product management token.',
+                prod_save_failed: 'Could not save the product. Check the fields and try again.',
                 btn_edit: 'Edit',
+                btn_delete: 'Delete',
+                btn_delete_product: 'Delete product',
+                prod_delete_description: 'This removes the product from the store. Past orders are kept.',
+                prod_delete_failed: 'Could not delete the product. Please try again.',
+                prod_empty: 'No products',
                 btn_approve: 'Approve',
                 btn_reject: 'Reject',
                 st_processed: 'Processed',
@@ -908,7 +1104,9 @@
                 lbl_prod_name_ar: 'Product Name (Arabic) *',
                 lbl_prod_name_en: 'English Name',
                 lbl_prod_cat: 'Primary Category *',
-                lbl_prod_source: 'Fulfillment Channel (v4.7.0 Core) *',
+                lbl_prod_source: 'Stock location *',
+                opt_prod_local: 'Iraq · Local stock',
+                opt_prod_international: 'China · International warehouse',
                 lbl_prod_price: 'Selling Price (USD) *',
                 lbl_prod_old_price: 'Original List Price (USD, Optional)',
                 lbl_prod_stock: 'Available Stock Quantity *',
@@ -1007,7 +1205,47 @@
                 btn_dispatch: 'إرسال الشحنة',
                 btn_mark_delivered: 'تأكيد التسليم',
                 btn_add_product: 'إضافة منتج',
+                lbl_prod_weight: 'الوزن المعتمد للشحن لكل قطعة (غرام)',
+                hint_prod_weight: 'أدخل وزن الشحن لكل قطعة بالغرام حسب شركة الشحن. 0.8 كغم = 800 غرام.',
+                prod_weight_invalid: 'أدخل وزناً صحيحاً أكبر من صفر بالغرام.',
+                lbl_prod_colors: 'الألوان المتوفرة',
+                lbl_prod_gender: 'المنتج مخصّص لـ *',
+                opt_gender_women: 'نساء',
+                opt_gender_men: 'رجال',
+                opt_gender_unisex: 'للجنسين · يظهر في القسمين',
+                hint_prod_gender: 'تظهر منتجات الجنسين في القسمين بنفس المخزون. تبقى المنتجات القديمة في قسم النساء حتى مراجعتها.',
+                prod_gender_invalid: 'اختر نساء أو رجال أو للجنسين.',
+                prod_color_invalid: 'اختر لوناً واحداً على الأقل.',
+                opt_color_black: 'أسود',
+                opt_color_brown: 'بني',
+                opt_color_cream: 'عاجي',
+                opt_color_olive: 'زيتي',
+                opt_color_taupe: 'رمادي دافئ',
+                opt_color_gold: 'ذهبي',
+                lbl_prod_image: 'صور المنتج',
+                btn_choose_prod_image: 'إضافة صور',
+                hint_prod_image: 'حتى ٦ صور بصيغة JPG أو PNG، وبحجم ٥ ميغابايت لكل صورة. الصورة الأولى هي صورة الغلاف.',
+                prod_image_limit: 'يمكن إضافة ٦ صور لكل منتج. احذف صورة قبل إضافة المزيد.',
+                prod_image_cover: 'الغلاف',
+                prod_image_photo: 'الصورة',
+                prod_image_earlier: 'نقل إلى موضع سابق',
+                prod_image_later: 'نقل إلى موضع لاحق',
+                prod_image_remove: 'إزالة',
+                prod_image_color: 'لون الصورة',
+                prod_image_general: 'عامة / كل الألوان',
+                hint_prod_image_color: 'حدّد لون كل صورة. عند اختيار اللون في المتجر تظهر صوره أولاً ثم الصور العامة.',
+                prod_image_color_invalid: 'إحدى الصور مرتبطة بلون غير متوفر. فعّل اللون أو غيّر الصورة إلى عامة.',
+                prod_image_color_unavailable: '(غير متوفر)',
+                lbl_prod_token: 'رمز إدارة المنتجات',
+                prod_image_invalid: 'اختر صورة JPG أو PNG صالحة لا تتجاوز 5 ميغابايت و6000 بكسل لكل ضلع (20 ميغابكسل كحد أقصى).',
+                prod_token_invalid: 'أدخل رمز إدارة المنتجات الصحيح.',
+                prod_save_failed: 'تعذّر حفظ المنتج. تحقق من الحقول وحاول مجدداً.',
                 btn_edit: 'تعديل',
+                btn_delete: 'حذف',
+                btn_delete_product: 'حذف المنتج',
+                prod_delete_description: 'سيختفي المنتج من المتجر وتبقى الطلبات السابقة محفوظة.',
+                prod_delete_failed: 'تعذّر حذف المنتج. يرجى المحاولة مرة أخرى.',
+                prod_empty: 'لا توجد منتجات',
                 btn_approve: 'موافقة',
                 btn_reject: 'رفض',
                 st_processed: 'تمت المعالجة',
@@ -1030,7 +1268,9 @@
                 lbl_prod_name_ar: 'اسم المنتج (بالعربية) *',
                 lbl_prod_name_en: 'الاسم بالإنجليزية',
                 lbl_prod_cat: 'الفئة الأساسية *',
-                lbl_prod_source: 'قناة التوريد المعتمدة *',
+                lbl_prod_source: 'موقع المخزون *',
+                opt_prod_local: 'العراق · المخزون المحلي',
+                opt_prod_international: 'الصين · المستودع الدولي',
                 lbl_prod_price: 'سعر البيع (بالدولار) *',
                 lbl_prod_old_price: 'السعر الأصلي (اختياري)',
                 lbl_prod_stock: 'الكمية المتوفرة في المخزون *',
@@ -1078,6 +1318,7 @@
                     el.innerText = t[k];
                 }
             });
+            renderProductImages();
 
             // Update current tab title
             const pageTitleEl = document.getElementById('page-title');
@@ -1256,33 +1497,216 @@
             openModal('order-detail-modal');
         }
 
-        async function loadProducts() {
+        const productImagePattern = /^\/api\/v1\/product-images\/[0-9a-f-]{36}\.(?:jpg|png)$/;
+        const escapeProductText = value => String(value ?? '').replace(/[&<>"']/g, ch =>
+            ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'})[ch]);
+        const MAX_PRODUCT_IMAGES = 6;
+        let productToken = '';
+        let productGallery = [];
+
+        function renderProductImages() {
             const t = i18nDict[adminLang] || i18nDict.en;
+            const count = new Intl.NumberFormat(adminLang === 'ar' ? 'ar-IQ' : 'en');
+            document.getElementById('prod-image-count').textContent =
+                count.format(productGallery.length) + ' / ' + count.format(MAX_PRODUCT_IMAGES);
+            document.getElementById('prod-image-gallery').innerHTML = productGallery.map((item, index) => {
+                const name = item.file?.name || (t.prod_image_photo + ' ' + count.format(index + 1));
+                return `<div class="product-image-tile">
+                    <img src="${escapeProductText(item.url)}" alt="${escapeProductText(name)}">
+                    <small dir="auto" title="${escapeProductText(name)}">${escapeProductText(name)}</small>
+                    ${index === 0 ? `<small>${t.prod_image_cover}</small>` : ''}
+                    <label class="product-image-color">${t.prod_image_color}
+                        <select class="form-control" data-image-color="${index}" aria-label="${t.prod_image_color} ${count.format(index + 1)}">
+                            <option value="" ${!item.color ? 'selected' : ''}>${t.prod_image_general}</option>
+                            ${productColorInputs.filter(input => input.checked || input.value === item.color).map(input => `<option value="${input.value}" ${item.color === input.value ? 'selected' : ''}>${t['opt_color_' + input.value]} ${input.checked ? '' : t.prod_image_color_unavailable}</option>`).join('')}
+                        </select>
+                    </label>
+                    <div class="product-image-actions">
+                        <button class="btn btn-secondary btn-sm" type="button" data-image-action="earlier" data-index="${index}" aria-label="${t.prod_image_earlier}" title="${t.prod_image_earlier}" ${index === 0 ? 'disabled' : ''}>↑</button>
+                        <button class="btn btn-secondary btn-sm" type="button" data-image-action="later" data-index="${index}" aria-label="${t.prod_image_later}" title="${t.prod_image_later}" ${index === productGallery.length - 1 ? 'disabled' : ''}>↓</button>
+                        <button class="btn btn-secondary btn-sm" type="button" data-image-action="remove" data-index="${index}">${t.prod_image_remove}</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        document.getElementById('prod-image-button').addEventListener('click', () => {
+            document.getElementById('prod-image').click();
+        });
+
+        function resetProductImage(product) {
+            productGallery.forEach(item => { if (item.file) URL.revokeObjectURL(item.url); });
+            const urls = Array.isArray(product?.imageUrls) ? product.imageUrls : [product?.imageUrl];
+            productGallery = urls.filter(url => productImagePattern.test(url)).map(url => ({ url, color: product?.imageColors?.[url] || '' }));
+            document.getElementById('prod-image').value = '';
+            document.getElementById('prod-token').value = productToken;
+            document.getElementById('prod-save-error').textContent = '';
+            renderProductImages();
+        }
+
+        document.getElementById('prod-image').addEventListener('change', event => {
+            const input = event.currentTarget;
+            const files = Array.from(input.files);
+            input.value = '';
+            if (!files.length) return;
+            const t = i18nDict[adminLang] || i18nDict.en;
+            const error = document.getElementById('prod-save-error');
+            if (productGallery.length + files.length > MAX_PRODUCT_IMAGES) {
+                error.textContent = t.prod_image_limit;
+                return;
+            }
+            if (files.some(file => !file.size || file.size > 5 * 1024 * 1024)) {
+                error.textContent = t.prod_image_invalid;
+                return;
+            }
+            error.textContent = '';
+            productGallery.push(...files.map(file => ({ file, url: URL.createObjectURL(file) })));
+            renderProductImages();
+        });
+
+        document.getElementById('prod-image-gallery').addEventListener('click', event => {
+            const button = event.target.closest('[data-image-action]');
+            if (!button || document.getElementById('prod-save').disabled) return;
+            const index = Number(button.dataset.index);
+            const action = button.dataset.imageAction;
+            const item = productGallery[index];
+            if (!item) return;
+            if (action === 'remove') {
+                if (item.file) URL.revokeObjectURL(item.url);
+                productGallery.splice(index, 1);
+            } else {
+                const target = index + (action === 'earlier' ? -1 : 1);
+                if (target < 0 || target >= productGallery.length) return;
+                productGallery[index] = productGallery[target];
+                productGallery[target] = item;
+            }
+            document.getElementById('prod-save-error').textContent = '';
+            renderProductImages();
+        });
+
+        document.getElementById('prod-image-gallery').addEventListener('change', event => {
+            const select = event.target.closest('[data-image-color]');
+            if (!select || document.getElementById('prod-save').disabled) return;
+            const item = productGallery[Number(select.dataset.imageColor)];
+            if (item) item.color = select.value;
+            document.getElementById('prod-save-error').textContent = '';
+        });
+
+        async function loadProducts() {
             const res = await fetch(`${API_BASE}/products`).then(r => r.json());
             if (res.code === 200) {
                 allProducts = res.data;
-                const rows = allProducts.map(p => {
-                    const srcLabel = p.fulfillmentSource === 'china' ? t.tag_china : t.tag_iraq;
-                    const srcTag = `<span class="tag ${p.fulfillmentSource === 'china' ? 'tag-china' : 'tag-iraq'}">${srcLabel}</span>`;
-                    return `<tr>
-                        <td><b>${p.id}</b></td>
-                        <td>
-                            <b>${p.name}</b><br>
-                            <small style="color:var(--muted)">${p.enName || ''}</small>
-                        </td>
-                        <td>${p.category}</td>
-                        <td>${srcTag}</td>
-                        <td><b style="color:var(--brown);">$${Number(p.price).toFixed(2)}</b></td>
-                        <td>${p.oldPrice ? `<del style="color:var(--muted)">$${Number(p.oldPrice).toFixed(2)}</del>` : '—'}</td>
-                        <td>${p.stock}</td>
-                        <td>
-                            <button class="btn btn-secondary btn-sm" onclick="editProduct(${p.id})">${t.btn_edit}</button>
-                        </td>
-                    </tr>`;
-                }).join('');
-                document.getElementById('products-table-body').innerHTML = rows || `<tr><td colspan="8" style="text-align:center;">${t.loading}</td></tr>`;
+                renderProducts();
             }
         }
+
+        function renderProducts() {
+            const t = i18nDict[adminLang] || i18nDict.en;
+            const rows = allProducts.map(p => {
+                const srcLabel = p.fulfillmentSource === 'china' ? t.tag_china : t.tag_iraq;
+                const srcTag = `<span class="tag ${p.fulfillmentSource === 'china' ? 'tag-china' : 'tag-iraq'}">${srcLabel}</span>`;
+                return `<tr>
+                    <td><b>${p.id}</b></td>
+                    <td>
+                        ${productImagePattern.test(p.imageUrl) ? `<img src="${p.imageUrl}" alt="" width="44" height="44" loading="lazy" style="object-fit:cover;vertical-align:middle;margin-inline-end:8px;border-radius:4px;">` : ''}
+                        <b>${escapeProductText(p.name)}</b><br>
+                        <small style="color:var(--muted)">${escapeProductText(p.enName)}</small>
+                    </td>
+                    <td>${escapeProductText(p.category)}<br><small>${t['opt_gender_' + (p.gender || 'women')] || '—'}</small></td>
+                    <td>${srcTag}</td>
+                    <td><b style="color:var(--brown);">$${Number(p.price).toFixed(2)}</b></td>
+                    <td>${p.oldPrice ? `<del style="color:var(--muted)">$${Number(p.oldPrice).toFixed(2)}</del>` : '—'}</td>
+                    <td>${p.stock}</td>
+                    <td>
+                        <div class="product-row-actions">
+                            <button class="btn btn-secondary btn-sm" onclick="editProduct(${p.id})">${t.btn_edit}</button>
+                            <button class="btn btn-delete btn-sm" onclick="openDeleteProduct(${p.id})">${t.btn_delete}</button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+            document.getElementById('products-table-body').innerHTML = rows || `<tr><td colspan="8" style="text-align:center;">${t.prod_empty}</td></tr>`;
+        }
+
+        function updateProductWeightField() {
+            const international = document.getElementById('prod-source').value === 'china';
+            document.getElementById('prod-weight-row').hidden = !international;
+            const field = document.getElementById('prod-weight');
+            field.disabled = !international;
+        }
+
+        document.getElementById('prod-source').addEventListener('change', updateProductWeightField);
+
+        const productDeleteDialog = document.getElementById('product-delete-modal');
+        const productDeleteConfirm = document.getElementById('product-delete-confirm');
+        const productDeleteCancel = document.getElementById('product-delete-cancel');
+        const productDeleteToken = document.getElementById('product-delete-token');
+        const productDeleteError = document.getElementById('product-delete-error');
+
+        function openDeleteProduct(id) {
+            const product = allProducts.find(item => item.id === id);
+            if (!product) return;
+            productDeleteDialog.dataset.productId = String(id);
+            document.getElementById('product-delete-name').textContent =
+                (adminLang === 'en' ? product.enName || product.name : product.name) + ` (#${id})`;
+            productDeleteToken.value = productToken;
+            productDeleteError.textContent = '';
+            productDeleteDialog.showModal();
+        }
+
+        productDeleteCancel.addEventListener('click', () => productDeleteDialog.close());
+        productDeleteDialog.addEventListener('cancel', event => {
+            if (productDeleteConfirm.disabled) event.preventDefault();
+        });
+        productDeleteDialog.addEventListener('close', () => {
+            productDeleteToken.value = '';
+            productDeleteError.textContent = '';
+        });
+
+        document.getElementById('product-delete-form').addEventListener('submit', async event => {
+            event.preventDefault();
+            if (productDeleteConfirm.disabled) return;
+            const productId = Number(productDeleteDialog.dataset.productId);
+            const token = productDeleteToken.value.trim();
+            const t = i18nDict[adminLang] || i18nDict.en;
+            productDeleteError.textContent = '';
+            productDeleteConfirm.disabled = true;
+            productDeleteCancel.disabled = true;
+            try {
+                const response = await fetch(`${API_BASE}/products/${productId}`, {
+                    method: 'DELETE',
+                    headers: { 'X-Product-Admin-Token': token }
+                });
+                if (response.status === 403) {
+                    productToken = '';
+                    productDeleteToken.value = '';
+                    productDeleteError.textContent = t.prod_token_invalid;
+                    productDeleteToken.focus();
+                    return;
+                }
+                const result = await response.json();
+                if (!response.ok || result.code !== 200) {
+                    productDeleteError.textContent = t.prod_delete_failed;
+                    return;
+                }
+                productToken = token;
+                allProducts = allProducts.filter(product => product.id !== productId);
+                productDeleteDialog.close();
+                renderProducts();
+            } catch (_) {
+                productDeleteError.textContent = t.prod_delete_failed;
+            } finally {
+                productDeleteConfirm.disabled = false;
+                productDeleteCancel.disabled = false;
+            }
+        });
+
+        const productColorInputs = Array.from(document.querySelectorAll('#prod-colors input'));
+        const productColorError = document.getElementById('prod-color-error');
+        document.getElementById('prod-colors').addEventListener('change', () => {
+            productColorError.hidden = true;
+            renderProductImages();
+        });
 
         function editProduct(id) {
             const t = i18nDict[adminLang] || i18nDict.en;
@@ -1293,11 +1717,18 @@
             document.getElementById('prod-name').value = p.name;
             document.getElementById('prod-en').value = p.enName || '';
             document.getElementById('prod-cat').value = p.category;
+            document.getElementById('prod-gender').value = p.gender || 'women';
             document.getElementById('prod-source').value = p.fulfillmentSource;
+            document.getElementById('prod-weight').value = p.shippingWeightGrams ?? '';
+            updateProductWeightField();
+            const colors = (p.colors || 'black').split(',').map(color => color.trim());
+            productColorInputs.forEach(input => { input.checked = colors.includes(input.value); });
+            productColorError.hidden = true;
             document.getElementById('prod-price').value = p.price;
             document.getElementById('prod-old-price').value = p.oldPrice || '';
             document.getElementById('prod-stock').value = p.stock;
             document.getElementById('prod-badge').value = p.badge || '';
+            resetProductImage(p);
             openModal('product-modal');
         }
 
@@ -1305,32 +1736,85 @@
             document.getElementById('modal-product-title').innerText = adminLang === 'ar' ? 'إضافة منتج جديد' : 'Add New Product';
             document.getElementById('product-form').reset();
             document.getElementById('prod-id').value = '';
+            updateProductWeightField();
+            productColorError.hidden = true;
+            resetProductImage();
             openModal('product-modal');
         }
 
         async function handleProductSubmit(e) {
             e.preventDefault();
             const id = document.getElementById('prod-id').value;
+            const weight = document.getElementById('prod-weight');
+            const t = i18nDict[adminLang] || i18nDict.en;
+            const selectedColors = productColorInputs.filter(input => input.checked).map(input => input.value);
+            if (!selectedColors.length) {
+                productColorError.textContent = t.prod_color_invalid;
+                productColorError.hidden = false;
+                productColorInputs[0].focus();
+                return;
+            }
             const body = {
                 id: id ? Number(id) : null,
                 name: document.getElementById('prod-name').value,
                 enName: document.getElementById('prod-en').value,
                 category: document.getElementById('prod-cat').value,
+                gender: document.getElementById('prod-gender').value,
                 fulfillmentSource: document.getElementById('prod-source').value,
+                shippingWeightGrams: weight.disabled || !weight.value ? null : Number(weight.value),
+                colors: selectedColors.join(','),
                 price: Number(document.getElementById('prod-price').value),
                 oldPrice: document.getElementById('prod-old-price').value ? Number(document.getElementById('prod-old-price').value) : null,
                 stock: Number(document.getElementById('prod-stock').value),
                 badge: document.getElementById('prod-badge').value
             };
-            const res = await fetch(`${API_BASE}/products`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            }).then(r => r.json());
-            if (res.code === 200) {
-                closeModal('product-modal');
-                alert(adminLang === 'ar' ? 'تم حفظ المنتج بنجاح' : 'Product saved successfully');
+            const token = document.getElementById('prod-token').value.trim();
+            const error = document.getElementById('prod-save-error');
+            const save = document.getElementById('prod-save');
+            if (save.disabled) return;
+            if (productGallery.some(item => item.color && !selectedColors.includes(item.color))) {
+                error.textContent = t.prod_image_color_invalid;
+                return;
+            }
+            const form = new FormData();
+            form.append('product', new Blob([JSON.stringify(body)], { type: 'application/json' }));
+            const imageOrder = productGallery.map(item => item.file ? 'new' : item.url);
+            form.append('imageOrder', new Blob([JSON.stringify(imageOrder)], { type: 'application/json' }));
+            form.append('imageColors', new Blob([JSON.stringify(productGallery.map(item => item.color || ''))], { type: 'application/json' }));
+            for (const item of productGallery) {
+                if (item.file) form.append('images', item.file);
+            }
+            error.textContent = '';
+            save.disabled = true;
+            const picker = document.getElementById('prod-image-button');
+            picker.disabled = true;
+            try {
+                const response = await fetch(`${API_BASE}/products`, {
+                    method: 'POST',
+                    headers: { 'X-Product-Admin-Token': token },
+                    body: form
+                });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok || result.code !== 200) {
+                    if (response.status === 403) productToken = '';
+                    error.textContent = response.status === 403 ? t.prod_token_invalid
+                        : result.message === 'INVALID_SHIPPING_WEIGHT' ? t.prod_weight_invalid
+                        : result.message === 'INVALID_PRODUCT_COLORS' ? t.prod_color_invalid
+                        : result.message === 'INVALID_PRODUCT_GENDER' ? t.prod_gender_invalid
+                        : result.message === 'INVALID_IMAGE_COLORS' ? t.prod_image_color_invalid
+                        : response.status === 413 || result.message?.includes('image') || result.message?.includes('Image')
+                            ? t.prod_image_invalid : t.prod_save_failed;
+                    return;
+                }
+                productToken = token;
+                document.getElementById('product-modal').classList.remove('active');
+                resetProductImage();
                 loadProducts();
+            } catch (_) {
+                error.textContent = t.prod_save_failed;
+            } finally {
+                save.disabled = false;
+                picker.disabled = false;
             }
         }
 
@@ -1399,7 +1883,13 @@
         }
 
         function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function closeModal(id) {
+            if (id === 'product-modal') {
+                if (document.getElementById('prod-save').disabled) return;
+                resetProductImage();
+            }
+            document.getElementById(id).classList.remove('active');
+        }
 
         // Initial Boot
         switchAdminLang(adminLang);

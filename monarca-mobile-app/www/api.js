@@ -49,10 +49,10 @@
       try {
         const query = new URLSearchParams(params).toString();
         const url = `${API_BASE}/products${query ? '?' + query : ''}`;
-        const res = await fetch(url);
+        const res = await fetch(url, { cache: 'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const json = await res.json();
-        return json.data || [];
+        return json.code === 200 && Array.isArray(json.data) ? json.data : null;
       } catch (e) {
         console.warn('[MonarcaAPI] getProducts fallback to local:', e.message);
         return null;
@@ -102,16 +102,16 @@
       }
     },
 
-    async createStripeCheckout(orderData) {
+    async createStripeCheckout(orderData, chargeCurrency = 'USD') {
       const res = await fetch(`${API_BASE}/payments/stripe/checkout-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderPayload(orderData, 'stripe', 'AED'))
+        body: JSON.stringify(orderPayload(orderData, 'stripe', chargeCurrency))
       });
       return unwrap(res);
     },
 
-    async createStripeCheckoutSession(orderId, chargeCurrency = 'AED') {
+    async createStripeCheckoutSession(orderId, chargeCurrency = 'USD') {
       const query = new URLSearchParams({ chargeCurrency }).toString();
       const res = await fetch(`${API_BASE}/payments/stripe/orders/${encodeURIComponent(orderId)}/checkout-session?${query}`, {
         method: 'POST',
@@ -173,29 +173,84 @@
     }
   };
 
+  const productImagePattern = /^\/api\/v1\/product-images\/[0-9a-f-]{36}\.(?:jpg|png)$/;
+  const csv = value => String(value ?? '').split(',').map(item => item.trim()).filter(Boolean);
+
+  function syncProduct(store, remote) {
+    const id = Number(remote.id);
+    if (!Number.isSafeInteger(id) || id < 1) return;
+    let product = store.products.find(item => item.id === id);
+    if (!product) {
+      product = {
+        id, introduced: id, sku: 'MON-' + String(id).padStart(4, '0'),
+        name: '', en: '', colors: ['black'], sizes: ['مقاس موحّد']
+      };
+      store.products.push(product);
+    }
+    const colors = csv(remote.colors).filter(color => Object.hasOwn(store.colors, color));
+    const sizes = csv(remote.sizes);
+    const paths = Array.isArray(remote.imageUrls) ? remote.imageUrls : [remote.imageUrl];
+    const imageUrls = paths.filter(path => productImagePattern.test(path))
+      .map(path => 'https://itsmonarca.com' + path);
+    const imageColors = {};
+    for (const [path, color] of Object.entries(remote.imageColors || {})) {
+      const url = 'https://itsmonarca.com' + path;
+      if (imageUrls.includes(url) && colors.includes(color)) imageColors[url] = color;
+    }
+    Object.assign(product, {
+      name: remote.name || product.name,
+      en: remote.enName || remote.name || product.en,
+      cat: remote.category || product.cat,
+      gender: remote.gender ?? 'women',
+      sub: remote.subCategory || product.sub,
+      img: remote.imgIndex ?? product.img,
+      imageUrl: imageUrls[0] || '',
+      imageUrls,
+      imageColors,
+      catalogUnavailable: false,
+      price: Number(remote.price),
+      old: remote.oldPrice == null ? null : Number(remote.oldPrice),
+      stock: Number(remote.stock) || 0,
+      fulfillmentSource: remote.fulfillmentSource,
+      fulfillment: remote.fulfillment,
+      badge: remote.badge || '',
+      colors: colors.length ? colors : product.colors,
+      sizes: sizes.length ? sizes : product.sizes,
+      unavailable: remote.unavailableSize ?? product.unavailable
+    });
+  }
+
   // Automatically sync products from server when app loads
   async function initServerSync() {
     try {
       const serverProducts = await window.MonarcaAPI.getProducts();
-      if (serverProducts && Array.isArray(serverProducts) && serverProducts.length > 0) {
-        const localProducts = window.Monarca?.products;
-        if (Array.isArray(localProducts)) {
-          serverProducts.forEach(sp => {
-            const p = localProducts.find(x => x.id === sp.id);
-            if (p) {
-              p.price = Number(sp.price);
-              if (sp.oldPrice) p.old = Number(sp.oldPrice);
-              p.stock = sp.stock;
-              p.fulfillmentSource = sp.fulfillmentSource;
-              p.fulfillment = sp.fulfillment;
-              if (sp.name) p.name = sp.name;
-              if (sp.enName) p.en = sp.enName;
-            }
-          });
-          // Re-render if home or catalog is active
-          if (typeof window.Monarca?.render === 'function') {
-            window.Monarca.render(true);
+      const store = window.Monarca;
+      if (Array.isArray(serverProducts) && store) {
+        const listedIds = new Set(serverProducts.map(product => Number(product.id)));
+        serverProducts.forEach(product => syncProduct(store, product));
+        for (const product of store.products) {
+          if (!listedIds.has(product.id)) {
+            product.catalogUnavailable = true;
+            product.stock = 0;
           }
+        }
+        const cart = store.state.cart;
+        const availableCart = cart.filter(line => listedIds.has(Number(line.id)));
+        const savedItems = store.state.savedItems || [];
+        const availableSavedItems = savedItems.filter(line => listedIds.has(Number(line.id)));
+        if (availableCart.length !== cart.length || availableSavedItems.length !== savedItems.length) {
+          store.state.cart = availableCart;
+          store.state.savedItems = availableSavedItems;
+          store.save();
+        }
+        if (store.ui.buyNow?.some(line => !listedIds.has(Number(line.id)))) {
+          store.ui.buyNow = null;
+        }
+        store.render(true);
+        if (availableCart.length !== cart.length) {
+          store.toast(window.MonarcaI18n?.language() === 'en'
+            ? 'An unavailable product was removed from your bag.'
+            : 'تمت إزالة منتج غير متاح من حقيبة التسوق.');
         }
       }
     } catch (err) {

@@ -10,38 +10,61 @@ import com.monarca.repository.AppConfigRepository;
 import com.monarca.repository.OrderRepository;
 import com.monarca.repository.ProductRepository;
 import com.monarca.repository.ReturnRequestRepository;
+import com.monarca.service.ProductImageStorage;
 import com.monarca.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/admin")
 @Tag(name = "Admin Management API", description = "Backoffice Store & Fulfillment Management")
 public class AdminController {
 
+    private static final Set<String> PRODUCT_COLORS = Set.of("black", "brown", "cream", "olive", "taupe", "gold");
+    private static final int MAX_PRODUCT_IMAGES = 6;
+    private static final String NEW_IMAGE = "new";
     private final ProductRepository productRepository;
+    private final ProductService productService;
     private final OrderRepository orderRepository;
     private final ReturnRequestRepository returnRequestRepository;
     private final AppConfigRepository appConfigRepository;
-    private final ProductService productService;
+    private final ProductImageStorage productImages;
+    private final String productAdminToken;
 
     public AdminController(ProductRepository productRepository,
+                           ProductService productService,
                            OrderRepository orderRepository,
                            ReturnRequestRepository returnRequestRepository,
                            AppConfigRepository appConfigRepository,
-                           ProductService productService) {
+                           ProductImageStorage productImages,
+                           @Value("${monarca.security.product-admin-token}") String productAdminToken) {
         this.productRepository = productRepository;
+        this.productService = productService;
         this.orderRepository = orderRepository;
         this.returnRequestRepository = returnRequestRepository;
         this.appConfigRepository = appConfigRepository;
-        this.productService = productService;
+        this.productImages = productImages;
+        this.productAdminToken = productAdminToken;
     }
 
     @GetMapping("/dashboard")
@@ -75,7 +98,7 @@ public class AdminController {
 
         dto.setReturnRequestsCount(returnRequestRepository.count());
 
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productService.getAll();
         dto.setProductsCount(products.size());
         dto.setIraqStockCount(products.stream().filter(p -> "iraq".equalsIgnoreCase(p.getFulfillmentSource())).count());
         dto.setChinaPreorderCount(products.stream().filter(p -> "china".equalsIgnoreCase(p.getFulfillmentSource())).count());
@@ -86,26 +109,214 @@ public class AdminController {
     @GetMapping("/products")
     @Operation(summary = "List All Products for Admin")
     public R<List<Product>> getProducts() {
-        return R.ok(productRepository.findAll());
+        return R.ok(productService.getAll());
     }
 
-    @PostMapping("/products")
-    @Operation(summary = "Create or Update Product (Change Price, Source, Stock)")
-    public R<Product> saveProduct(@RequestBody Product product) {
-        if ("china".equalsIgnoreCase(product.getFulfillmentSource())) {
-            product.setFulfillment("preorder");
-        } else {
-            product.setFulfillment("in_stock");
-            product.setFulfillmentSource("iraq");
+    @PostMapping(value = "/products", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public R<Product> saveProduct(@RequestBody Product fields,
+                                  @RequestHeader(value = "X-Product-Admin-Token", required = false) String token) {
+        return saveProduct(fields, null, null, null, null, token);
+    }
+
+    @PostMapping(value = "/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Save a product and its ordered JPG or PNG gallery")
+    public R<Product> saveProduct(@RequestPart("product") Product fields,
+                                  @RequestPart(value = "image", required = false) MultipartFile image,
+                                  @RequestPart(value = "images", required = false) List<MultipartFile> images,
+                                  @RequestPart(value = "imageOrder", required = false) List<String> imageOrder,
+                                  @RequestPart(value = "imageColors", required = false) List<String> imageColors,
+                                  @RequestHeader(value = "X-Product-Admin-Token", required = false) String token) {
+        requireProductAdmin(token);
+        if (fields.getGender() != null && !Set.of("women", "men", "unisex").contains(fields.getGender())) {
+            return R.fail(400, "INVALID_PRODUCT_GENDER");
         }
-        return R.ok(productRepository.save(product));
+        if (fields.getName() == null || fields.getName().isBlank() || fields.getName().length() > 100
+                || (fields.getEnName() != null && fields.getEnName().length() > 100)
+                || (fields.getBadge() != null && fields.getBadge().length() > 50)
+                || fields.getPrice() == null || fields.getPrice().signum() <= 0
+                || fields.getStock() == null || fields.getStock() < 0
+                || fields.getCategory() == null
+                || !Set.of("clothes", "shoes", "bags", "accessories").contains(fields.getCategory())) {
+            return R.fail(400, "Check the product name, category, price and stock.");
+        }
+        Product product = fields.getId() == null ? new Product()
+                : productRepository.findByIdAndDeletedAtIsNull(fields.getId()).orElse(null);
+        if (product == null) {
+            return R.fail(404, "Product not found.");
+        }
+        boolean international = "china".equalsIgnoreCase(fields.getFulfillmentSource());
+        Integer weight = fields.getShippingWeightGrams();
+        if (weight != null && weight < 1) {
+            return R.fail(400, "INVALID_SHIPPING_WEIGHT");
+        }
+        if (weight == null) {
+            weight = product.getShippingWeightGrams();
+        }
+
+        String colors = fields.getColors();
+        if (colors != null) {
+            Set<String> selectedColors = new LinkedHashSet<>();
+            for (String color : colors.split(",", -1)) {
+                String code = color.trim();
+                if (!PRODUCT_COLORS.contains(code)) {
+                    return R.fail(400, "INVALID_PRODUCT_COLORS");
+                }
+                selectedColors.add(code);
+            }
+            product.setColors(String.join(",", selectedColors));
+        }
+
+        product.setName(fields.getName().trim());
+        product.setEnName(fields.getEnName());
+        product.setCategory(fields.getCategory());
+        if (fields.getGender() != null) product.setGender(fields.getGender());
+        else if (product.getId() == null) product.setGender("women");
+        product.setPrice(fields.getPrice());
+        product.setOldPrice(fields.getOldPrice());
+        product.setStock(fields.getStock());
+        product.setBadge(fields.getBadge());
+        product.setFulfillmentSource(international ? "china" : "iraq");
+        product.setFulfillment(international ? "preorder" : "in_stock");
+        product.setShippingWeightGrams(international ? weight : null);
+        if (product.getId() == null) {
+            if (colors == null) {
+                product.setColors("black");
+            }
+            product.setSizes(switch (product.getCategory()) {
+                case "clothes" -> "S,M,L,XL";
+                case "shoes" -> "37,38,39,40,41";
+                default -> "مقاس موحّد";
+            });
+        }
+        List<String> uploaded = new ArrayList<>();
+        try {
+            if (image != null || images != null || imageOrder != null) {
+                updateImages(product, image, images, imageOrder, uploaded);
+            }
+            updateImageColors(product, fields.getImageColors(), imageColors);
+            return R.ok(productRepository.saveAndFlush(product));
+        } catch (IllegalArgumentException ex) {
+            discardUploads(uploaded, ex);
+            return R.fail(400, ex.getMessage());
+        } catch (IOException ex) {
+            discardUploads(uploaded, ex);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not store the images.", ex);
+        } catch (RuntimeException ex) {
+            discardUploads(uploaded, ex);
+            throw ex;
+        }
+    }
+
+    private void updateImages(Product product, MultipartFile legacyImage, List<MultipartFile> images,
+                              List<String> imageOrder, List<String> uploaded) throws IOException {
+        List<String> current = product.getImageUrls();
+        if (legacyImage != null) {
+            if (images != null || imageOrder != null) {
+                throw new IllegalArgumentException("Invalid product image request.");
+            }
+            // Older editors replace only the cover photo.
+            String coverColor = product.getImageColors() == null ? null : product.getImageColors().get(product.getImageUrl());
+            String cover = productImages.store(legacyImage);
+            uploaded.add(cover);
+            List<String> gallery = new ArrayList<>();
+            gallery.add(cover);
+            gallery.addAll(current.subList(Math.min(1, current.size()), current.size()));
+            product.replaceImages(gallery);
+            if (coverColor != null) product.getImageColors().put(cover, coverColor);
+            return;
+        }
+
+        List<MultipartFile> files = images == null ? List.of() : images;
+        if (imageOrder == null) {
+            throw new IllegalArgumentException("Product image order is required.");
+        }
+        if (imageOrder.size() > MAX_PRODUCT_IMAGES || files.size() > MAX_PRODUCT_IMAGES) {
+            throw new IllegalArgumentException("A product can have at most 6 images.");
+        }
+        int newCount = 0;
+        Set<String> retained = new HashSet<>();
+        for (String entry : imageOrder) {
+            if (NEW_IMAGE.equals(entry)) {
+                newCount++;
+            } else if (entry == null || !current.contains(entry) || !retained.add(entry)) {
+                throw new IllegalArgumentException("Invalid product image order. Reopen the editor and try again.");
+            }
+        }
+        if (newCount != files.size()) {
+            throw new IllegalArgumentException("Product image order does not match the uploaded files.");
+        }
+
+        var remaining = files.iterator();
+        List<String> gallery = new ArrayList<>(imageOrder.size());
+        for (String entry : imageOrder) {
+            if (NEW_IMAGE.equals(entry)) {
+                String path = productImages.store(remaining.next());
+                uploaded.add(path);
+                gallery.add(path);
+            } else {
+                gallery.add(entry);
+            }
+        }
+        product.replaceImages(gallery);
+    }
+
+    private void updateImageColors(Product product, Map<String, String> byPath, List<String> orderedColors) {
+        List<String> gallery = product.getImageUrls();
+        Set<String> available = new HashSet<>(List.of((product.getColors() == null ? "" : product.getColors()).split(",")));
+        Map<String, String> result = new LinkedHashMap<>();
+        if (orderedColors != null) {
+            if (byPath != null || orderedColors.size() != gallery.size()) {
+                throw new IllegalArgumentException("INVALID_IMAGE_COLORS");
+            }
+            for (int i = 0; i < gallery.size(); i++) {
+                String color = orderedColors.get(i);
+                if (color == null || (!color.isEmpty() && !available.contains(color))) {
+                    throw new IllegalArgumentException("INVALID_IMAGE_COLORS");
+                }
+                if (!color.isEmpty()) result.put(gallery.get(i), color);
+            }
+        } else if (byPath != null) {
+            for (var entry : byPath.entrySet()) {
+                if (!gallery.contains(entry.getKey()) || !available.contains(entry.getValue())) {
+                    throw new IllegalArgumentException("INVALID_IMAGE_COLORS");
+                }
+                result.put(entry.getKey(), entry.getValue());
+            }
+        } else if (product.getImageColors() != null) {
+            product.getImageColors().forEach((path, color) -> {
+                if (gallery.contains(path) && available.contains(color)) result.put(path, color);
+            });
+        }
+        product.setImageColors(result);
+    }
+
+    private void discardUploads(List<String> uploaded, Exception failure) {
+        for (String path : uploaded) {
+            try {
+                productImages.discard(path);
+            } catch (IOException cleanupError) {
+                failure.addSuppressed(cleanupError);
+            }
+        }
     }
 
     @DeleteMapping("/products/{id}")
     @Operation(summary = "Delete Product")
-    public R<String> deleteProduct(@PathVariable Long id) {
-        productRepository.deleteById(id);
+    public R<String> deleteProduct(@PathVariable Long id,
+                                   @RequestHeader(value = "X-Product-Admin-Token", required = false) String token) {
+        requireProductAdmin(token);
+        productService.delete(id);
         return R.ok("Deleted successfully", null);
+    }
+
+    private void requireProductAdmin(String token) {
+        if (productAdminToken.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Product management token is not configured.");
+        }
+        if (token == null || !MessageDigest.isEqual(productAdminToken.getBytes(StandardCharsets.UTF_8),
+                token.getBytes(StandardCharsets.UTF_8))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid product management token.");
+        }
     }
 
     @GetMapping("/orders")
