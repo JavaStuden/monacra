@@ -69,6 +69,23 @@ function galleryColorNote(p) {
   if(p.colors.length<2 || galleryImages(p).some(url=>p.imageColors?.[url]===ui.selectedColor))return '';
   return `<p class="pd-subnote">${window.MonarcaI18n?.language()==='en'?'No photos are assigned to this colour; showing reference images.':'لا توجد صور مخصصة لهذا اللون؛ الصور المعروضة مرجعية.'}</p>`;
 }
+function openProductImages(p) {
+  const en=window.MonarcaI18n?.language()==='en';
+  const images=[...new Set(p.imageUrls||[])];
+  const entries=images.length ? images.map(url=>({url})) : [{}];
+  const title=en?'Product photos':'صور المنتج';
+  sheet(title,`<div class="pd-image-scroll" tabindex="0" role="region" aria-label="${title}">
+    <p class="pd-image-instruction">${en?'Scroll down to see all product photos.':'مرّري للأسفل لمشاهدة جميع صور المنتج.'}</p>
+    <div class="pd-image-list">${entries.map(({url},index)=>{
+      const color=url?p.imageColors?.[url]:'';
+      const colorLabel=color?(en?({black:'Black',brown:'Brown',cream:'Ivory',olive:'Olive',taupe:'Warm taupe',gold:'Gold'}[color]||color):colors[color]?.[0]||color):'';
+      return `<figure class="pd-image-item">${url?`<img src="${esc(url)}" alt="${esc(p.name)} · ${en?'Photo':'الصورة'} ${ar(index+1)}" decoding="async">`:`<div class="pd-reference-image">${photo(p)}</div>`}<figcaption>${en?'Photo':'الصورة'} ${ar(index+1)} / ${ar(entries.length)}${colorLabel?' · '+esc(colorLabel):''}</figcaption></figure>`;
+    }).join('')}</div>
+    ${images.length?'':`<p>${en?'Only one reference photo is available for this product.':'تتوفر صورة مرجعية واحدة فقط لهذا المنتج.'}</p>`}
+    <div class="button-stack">${btn(en?'Back to product':'العودة إلى القطعة','close-sheet','secondary')}</div>
+  </div>`);
+  document.querySelector('#overlay-root .sheet')?.classList.add('pd-image-sheet');
+}
 function galleryIndex(p) {
   return galleryImages(p)[ui.pdPhotoIndex] ? ui.pdPhotoIndex : 0;
 }
@@ -122,7 +139,7 @@ const actions={
  'pd-qty':el=>{const p=get(ui.productId);ui.productQty=Math.max(1,Math.min(p.stock,(Number(ui.productQty)||1)+Number(el.dataset.value)));render(true);},
  'pd-photo':el=>{ui.pdPhotoIndex=Number(el.dataset.value);render(true);},
  'pd-gallery':el=>{ui.pdGallery=el.dataset.value;render(true);},
- 'pd-zoom':()=>{const p=get(ui.productId);if(!p)return;if(p.imageUrls?.length){const en=window.MonarcaI18n?.language()==='en';sheet(en?'Product image':'صورة المنتج',`<div class="pd-zoom-frame">${galleryPhoto(p)}</div><div class="button-stack">${btn(en?'Back to product':'العودة إلى القطعة','close-sheet','secondary')}</div>`);return;}sheet('تفاصيل صورة العرض',`<div class="pd-zoom-frame ${ui.pdGallery==='detail'?'detail':''}">${photo(p)}</div><p>${ui.pdGallery==='detail'?'قصّة مكبّرة من صورة العرض نفسها؛ ليست زاوية تصوير إضافية. ':''}${isAiPhoto(p)?'صورة عرض مولّدة بالذكاء الاصطناعي بالاستناد إلى مرجع التصميم، وليست تصويراً لمنتج فعلي موثّق.':'الصورة المرجعية التي قدّمها العميل.'}</p><div class="button-stack">${btn('العودة إلى القطعة','close-sheet','secondary')}</div>`);},
+ 'pd-zoom':()=>{const p=get(ui.productId);if(p)openProductImages(p);},
  'pd-disclosure':el=>{ui.pdDetails=ui.pdDetails||{};ui.pdDetails[el.dataset.value]=!ui.pdDetails[el.dataset.value];render(true);},
  'pd-share':async el=>{const p=get(el.dataset.id);if(!p)return;const url='https://itsmonarca.com/#product/'+p.id;if(navigator.share){try{await navigator.share({title:p.name+' · Monarca',text:(p.name_ar||p.name)+' · Monarca Boutique',url:url});return;}catch(e){if(e.name==='AbortError')return;}}shareProduct(p);},
  'pd-copy':async()=>{const input=document.getElementById('pd-share-url');if(!input)return;try{if(!navigator.clipboard?.writeText)throw new Error('clipboard');await navigator.clipboard.writeText(input.value);toast('تم نسخ رابط القطعة');document.getElementById('pd-copy-note').textContent='تم النسخ. يمكنك لصقه في رسالتك.';}catch{input.focus();input.select();document.getElementById('pd-copy-note').textContent='تم تحديد الرابط. استخدمي أمر «نسخ» في جهازك لنسخه.';}},

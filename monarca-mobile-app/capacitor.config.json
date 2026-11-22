@@ -1,6 +1,6 @@
 {
-  "appId": "com.monarca.boutique",
-  "appName": "Monarca",
+  "appId": "com.monarca.boutique.preview",
+  "appName": "Monarca Preview",
   "webDir": "www",
   "server": {
     "androidScheme": "https",
