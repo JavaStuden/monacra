@@ -28,9 +28,30 @@
     "privacy": {
       "title": "سياسة الخصوصية",
       "sections": [
-        "عند تقديم الطلب، نجمع اسمك ورقم هاتفك وعنوان التوصيل وتفاصيل الطلب لمعالجته وتوصيله وتقديم خدمة العملاء.",
-        "تُدخل بيانات البطاقة في صفحة Stripe Checkout. لا يستلم المتجر رقم بطاقتك الكامل أو رمز الأمان ولا يخزنهما.",
-        "نشارك المعلومات اللازمة لمعالجة الدفع مع Stripe، والمعلومات اللازمة للتسليم مع خدمة التوصيل. نحتفظ بسجلات الطلبات حسب متطلبات تشغيل المتجر والالتزامات القانونية."
+        "تاريخ السريان وآخر تحديث: 22 نوفمبر 2026",
+        "توضح هذه السياسة كيفية التعامل مع معلوماتك عند استخدام موقع Monarca وتطبيق التسوق وخدمة العملاء.",
+        "1. من نحن وكيف تتواصل معنا",
+        "Monarca متجر للملابس والأحذية والحقائب والإكسسوارات يخدم العملاء في العراق. بيانات مشغّل المتجر والتواصل موضحة أدناه. للاستفسار عن الخصوصية أو لطلب تصحيح بياناتك أو حذفها، تواصل معنا عبر البريد الإلكتروني أو واتساب.",
+        "FORT ME GENERAL TRADING L.L.C · Al Muraqqabat, Alliance Insurance Building, Deira, Office C1-20, Dubai, UAE · Info@monarca.com · WhatsApp +964 750 222 3313",
+        "2. المعلومات التي تقدمها",
+        "عند تقديم طلب، نعالج اسم المستلم ورقم هاتفه وعنوان التوصيل والمنتجات والكميات والخيارات المختارة والملاحظات التي تضيفها. نحتفظ برقم الطلب والمبلغ والعملة وحالة الدفع ومعرّفات Stripe اللازمة لربط الدفعة بطلبك. إذا تواصلت معنا أو طلبت إرجاعاً، نعالج الرسالة وبيانات التواصل وتفاصيل الطلب أو المرفقات التي تختار إرسالها.",
+        "3. كيفية استخدام المعلومات",
+        "نستخدم المعلومات لتسعير الطلب ومعالجة الدفع وتأكيده وتجهيز الشحنة وتوصيلها وتحديث حالة الطلب والتعامل مع الاستفسارات والإرجاع والاسترداد، ولحماية الخدمة من الاحتيال والوفاء بالالتزامات المحاسبية والقانونية. التصفح وإضافة المنتجات إلى السلة لا يتطلبان إنشاء حساب؛ يحتاج إتمام الطلب إلى بيانات توصيل صحيحة.",
+        "4. الدفع عبر Stripe",
+        "تُدخل بيانات بطاقتك في صفحة Stripe Checkout المستضافة لدى Stripe. لا يستلم خادم Monarca رقم البطاقة الكامل أو رمز الأمان ولا يخزنهما. تعالج Stripe بيانات الدفع والمعلومات التقنية اللازمة لتنفيذ العملية والتحقق من الأمان وفق سياسة خصوصية Stripe. نتلقى نتيجة الدفع ومعرّفات العملية ومبلغها وعملتها لتأكيد الطلب ومتابعته.",
+        "5. التخزين على جهازك والأذونات",
+        "تُحفظ اللغة والقسم المختار والسلة والمفضّلة والعناوين المحفوظة ومراجع الطلبات وبعض بيانات الطلب محلياً على جهازك أو في المتصفح. لا يضمن هذا التخزين مزامنة البيانات بين الأجهزة. يمكنك حذف العناوين والمفضّلة من الإعدادات، أو مسح بيانات الموقع أو التطبيق من جهازك؛ احفظ أرقام طلباتك أولاً. مسح البيانات المحلية لا يحذف سجلات الطلبات على الخادم.",
+        "إذا اخترت التصوير أو صورة من جهازك، نطلب إذن الكاميرا أو الصور عند الحاجة. في ميزة الصور الحالية تبقى الصورة المختارة على جهازك ولا تُرفع إلى Monarca للمطابقة الآلية. يمكنك رفض الإذن أو إلغاؤه من إعدادات الجهاز ومواصلة تصفح المتجر. إذا أرسلت صورة بنفسك عبر البريد أو واتساب، فستصل إلى جهة الدعم التي تختارها.",
+        "6. البيانات التقنية والخدمات الأخرى",
+        "عند الاتصال بالموقع أو واجهات المتجر، قد تسجل البنية المستضيفة عنوان IP ووقت الطلب والمسار المطلوب ونوع المتصفح أو الجهاز ونتيجة الطلب لأغراض التشغيل والأمان وحل الأعطال. لا يتضمن كود التسوق الحالي إعلانات موجهة أو نظام تتبع إعلاني خاصاً بـ Monarca. عند فتح Stripe أو واتساب أو خدمة البريد، تنطبق أيضاً سياسة الخدمة التي تستخدمها على البيانات التي تعالجها.",
+        "7. مشاركة البيانات ونقلها",
+        "نشارك المعلومات اللازمة فقط مع مزوّد الدفع وجهات التوصيل والاستضافة والدعم بحسب دور كل جهة، أو عند الحاجة للامتثال للقانون وحماية الحقوق. لا نبيع معلوماتك الشخصية. قد تتطلب خدمة المتجر من الإمارات والتوصيل إلى العراق والاستعانة بمزوّدي الخدمة معالجة بيانات خارج بلدك؛ نطلب من الجهات التي تعمل لحسابنا حماية البيانات واستخدامها لأغراض الخدمة.",
+        "8. الاحتفاظ بالمعلومات وحمايتها",
+        "نحتفظ بسجلات الطلب والدفع والدعم للمدة اللازمة لتنفيذ الطلب ومعالجة الإرجاع والنزاعات والوفاء بمتطلبات المحاسبة والقانون. تختلف المدة حسب نوع السجل والالتزامات المطبقة؛ يمكنك الاستفسار عنها عبر قنوات التواصل أعلاه. نستخدم HTTPS وضوابط وصول لحماية الخدمة، مع عدم إمكان ضمان أمان أي نظام بصورة مطلقة.",
+        "9. خياراتك وطلبات الخصوصية",
+        "لطلب الوصول إلى معلوماتك أو تصحيحها أو حذفها أو الاعتراض على استخدام لا يلزم لتنفيذ طلبك، راسلنا بعنوان «Monarca Privacy Request» وأضف رقم الطلب إن وجد. سنطلب ما يلزم للتحقق من علاقتك بالطلب قبل كشف بيانات أو تعديلها، وقد نحتفظ بالسجلات المطلوبة قانوناً أو لحل نزاع. لا ترسل رقم بطاقة كاملاً أو رمز CVV أو رمز تحقق مصرفياً. التطبيق الحالي لا ينشئ حساب عميل على الخادم؛ طلب حذف البيانات يختلف عن مسح التخزين المحلي.",
+        "10. الأطفال والتغييرات",
+        "الخدمة موجهة للتسوق العام وليست مصممة لجمع بيانات الأطفال. تواصل معنا إذا أرسلت بيانات طفل بالخطأ. سننشر أي تحديث لهذه السياسة في هذا العنوان مع تاريخ التحديث؛ يوضح مركز الدعم طرق التواصل ومساعدة الطلبات."
       ]
     }
   },
@@ -63,9 +84,30 @@
     "privacy": {
       "title": "Privacy Policy",
       "sections": [
-        "When you place an order, we collect your name, phone number, delivery address and order details to process and deliver it and provide customer care.",
-        "Card details are entered on Stripe Checkout. The store does not receive or store your full card number or security code.",
-        "We share the information needed to process payment with Stripe and the information needed for delivery with the delivery service. We retain order records as required for store operations and legal obligations."
+        "Effective and last updated: 22 November 2026",
+        "This policy explains how we handle your information when you use the Monarca website, shopping app and customer support.",
+        "1. Who we are and how to contact us",
+        "Monarca is a clothing, footwear, bag and accessories store serving customers in Iraq. The store operator and contact details are below. Contact us by email or WhatsApp with privacy questions or requests to correct or delete your information.",
+        "FORT ME GENERAL TRADING L.L.C · Al Muraqqabat, Alliance Insurance Building, Deira, Office C1-20, Dubai, UAE · Info@monarca.com · WhatsApp +964 750 222 3313",
+        "2. Information you provide",
+        "When you place an order, we process the recipient's name, phone number, delivery address, items, quantities, selected options and any notes you enter. We retain the order reference, amount, currency, payment status and Stripe identifiers needed to link the payment to your order. When you contact us or request a return, we process your message, contact details, order information and any attachments you choose to send.",
+        "3. How we use information",
+        "We use information to quote orders, process and confirm payments, prepare and deliver shipments, update order status, handle enquiries, returns and refunds, protect against fraud, and meet accounting and legal obligations. Browsing and adding items to your bag do not require an account; checkout requires valid delivery information.",
+        "4. Payments through Stripe",
+        "You enter card details on Stripe's hosted Checkout page. The Monarca server does not receive or store your full card number or security code. Stripe processes payment details and technical information needed to carry out and secure the transaction under the Stripe Privacy Policy. We receive the payment result, transaction identifiers, amount and currency to confirm and manage your order.",
+        "5. Device storage and permissions",
+        "Your language, selected department, bag, favourites, saved addresses, order references and some order information are stored on your device or in your browser. This does not guarantee synchronisation across devices. You can remove addresses and favourites in Settings or clear site or app data on your device; save your order references first. Clearing local data does not delete server order records.",
+        "If you choose to take or select a photo, we request camera or photo access when needed. In the current photo feature, the selected photo stays on your device and is not uploaded to Monarca for automatic matching. You may decline or revoke permission in device settings and continue browsing. If you separately send a photo by email or WhatsApp, it is sent to the support recipient you choose.",
+        "6. Technical data and external services",
+        "When you connect to the website or store APIs, hosting infrastructure may log your IP address, request time, requested path, browser or device type and response status for operations, security and troubleshooting. The current shopping code does not include targeted advertising or a Monarca advertising tracking system. When you open Stripe, WhatsApp or your email service, that service's privacy policy also applies to the information it processes.",
+        "7. Sharing and international processing",
+        "We share necessary information with payment, delivery, hosting and support providers according to their role, or where needed to comply with law or protect rights. We do not sell your personal information. Operating the store from the UAE, delivering in Iraq and using service providers may involve processing outside your country. We require providers acting for us to protect information and use it for service purposes.",
+        "8. Retention and protection",
+        "We retain order, payment and support records for as long as needed to fulfil orders, handle returns and disputes, and meet accounting and legal requirements. Retention depends on the record and applicable obligations; contact us for information about your records. We use HTTPS and access controls to help protect the service, but no system can guarantee absolute security.",
+        "9. Your choices and privacy requests",
+        "To request access, correction or deletion, or to object to a use not required to fulfil your order, contact us with the subject “Monarca Privacy Request” and your order reference, if any. We will ask for appropriate evidence connecting you to the order before disclosing or changing information. We may retain records required by law or for a dispute. Never send a full card number, CVV or banking verification code. The current app does not create a server-side customer account; requesting deletion of data is separate from clearing local storage.",
+        "10. Children and changes",
+        "This is a general shopping service and is not designed to collect children's information. Contact us if a child's information was submitted by mistake. Changes will be published at this URL with an updated date. Visit Support for contact details and order help."
       ]
     }
   }
