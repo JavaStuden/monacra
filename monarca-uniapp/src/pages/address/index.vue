@@ -1,8 +1,8 @@
 <template>
   <AppShell :key="state.language" :title="t('addresses')">
     <view v-for="a in state.addresses" :key="a.id" class="card" :class="{ 'selected-card': state.selectedAddressId === a.id }"><view @click="select(a)"><text>{{ a.name }}</text><text class="muted">{{ [a.city, a.area, a.street].join(' · ') }}</text><text class="ltr">{{ a.phone }}</text></view><button class="text-button" @click="draft = { ...a }">{{ t('edit') }}</button></view>
-    <text class="section-title">{{ draft.id ? t('edit') : t('addAddress') }}</text>
-    <label v-for="key in fields" :key="key" class="field"><text class="field-label">{{ t(key) }}{{ required.includes(key) ? ' *' : '' }}</text><input v-model="draft[key]" :aria-label="t(key)" :type="key === 'phone' ? 'tel' : 'text'" :maxlength="key === 'phone' ? 30 : 100" :placeholder="key === 'phone' ? '+964 7xx xxx xxxx' : ''" /></label>
+    <text class="eyebrow">YOUR ADDRESS</text><text class="section-title">{{ draft.id ? t('edit') : t('addAddress') }}</text><text class="muted body-copy">{{ t('myAddress') }}</text>
+    <view class="address-form"><label v-for="key in fields" :key="key" class="field" :class="'field-' + key"><text class="field-label">{{ t(key) }}{{ required.includes(key) ? ' *' : '' }}</text><input v-model="draft[key]" :aria-label="t(key)" :type="key === 'phone' ? 'tel' : 'text'" :maxlength="key === 'phone' ? 30 : 100" :placeholder="key === 'phone' ? '+964 7xx xxx xxxx' : ''" /></label></view>
     <text v-if="error" class="error">{{ error }}</text><button class="primary" @click="save">{{ t('save') }}</button>
   </AppShell>
 </template>

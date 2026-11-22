@@ -1,6 +1,14 @@
 import { state } from './store.js';
 const dictionary = {
-  home: ['الرئيسية', 'Home'], catalog: ['المجموعة', 'Collection'], wishlist: ['المفضلة', 'Saved'], cart: ['السلة', 'Bag'], account: ['حسابي', 'My Monarca'],
+  share: ['مشاركة القطعة', 'Share piece'], photoSearch: ['البحث بالصورة', 'Photo inspiration'],
+  bagTitle: ['حقيبة التسوّق', 'Shopping bag'], selectAll: ['تحديد الكل', 'Select all'], saveForLater: ['نقل للمفضلة', 'Move to wishlist'],
+  categories: ['الأقسام', 'Categories'], menu: ['القائمة', 'Menu'], viewAll: ['عرض الكل', 'View all'], selectedProducts: ['منتجات مختارة', 'Selected pieces'], shopCategory: ['التسوّق', 'Shop'], browseEdit: ['المختارات', 'The edit'], localTime: ['توصيل خلال ٣–٤ أيام', 'Delivery in 3–4 days'], internationalTime: ['توصيل خلال ١٥–٢٠ يوماً', 'Delivery in 15–20 days'],
+  timeless: ['أناقة خالدة', 'Timeless elegance'], timelessNote: ['تفاصيل صغيرة تصنع فرقاً كبيراً', 'Small details make a lasting difference'], shopNow: ['التسوّق الآن', 'Shop now'],
+  sourcing: ['اختيار جهة التوريد', 'Choose your delivery'], sourcingNote: ['التوصيل والدفع حسب جهة التوريد', 'Delivery and payment, at a glance'], localTitle: ['متوفر في العراق', 'Available in Iraq'], internationalTitle: ['شحن دولي', 'International collection'], cardOnly: ['الدفع الآمن بالبطاقة', 'Secure card payment'], browseProducts: ['عرض المنتجات', 'View pieces'],
+  discoverCategories: ['استكشاف الأقسام', 'Discover categories'], categoryIntro: ['الأسلوب يبدأ من هنا.', 'Your style starts here.'], categoryNote: ['اختيار قسم لاستكشاف القطع المناسبة.', 'Find the pieces that feel like you.'], offers: ['العروض', 'Offers'], bestsellers: ['الأكثر طلباً', 'Customer favourites'], pieces: ['قطع', 'pieces'], chooseType: ['اختيار نوع القطعة', 'Choose a category'], curation: ['اختيارات تتناسق معاً', 'Considered together'], curationNote: ['إطلالات جاهزة للإلهام، وكل قطعة قابلة للتسوّق.', 'Discover pieces that work beautifully together.'],
+  details: ['تفاصيل القطعة', 'Piece details'], zoom: ['اضغطي للتكبير', 'Tap to zoom'], fullPhoto: ['القطعة', 'Full view'], detailPhoto: ['تفصيل الصورة', 'Detail'], photoNote: ['عرض كامل + قصّة مكبّرة لنفس صورة العرض.', 'Full view and a detail crop of the same photo.'], aboutPiece: ['عن القطعة', 'About the piece'], deliveryReturns: ['التوصيل والاستبدال', 'Delivery & returns'], completeLook: ['أكملي الإطلالة', 'Complete the look'],
+  yourDetails: ['تفاصيلك', 'Your details'], helpSection: ['نحن هنا للمساعدة', 'Here to help'], gift: ['الطلب هدية', 'This order is a gift'], selection: ['اختياراتك', 'Your selection'], paymentMethod: ['طريقة الدفع', 'Payment method'], orderSummary: ['ملخص الطلب', 'Order summary'], checkoutIntro: ['العنوان والتوصيل والدفع في صفحة واحدة.', 'Address, delivery and payment in one place.'], deliveryMethod: ['طريقة التوصيل', 'Delivery method'], bagIntro: ['قطع تستحق أن ترافقك.', 'Pieces worth keeping close.'], myAddress: ['تفاصيل واضحة تساعد في توصيل اختياراتك.', 'A few details to help your pieces find you.'],
+  home: ['الرئيسية', 'Home'], catalog: ['المجموعة', 'Collection'], wishlist: ['المفضلة', 'Wishlist'], cart: ['السلة', 'Bag'], account: ['حسابي', 'Account'],
   back: ['رجوع', 'Back'], shop: ['تسوّقي المجموعة', 'Explore the collection'], new: ['مختارات موناركا', 'The Monarca edit'],
   hero: ['تفاصيل بسيطة، أناقة تدوم.', 'Small details. Lasting style.'], heroNote: ['قطع مختارة بعناية، تصلك إلى العراق.', 'Considered pieces, delivered across Iraq.'],
   search: ['ابحثي عن قطعة', 'Find your next piece'], all: ['الكل', 'All'], clothes: ['ملابس', 'Clothing'], shoes: ['أحذية', 'Shoes'], bags: ['حقائب', 'Bags'], accessories: ['إكسسوارات', 'Accessories'],
@@ -8,7 +16,7 @@ const dictionary = {
   loading: ['جارٍ التحميل…', 'Loading…'], retry: ['حاولي مجدداً', 'Try again'], network: ['تعذّر الاتصال. تحققي من الإنترنت.', 'Could not connect. Check your connection.'],
   empty: ['لا توجد قطع هنا بعد', 'Nothing here yet'], emptyBag: ['سلتك بانتظار اختياراتك', 'Your bag is ready for something lovely'],
   size: ['المقاس', 'Size'], color: ['اللون', 'Colour'], quantity: ['الكمية', 'Quantity'], addBag: ['أضيفي إلى السلة', 'Add to bag'], buyNow: ['اشتري الآن', 'Buy now'], added: ['تمت الإضافة إلى السلة', 'Added to your bag'],
-  choose: ['اختاري اللون والمقاس المتاح', 'Choose an available colour and size'], unavailable: ['القطعة غير متوفرة', 'This piece is unavailable'],
+  choose: ['اختاري اللون والمقاس المتاح', 'Choose an available colour and size'], chooseSize: ['اختاري المقاس', 'Choose a size'], unavailable: ['القطعة غير متوفرة', 'This piece is unavailable'],
   stock: ['المتوفر', 'Available'], local: ['توصيل سريع · ٣–٤ أيام', 'Express delivery · 3–4 days'], international: ['شحن دولي · ١٥–٢٠ يوماً', 'International delivery · 15–20 days'],
   material: ['الخامة والعناية', 'Materials & care'], sizeGuide: ['دليل المقاسات', 'Measurements'], checkout: ['إتمام الطلب', 'Checkout'], remove: ['إزالة', 'Remove'],
   subtotal: ['قيمة المنتجات', 'Subtotal'], discount: ['الخصم', 'Discount'], shipping: ['التوصيل', 'Delivery'], total: ['الإجمالي', 'Total'], due: ['المبلغ المستحق', 'Amount due'],
@@ -37,7 +45,7 @@ const dictionary = {
 export function t(key) { return dictionary[key]?.[state.language === 'en' ? 1 : 0] || key; }
 export const text = (ar, en) => state.language === 'en' ? en : ar;
 export const productName = product => state.language === 'en' ? product.enName || product.name : product.name;
-export const money = (amount, currency = 'USD') => `${Number(amount || 0).toFixed(2)} ${currency}`;
+export const money = (amount, currency = 'USD') => `${new Intl.NumberFormat(state.language === 'ar' ? 'ar-IQ' : 'en-US', { maximumFractionDigits: 2 }).format(Number(amount || 0))} ${currency}`;
 export function errorText(error) {
   if (error?.message === 'INTERNATIONAL_SHIPPING_UNAVAILABLE') return text('تعذّر حساب الشحن الدولي لهذه القطعة. تواصلي مع المتجر.', 'International delivery is not available for this piece yet. Contact the store.');
   if (error?.message === 'CHECKOUT_TOTAL_CHANGED') return t('changeTotal');

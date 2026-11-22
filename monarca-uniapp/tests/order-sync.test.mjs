@@ -16,7 +16,7 @@ globalThis.uni = {
     queueMicrotask(() => options.success({ statusCode: 200, data: { code: 200, data } }));
   }
 };
-const { state, syncOrder, persist } = await import('../src/store.js');
+const { state, syncOrder, persist, addCart } = await import('../src/store.js');
 
 test('Server confirmation consumes checkout quantities once, including after restoring app storage', async () => {
   state.cart = [{ productId: 3, color: 'cream', size: 'M', qty: 3 }];
@@ -34,6 +34,21 @@ test('Server confirmation consumes checkout quantities once, including after res
   await restored.syncOrder(id);
   assert.equal(restored.state.cart[0].qty, 2);
   assert.equal(statusCalls, 4); assert.equal(publicListCalls, 0);
+});
+
+test('Cart selections survive restart and adding a variant selects only that variant', async () => {
+  state.cart = [
+    { productId: 3, color: 'cream', size: 'M', qty: 1, selected: false },
+    { productId: 3, color: 'cream', size: 'L', qty: 2, selected: false },
+    { productId: 4, color: 'black', size: 'M', qty: 1 }
+  ];
+  addCart({ productId: 3, color: 'cream', size: 'M', qty: 1 });
+  const restored = await import('../src/store.js?selection-restart');
+  assert.equal(restored.state.cart[0].qty, 2);
+  assert.equal(restored.state.cart[0].selected, true);
+  assert.equal(restored.state.cart[1].selected, false);
+  // Older saved carts without a selected field remain included at checkout.
+  assert.deepEqual(restored.state.cart.filter(line => line.selected !== false).map(line => line.qty), [2, 1]);
 });
 
 test('Storage errors are surfaced; the app does not claim an order was saved', () => {

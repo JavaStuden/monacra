@@ -1,5 +1,5 @@
 <template>
-  <AppShell :key="state.language" :title="t('policies')">
+  <AppShell :key="state.language" :title="t('policies')" class="policy-document">
     <view class="chips"><button v-for="key in types" :key="key" class="chip" :class="{ selected: type === key }" @click="type = key">{{ t(key) }}</button></view>
     <text class="section-title">{{ page.title }}</text><text v-for="(paragraph, index) in page.sections" :key="index" class="body-copy">{{ paragraph }}</text>
     <view v-if="type === 'privacy'" class="notice">{{ t('guestNote') }}</view><button class="secondary" @click="go('support')">{{ t('contact') }}</button>

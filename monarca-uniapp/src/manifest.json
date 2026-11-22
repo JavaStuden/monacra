@@ -10,9 +10,9 @@
     "usingComponents": true,
     "compilerVersion": 3,
     "splashscreen": { "alwaysShowBeforeRender": true, "waiting": true, "autoclose": true, "delay": 0 },
-    "modules": {},
+    "modules": { "Camera": {} },
     "distribute": {
-      "ios": { "appid": "com.monarca.boutique", "deploymentTarget": "13.0", "idfa": false },
+      "ios": { "appid": "com.monarca.boutique", "deploymentTarget": "13.0", "idfa": false, "privacyDescription": { "NSCameraUsageDescription": "Take a photo of a piece you want to find. Photos stay on your device.", "NSPhotoLibraryUsageDescription": "Choose a photo for shopping inspiration. Photos stay on your device." } },
       "android": { "packagename": "com.monarca.boutique", "permissions": [] },
       "icons": { "ios": { "appstore": "static/icon.png" } }
     }

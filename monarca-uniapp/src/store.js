@@ -31,7 +31,7 @@ export function refreshProducts() {
 }
 export function addCart(line) {
   const existing = state.cart.find(item => lineKey(item) === lineKey(line));
-  if (existing) existing.qty += line.qty; else state.cart.push({ ...line });
+  if (existing) { existing.qty += line.qty; existing.selected = true; } else state.cart.push({ ...line, selected: true });
   persist();
 }
 export function toggleWish(id) { state.wish = state.wish.includes(id) ? state.wish.filter(x => x !== id) : [...state.wish, id]; persist(); }

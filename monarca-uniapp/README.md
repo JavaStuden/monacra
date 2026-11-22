@@ -1,6 +1,6 @@
 # Monarca uni-app 手机端
 
-这是 2026-11-22 从现有 Monarca Web/Capacitor 项目迁移的 **Vue 3 + uni-app** 工程，主要面向 iOS，也可生成 Android 资源和 H5 预览。购物页面是 `.vue` 组件；没有用一个 WebView 嵌入整个旧网站。
+这是 2026-11-22 从现有 Monarca Web/Capacitor 项目迁移的 **Vue 3 + uni-app** 工程，共 19 个页面，主要面向 iOS，也可生成 Android 资源和 H5 预览。购物页面是 `.vue` 组件。最新版本以提供的 `Monarca-v4.7.0.apk` 内网页为版式参考，恢复了主要页面的布局、品牌素材、Zain 字体和线条图标。详细范围见 [APK 版式迁移说明](APK-VISUAL-MIGRATION.md)。
 
 旧工程 `monarca-mobile-app` 继续保留；Spring Boot 后端 `monarca-server` 的现有未提交改动未被本次迁移覆盖。正式网站没有部署本工程。
 
@@ -27,6 +27,7 @@ npm run build:app
 1. 在 HBuilderX 中导入本工程目录 `monarca-uniapp`，不要导入旧的 `monarca-mobile-app`。如果项目尚未安装依赖，先运行 `npm ci`。
 2. 打开 `src/manifest.json`。根级 `appid` 目前有意留空：通过你自己的 DCloud 账号获取 **DCloud AppID**。它与 Apple Bundle ID 不同，不能填写 `com.monarca.boutique` 代替。
 3. iOS Bundle ID 已预填 `com.monarca.boutique`，须与 Apple Developer 中的 App ID、描述文件及 App Store Connect 应用记录一致。
+   相机/相册入口已配置 `Camera` 模块和 iOS 用途说明；只在用户主动拍照或选图时调用，当前图片仅作本机参考，没有上传或匹配服务。云打包后仍须在 iPhone 上核对授权和拒绝授权行为。
 4. 从“发行 → 原生 App 云打包”进入 iOS 正式打包；按当前 HBuilderX 的提示提供 Apple Distribution P12、其密码和 **App Store Connect** 分发描述文件。现有 `.ios-signing/` 中的 CSR 和私钥可继续用于申请同一开发者账号的证书。
 5. P12 生成方式见旧工程的 [Windows 签名说明](../monarca-mobile-app/IOS-APPSTORE-WINDOWS.md)。取得 Apple `.cer` 后可在仓库根目录运行：
 
@@ -42,10 +43,14 @@ npm run build:app
 
 | 页面 | 代码 | 当前行为 |
 | --- | --- | --- |
-| 首页 | `src/pages/home/index.vue` | 品牌素材、真实商品推荐 |
-| 分类/搜索 | `src/pages/catalog/index.vue` | 分类、文本搜索、新品/价格排序 |
+| 首页 | `src/pages/home/index.vue` | 原版通告、品牌栏、横幅、圆分类、双货源卡和真实商品推荐 |
+| 分类入口 | `src/pages/categories/index.vue` | 六宫格分类、真实商品数量、二级分类图卡 |
+| 搜索入口 | `src/pages/search/index.vue` | 原版搜索框、圆分类、推荐搜索词 |
+| 菜单 | `src/pages/menu/index.vue` | 原版字标、导航入口 |
+| 拍照/选图 | `src/pages/photo/index.vue` | 本机参考图片；明确提示尚无图片匹配服务 |
+| 商品列表 | `src/pages/catalog/index.vue` | 分类/子类、货源、优惠、文本搜索、新品/价格排序 |
 | 商品详情 | `src/pages/product/index.vue` | 服务器商品、上传图片/旧图裁剪、颜色/尺码/库存、购物车、立即购买 |
-| 购物车 | `src/pages/cart/index.vue` | 数量、移除、服务器实时运费和总额 |
+| 购物车 | `src/pages/cart/index.vue` | 单选/全选、数量、移入收藏、移除；仅勾选商品进入报价和结账 |
 | 地址簿 | `src/pages/address/index.vue` | 本机多地址、编辑、伊拉克手机号校验 |
 | 结账 | `src/pages/checkout/index.vue` | 服务器报价、优惠码、地址、USD/AED、创建 Stripe 会话 |
 | 付款确认 | `src/pages/payment/index.vue` | 系统浏览器打开 Stripe、服务器状态查询、返回 App 后手动核实 |
@@ -58,7 +63,7 @@ npm run build:app
 | 退货申请 | `src/pages/returns/index.vue` | 已送达订单提交后端 `/returns`；提交结果不是退款成功 |
 | 设置 | `src/pages/settings/index.vue` | 阿拉伯语/英语、RTL、清理本机地址和收藏 |
 
-界面是迁移后的手机布局，尚未逐像素复刻旧站所有视觉细节。商品名称使用服务器 `name` / `enName`，只有阿拉伯语的商品描述仍显示服务器原文。
+首页、分类、详情、账户、购物车和结账已逐屏对照 APK 内网页，其他页面应用同一套视觉组件。本次不是 Android/iOS 真机逐像素验证。商品名称使用服务器 `name` / `enName`，只有阿拉伯语的商品描述仍显示服务器原文。原 APK 的演示数据与旧支付选项不会覆盖服务器数据或真实支付逻辑。
 
 ## 支付和订单的数据约定
 
@@ -72,11 +77,11 @@ npm run build:app
 
 ## 验证与剩余工作
 
-已完成 H5 编译、App 资源编译、8 项业务/状态恢复测试，以及浏览器下的商品加载、语言切换、购物车、地址校验、报价和币种选择检查。测试没有创建真实 Stripe 会话或扣款。
+已完成 H5 编译、App 资源编译、9 项业务/状态恢复测试，以及浏览器下的商品加载、语言切换、购物车勾选、地址校验、报价和币种选择检查。已检查 360/390/430 CSS 像素宽度的代表性页面和英/阿语方向。测试没有创建真实 Stripe 会话或扣款。
 
 尚需完成：DCloud AppID、Apple 分发证书/描述文件、HBuilderX iOS 云打包、iPhone 真机/安全区域/外链测试、真实 AED 支付及回调验证、App Store 资料和隐私申报。App 图标暂沿用现有品牌图，需要在送审前确认。
 
-旧站的演示评论、演示消息/客服工单、虚拟卡、模拟退款、相机识图、假登录没有作为真实服务迁移。退款执行和真实物流承运商仍需现有后端继续接入；本次未声称这些功能已实现。
+旧站的演示评论、演示消息/客服工单、虚拟卡、模拟退款、图片匹配、假登录没有作为真实服务迁移；拍照和相册入口已保留。退款执行和真实物流承运商仍需现有后端继续接入；本次未声称这些功能已实现。
 
 ## 官方文档
 

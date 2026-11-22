@@ -1,6 +1,10 @@
 {
   "pages": [
     { "path": "pages/home/index" },
+    { "path": "pages/categories/index" },
+    { "path": "pages/search/index" },
+    { "path": "pages/photo/index" },
+    { "path": "pages/menu/index" },
     { "path": "pages/catalog/index" },
     { "path": "pages/product/index" },
     { "path": "pages/cart/index" },

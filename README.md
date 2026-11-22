@@ -7,7 +7,7 @@
 
 ## 目录结构
 
-**uni-app 手机端迁移（2026-11-22）**：新增独立 Vue 3 工程 [monarca-uniapp](monarca-uniapp/README.md)，包含 15 个主要页面及现有后端/Stripe 接口接入，可在 HBuilderX 中继续开发和云打包。原 Capacitor 工程保留；App 资源编译通过不等于签名 IPA 或 App Store 发布完成。
+**uni-app 手机端迁移（2026-11-22）**：独立 Vue 3 工程 [monarca-uniapp](monarca-uniapp/README.md) 现有 19 个页面，已按提供的 Android APK 重建主要页面版式，复用品牌、字体和图标，并接入现有后端/Stripe。参见 [APK 版式迁移说明](monarca-uniapp/APK-VISUAL-MIGRATION.md)。可在 HBuilderX 中继续开发和云打包；App 资源编译通过不等于签名 IPA 或 App Store 发布完成。
 
 ```
 代码/

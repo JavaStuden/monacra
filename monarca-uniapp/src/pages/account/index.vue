@@ -1,11 +1,16 @@
 <template>
-  <AppShell :key="state.language" :title="t('account')" active="account" :back="false">
-    <view class="card"><text class="eyebrow">YOUR MONARCA</text><text class="section-title">{{ t('guest') }}</text><text class="muted">{{ t('guestNote') }}</text></view>
-    <button v-for="item in menu" :key="item.page" class="menu-row" @click="go(item.page)"><text>{{ t(item.label) }}</text><text class="menu-symbol">{{ item.count?.() ?? '›' }}</text></button>
+  <AppShell :key="state.language" :title="t('account')" action="settings" active="account" edge>
+    <view class="profile-hero"><view class="profile-avatar"><LineIcon name="user" :size="29" /></view><view><text class="eyebrow">YOUR MONARCA</text><text class="section-title">{{ text('مساحة لكل اختياراتك', 'Your Monarca space') }}</text><text class="muted">{{ text('عناوينك ومفضّلتك على هذا الجهاز', 'Your addresses and favourites on this device') }}</text></view></view>
+    <view class="account-content"><view class="account-section"><view class="section-head"><text class="section-title">{{ t('orders') }}</text><button class="text-button" @click="go('orders')">{{ t('viewAll') }}</button></view><view class="order-shortcuts"><button v-for="shortcut in shortcuts" :key="shortcut.status" @click="go('orders', { status: shortcut.status })"><LineIcon :name="shortcut.icon" :size="24" /><text v-if="count(shortcut.status)" class="shortcut-count">{{ count(shortcut.status) }}</text><text>{{ t(shortcut.status) }}</text></button></view><text class="muted small">{{ t('deviceOrders') }}</text></view>
+    <view class="account-stats"><button @click="go('wishlist')"><text class="stat-number">{{ state.wish.length }}</text><text>{{ t('wishlist') }}</text></button><button @click="go('orders')"><text class="stat-number">{{ state.orders.length }}</text><text>{{ t('orders') }}</text></button><button @click="go('address')"><text class="stat-number">{{ state.addresses.length }}</text><text>{{ t('addresses') }}</text></button></view>
+    <view v-for="section in sections" :key="section.label" class="account-section"><text class="section-title">{{ t(section.label) }}</text><button v-for="item in section.items" :key="item.page" class="account-menu" @click="go(item.page)"><view class="menu-icon"><LineIcon :name="item.icon" :size="19" /></view><view><text class="account-menu-title">{{ t(item.label) }}</text><text class="muted">{{ t(item.note) }}</text></view><LineIcon name="arrow" :size="16" :mirror="state.language === 'en'" /></button></view>
     <text class="footer-note">MONARCA · 4.7.0</text>
+    </view>
   </AppShell>
 </template>
 <script setup>
-import AppShell from '../../components/AppShell.vue'; import { state, go } from '../../store.js'; import { t } from '../../i18n.js';
-const menu = [{ page: 'orders', label: 'orders', count: () => state.orders.length }, { page: 'wishlist', label: 'wishlist', count: () => state.wish.length }, { page: 'address', label: 'addresses' }, { page: 'returns', label: 'returns' }, { page: 'support', label: 'support' }, { page: 'policy', label: 'policies' }, { page: 'settings', label: 'settings' }];
+import AppShell from '../../components/AppShell.vue'; import LineIcon from '../../components/LineIcon.vue'; import { state, go } from '../../store.js'; import { t, text } from '../../i18n.js';
+const shortcuts = [{ status: 'payment_pending', icon: 'card' }, { status: 'preparing', icon: 'box' }, { status: 'shipped', icon: 'truck' }, { status: 'delivered', icon: 'check' }];
+const count = status => state.orders.filter(o => status === 'preparing' ? ['placed', 'preparing'].includes(o.status) : o.status === status).length;
+const sections = [{ label: 'yourDetails', items: [{ page: 'address', label: 'addresses', note: 'myAddress', icon: 'pin' }, { page: 'wishlist', label: 'wishlist', note: 'selectedProducts', icon: 'heart' }] }, { label: 'helpSection', items: [{ page: 'returns', label: 'returns', note: 'requestReturn', icon: 'return' }, { page: 'support', label: 'support', note: 'contact', icon: 'chat' }] }, { label: 'account', items: [{ page: 'policy', label: 'policies', note: 'terms', icon: 'shield' }, { page: 'settings', label: 'settings', note: 'language', icon: 'settings' }] }];
 </script>

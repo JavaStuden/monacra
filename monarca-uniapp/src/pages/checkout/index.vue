@@ -2,12 +2,14 @@
   <AppShell :key="state.language" :title="t('checkout')" :nav="false">
     <EmptyState v-if="!lines.length" :title="t('emptyBag')" />
     <template v-else>
-      <view class="section-head"><text class="section-title">{{ t('address') }}</text><button class="text-button" :disabled="busy" @click="go('address')">{{ t('edit') }}</button></view>
+      <text class="muted checkout-intro">{{ t('checkoutIntro') }}</text><view class="checkout-section"><view class="section-head"><text class="section-title">{{ t('address') }}</text><button class="text-button" :disabled="busy" @click="go('address')">{{ t('edit') }}</button></view>
       <picker v-if="state.addresses.length" :range="state.addresses" range-key="label" :value="addressIndex" :disabled="busy" @change="selectAddress">
-        <view class="card"><text>{{ address?.name }}</text><text class="muted">{{ [address?.city, address?.area, address?.street].filter(Boolean).join(' · ') }}</text><text class="ltr">{{ address?.phone }}</text><text> ⌄</text></view>
+        <view class="address-preview"><LineIcon name="pin" :size="22" /><view><text class="line-name">{{ address?.name }}</text><text class="muted">{{ [address?.city, address?.area, address?.street].filter(Boolean).join(' · ') }}</text><text class="ltr">{{ address?.phone }}</text></view><LineIcon name="chevron" :size="17" :mirror="state.language === 'ar'" /></view>
       </picker>
-      <button v-else class="secondary" @click="go('address')">{{ t('addAddress') }}</button>
-      <view class="card"><text class="section-title">{{ t('shipping') }}</text><text v-for="group in quote?.deliveryGroups || []" :key="group.source" class="body-copy">{{ t(group.source === 'china' ? 'international' : 'local') }} · {{ group.count }}</text></view>
+      <button v-else class="secondary" @click="go('address')"><LineIcon name="plus" :size="18" />{{ t('addAddress') }}</button></view>
+      <view class="checkout-section"><text class="section-title">{{ t('deliveryMethod') }}</text><view v-for="group in quote?.deliveryGroups || []" :key="group.source" class="delivery-option"><LineIcon :name="group.source === 'china' ? 'globe' : 'truck'" :size="24" /><view><text class="line-name">{{ t(group.source === 'china' ? 'international' : 'local') }}</text><text class="muted">{{ group.count }} {{ t('pieces') }} · {{ t('cardOnly') }}</text></view><LineIcon name="check" :size="20" /></view></view>
+      <view class="checkout-section"><text class="section-title">{{ t('paymentMethod') }}</text><view class="payment-network"><view class="card-networks"><text class="visa-word">VISA</text><view class="mastercard-mark" /><text>Stripe</text></view><LineIcon name="check" :size="20" /></view><text class="muted body-copy">{{ t('stripeNote') }}</text></view>
+      <view class="checkout-section"><text class="section-title">{{ t('orderSummary') }} · {{ lines.reduce((n, l) => n + l.qty, 0) }}</text><view v-for="line in lines" :key="lineKey(line)" class="checkout-mini-line"><image :src="product(line)?.images[0] || '/static/product-placeholder.png'" mode="aspectFill" /><view><text class="line-name">{{ product(line) ? productName(product(line)) : line.productId }}</text><text class="muted">{{ t(line.color) }} · {{ sizeName(line.size, state.language === 'en') }} · {{ line.qty }}</text><text class="line-price">{{ money((product(line)?.price || 0) * line.qty) }}</text></view></view>
       <view class="row"><input v-model="coupon" :disabled="busy" :placeholder="t('coupon')" :aria-label="t('coupon')" maxlength="30" /><button class="chip" :disabled="busy || quoteLoading" @click="updateQuote">{{ t('apply') }}</button></view>
       <text v-if="quote?.appliedCoupon" class="muted">{{ quote.appliedCoupon }}</text>
       <text v-if="quoteLoading" class="muted">{{ t('loading') }}</text><text v-if="error" class="error">{{ error }}</text><OrderTotals :quote="quote" :currency="currency" />
@@ -19,21 +21,22 @@
       <view class="notice">{{ t('stripeNote') }}</view>
       <checkbox-group @change="accepted = $event.detail.value.includes('yes')"><label class="checkbox-line"><checkbox value="yes" :checked="accepted" :disabled="busy" color="#6f5133" /><text>{{ t('termsAccept') }}</text></label></checkbox-group>
       <view class="row"><button class="text-button" @click="go('policy', { type: 'terms' })">{{ t('terms') }}</button><button class="text-button" @click="go('policy', { type: 'privacy' })">{{ t('privacy') }}</button></view>
-      <button class="primary" :disabled="busy || quoteLoading || !quote || !address" @click="pay">{{ busy ? t('loading') : t('pay') }}</button>
+      <button class="primary" :disabled="busy || quoteLoading || !quote || !address" @click="pay">{{ busy ? t('loading') : t('pay') }}<LineIcon name="arrow" :size="18" :mirror="state.language === 'en'" /></button></view>
     </template>
   </AppShell>
 </template>
 <script setup>
 import { computed, ref } from 'vue'; import { onLoad, onShow } from '@dcloudio/uni-app';
 import AppShell from '../../components/AppShell.vue'; import OrderTotals from '../../components/OrderTotals.vue'; import EmptyState from '../../components/EmptyState.vue';
-import { state, go, persist, saveOrder, refreshProducts, toast } from '../../store.js'; import { t, money, errorText } from '../../i18n.js'; import { api } from '../../api.js';
-import { aedAmount, orderPayload, validateCheckoutSession, checkoutFingerprint, addressValid, validateVariant } from '../../core/commerce.js';
+import { state, go, persist, saveOrder, refreshProducts, toast } from '../../store.js'; import { t, money, productName, errorText } from '../../i18n.js'; import { api } from '../../api.js'; import LineIcon from '../../components/LineIcon.vue';
+import { aedAmount, orderPayload, validateCheckoutSession, checkoutFingerprint, addressValid, validateVariant, lineKey, sizeName } from '../../core/commerce.js';
+const product = line => state.products.find(p => p.id === line.productId);
 const lines = ref([]), source = ref('cart'), quote = ref(null), quoteLoading = ref(false), busy = ref(false), error = ref(''), coupon = ref(''), note = ref(''), currency = ref('USD'), accepted = ref(false);
 const addressIndex = computed(() => Math.max(0, state.addresses.findIndex(a => a.id === state.selectedAddressId)));
 const address = computed(() => state.addresses[addressIndex.value]); let quoteSequence = 0;
 onLoad(options => {
   source.value = options.source === 'buy' ? 'buy' : 'cart';
-  const selected = source.value === 'buy' ? uni.getStorageSync('monarca-buy-now') : state.cart;
+  const selected = source.value === 'buy' ? uni.getStorageSync('monarca-buy-now') : state.cart.filter(line => line.selected !== false);
   lines.value = JSON.parse(JSON.stringify(Array.isArray(selected) ? selected : selected ? [selected] : []));
 });
 onShow(() => { if (!busy.value) updateQuote(); });

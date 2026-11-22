@@ -1,6 +1,6 @@
 <template>
   <AppShell :key="state.language" :title="t('payment')" :nav="false">
-    <text class="order-id ltr">{{ id }}</text><view class="card"><text class="section-title">{{ t(paid ? 'paid' : failed ? 'failed' : 'pending') }}</text><text v-if="order" class="ltr">{{ money(order.chargeAmount ?? order.total, order.chargeCurrency || 'USD') }}</text></view>
+    <view class="payment-result"><view class="result-icon"><LineIcon :name="paid ? 'check' : failed ? 'card' : 'shield'" :size="32" /></view><text class="section-title">{{ t(paid ? 'paid' : failed ? 'failed' : 'pending') }}</text><text class="order-id ltr">{{ id }}</text><text v-if="order" class="detail-price">{{ money(order.chargeAmount ?? order.total, order.chargeCurrency || 'USD') }}</text></view>
     <text v-if="error" class="error">{{ error }}</text>
     <template v-if="!paid">
       <view class="notice">{{ t('paymentReturn') }}</view><text class="body-copy">{{ t('noDuplicate') }}</text>
@@ -12,7 +12,7 @@
   </AppShell>
 </template>
 <script setup>
-import { computed, ref } from 'vue'; import { onLoad, onShow, onHide, onUnload } from '@dcloudio/uni-app'; import AppShell from '../../components/AppShell.vue';
+import { computed, ref } from 'vue'; import { onLoad, onShow, onHide, onUnload } from '@dcloudio/uni-app'; import AppShell from '../../components/AppShell.vue'; import LineIcon from '../../components/LineIcon.vue';
 import { state, go, syncOrder, openExternal } from '../../store.js'; import { validOrderId, validateCheckoutSession } from '../../core/commerce.js'; import { t, money, errorText } from '../../i18n.js';
 const id = ref(''), order = ref(null), checking = ref(false), error = ref(''); const session = computed(() => state.pending[id.value]?.session);
 const paid = computed(() => order.value?.paymentStatus === 'paid'); const failed = computed(() => order.value?.paymentStatus === 'failed'); let timer, visible = false, pageActive = false, checks = 0;
