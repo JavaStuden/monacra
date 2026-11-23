@@ -1206,6 +1206,10 @@ textarea {
     margin: 20px 0 12px
 }
 
+.shell .product-content > .option-title:first-child {
+    margin-top: 0
+}
+
 .shell .option-title .muted {
     font-size: 12px
 }
@@ -1215,6 +1219,11 @@ textarea {
     gap: 13px;
     flex-wrap: wrap;
     margin-bottom: 22px
+}
+
+.shell .product-colors + .product-rule,
+.shell .product-colors + .body-copy + .product-rule {
+    margin-top: 6px
 }
 
 .shell .product-colors button {
