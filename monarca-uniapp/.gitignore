@@ -1,6 +1,13 @@
 node_modules/
 dist/
-unpackage/
+unpackage/*
+!unpackage/res/
+unpackage/res/*
+!unpackage/res/icons/
+src/unpackage/*
+!src/unpackage/res/
+src/unpackage/res/*
+!src/unpackage/res/icons/
 .hbuilderx/
 .env.local
 *.log
