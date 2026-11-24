@@ -11,7 +11,9 @@ import com.monarca.repository.OrderRepository;
 import com.monarca.repository.ProductRepository;
 import com.monarca.repository.ReturnRequestRepository;
 import com.monarca.service.ProductImageStorage;
+import com.monarca.service.ProductVideoStorage;
 import com.monarca.service.ProductService;
+import com.monarca.service.ProductOptions;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +42,6 @@ import java.util.Set;
 @Tag(name = "Admin Management API", description = "Backoffice Store & Fulfillment Management")
 public class AdminController {
 
-    private static final Set<String> PRODUCT_COLORS = Set.of("black", "brown", "cream", "olive", "taupe", "gold");
     private static final int MAX_PRODUCT_IMAGES = 6;
     private static final String NEW_IMAGE = "new";
     private final ProductRepository productRepository;
@@ -49,6 +50,7 @@ public class AdminController {
     private final ReturnRequestRepository returnRequestRepository;
     private final AppConfigRepository appConfigRepository;
     private final ProductImageStorage productImages;
+    private final ProductVideoStorage productVideos;
     private final String productAdminToken;
 
     public AdminController(ProductRepository productRepository,
@@ -57,6 +59,7 @@ public class AdminController {
                            ReturnRequestRepository returnRequestRepository,
                            AppConfigRepository appConfigRepository,
                            ProductImageStorage productImages,
+                           ProductVideoStorage productVideos,
                            @Value("${monarca.security.product-admin-token}") String productAdminToken) {
         this.productRepository = productRepository;
         this.productService = productService;
@@ -64,6 +67,7 @@ public class AdminController {
         this.returnRequestRepository = returnRequestRepository;
         this.appConfigRepository = appConfigRepository;
         this.productImages = productImages;
+        this.productVideos = productVideos;
         this.productAdminToken = productAdminToken;
     }
 
@@ -115,7 +119,7 @@ public class AdminController {
     @PostMapping(value = "/products", consumes = MediaType.APPLICATION_JSON_VALUE)
     public R<Product> saveProduct(@RequestBody Product fields,
                                   @RequestHeader(value = "X-Product-Admin-Token", required = false) String token) {
-        return saveProduct(fields, null, null, null, null, token);
+        return saveProduct(fields, null, null, null, null, null, false, null, false, token);
     }
 
     @PostMapping(value = "/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -125,8 +129,14 @@ public class AdminController {
                                   @RequestPart(value = "images", required = false) List<MultipartFile> images,
                                   @RequestPart(value = "imageOrder", required = false) List<String> imageOrder,
                                   @RequestPart(value = "imageColors", required = false) List<String> imageColors,
+                                  @RequestPart(value = "video", required = false) MultipartFile video,
+                                  @RequestParam(value = "removeVideo", defaultValue = "false") boolean removeVideo,
+                                  @RequestPart(value = "sizeChart", required = false) MultipartFile sizeChart,
+                                  @RequestParam(value = "removeSizeChart", defaultValue = "false") boolean removeSizeChart,
                                   @RequestHeader(value = "X-Product-Admin-Token", required = false) String token) {
         requireProductAdmin(token);
+        if (video != null && removeVideo) return R.fail(400, "INVALID_PRODUCT_VIDEO");
+        if (sizeChart != null && removeSizeChart) return R.fail(400, "INVALID_SIZE_CHART");
         if (fields.getGender() != null && !Set.of("women", "men", "unisex").contains(fields.getGender())) {
             return R.fail(400, "INVALID_PRODUCT_GENDER");
         }
@@ -153,17 +163,10 @@ public class AdminController {
             weight = product.getShippingWeightGrams();
         }
 
-        String colors = fields.getColors();
-        if (colors != null) {
-            Set<String> selectedColors = new LinkedHashSet<>();
-            for (String color : colors.split(",", -1)) {
-                String code = color.trim();
-                if (!PRODUCT_COLORS.contains(code)) {
-                    return R.fail(400, "INVALID_PRODUCT_COLORS");
-                }
-                selectedColors.add(code);
-            }
-            product.setColors(String.join(",", selectedColors));
+        try {
+            ProductOptions.apply(product, fields);
+        } catch (IllegalArgumentException ex) {
+            return R.fail(400, ex.getMessage());
         }
 
         product.setName(fields.getName().trim());
@@ -178,22 +181,28 @@ public class AdminController {
         product.setFulfillmentSource(international ? "china" : "iraq");
         product.setFulfillment(international ? "preorder" : "in_stock");
         product.setShippingWeightGrams(international ? weight : null);
-        if (product.getId() == null) {
-            if (colors == null) {
-                product.setColors("black");
-            }
-            product.setSizes(switch (product.getCategory()) {
-                case "clothes" -> "S,M,L,XL";
-                case "shoes" -> "37,38,39,40,41";
-                default -> "مقاس موحّد";
-            });
-        }
         List<String> uploaded = new ArrayList<>();
         try {
             if (image != null || images != null || imageOrder != null) {
                 updateImages(product, image, images, imageOrder, uploaded);
             }
             updateImageColors(product, fields.getImageColors(), imageColors);
+            if (video != null) {
+                String path = productVideos.store(video);
+                uploaded.add(path);
+                product.setVideoUrl(path);
+            } else if (removeVideo) {
+                product.setVideoUrl(null);
+            }
+            if (sizeChart != null) {
+                String path;
+                try { path = productImages.store(sizeChart); }
+                catch (IllegalArgumentException ex) { throw new IllegalArgumentException("INVALID_SIZE_CHART", ex); }
+                uploaded.add(path);
+                product.setSizeChartUrl(path);
+            } else if (removeSizeChart) {
+                product.setSizeChartUrl(null);
+            }
             return R.ok(productRepository.saveAndFlush(product));
         } catch (IllegalArgumentException ex) {
             discardUploads(uploaded, ex);
@@ -293,7 +302,8 @@ public class AdminController {
     private void discardUploads(List<String> uploaded, Exception failure) {
         for (String path : uploaded) {
             try {
-                productImages.discard(path);
+                if (path.startsWith(ProductVideoStorage.URL_PREFIX)) productVideos.discard(path);
+                else productImages.discard(path);
             } catch (IOException cleanupError) {
                 failure.addSuppressed(cleanupError);
             }

@@ -11,7 +11,7 @@
           <view v-for="(url, index) in photos" :key="url" class="product-gallery-item">
             <image v-if="!failed[url]" :src="url" mode="widthFix" :alt="`${name} · ${text('الصورة', 'Photo')} ${index + 1}`" @error="failed[url] = true" />
             <view v-else class="product-gallery-error">{{ text('تعذّر تحميل الصورة. تحققي من الاتصال وأعيدي فتح المعرض.', 'Could not load this photo. Check your connection and reopen the gallery.') }}</view>
-            <text class="product-gallery-caption">{{ text('الصورة', 'Photo') }} {{ index + 1 }} / {{ photos.length }}{{ imageColors[url] ? ' · ' + t(imageColors[url]) : '' }}</text>
+            <text class="product-gallery-caption">{{ text('الصورة', 'Photo') }} {{ index + 1 }} / {{ photos.length }}{{ imageColors[url] ? ' · ' + colorName(imageColors[url], { colorOptions }) : '' }}</text>
           </view>
           <button class="product-gallery-return" tabindex="0" @click="close">{{ text('العودة إلى القطعة', 'Back to product') }}</button>
         </view>
@@ -23,8 +23,8 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import LineIcon from './LineIcon.vue';
 import { state } from '../store.js';
-import { t, text } from '../i18n.js';
-const props = defineProps({ open: Boolean, images: { type: Array, default: () => [] }, imageColors: { type: Object, default: () => ({}) }, name: String });
+import { t, text, colorName } from '../i18n.js';
+const props = defineProps({ open: Boolean, images: { type: Array, default: () => [] }, imageColors: { type: Object, default: () => ({}) }, colorOptions: { type: Array, default: () => [] }, name: String });
 const emit = defineEmits(['close']);
 const photos = computed(() => [...new Set(props.images)]);
 const root = ref(null), failed = ref({});

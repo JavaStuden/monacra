@@ -7,6 +7,7 @@
     { "path": "pages/menu/index" },
     { "path": "pages/catalog/index" },
     { "path": "pages/product/index" },
+    { "path": "pages/size-guide/index" },
     { "path": "pages/cart/index" },
     { "path": "pages/checkout/index" },
     { "path": "pages/payment/index" },

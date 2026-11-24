@@ -10,8 +10,8 @@ server:
 spring:
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 31MB
+      max-file-size: 20MB
+      max-request-size: 58MB
   application:
     name: monarca-server
   datasource:

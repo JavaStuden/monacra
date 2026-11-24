@@ -1,3 +1,4 @@
+import { safeColorOptions } from './product-options.js';
 export const ORIGIN = 'https://itsmonarca.com';
 export const USD_AED_RATE = 3.67;
 export const csv = value => Array.isArray(value) ? value : String(value || '').split(',').map(x => x.trim()).filter(Boolean);
@@ -14,6 +15,9 @@ export function safeImage(value) {
   if (typeof value !== 'string') return '';
   return /^\/api\/v1\/product-images\/[a-f0-9-]{36}\.(jpg|png)$/.test(value) ? ORIGIN + value : '';
 }
+export function safeVideo(value) {
+  return typeof value === 'string' && /^\/api\/v1\/product-videos\/[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\.mp4$/.test(value) ? ORIGIN + value : '';
+}
 export function normalizeProduct(p) {
   const remote = csv(p.imageUrls?.length ? p.imageUrls : p.imageUrl).map(safeImage).filter(Boolean);
   const index = p.imgIndex == null ? -1 : Number(p.imgIndex);
@@ -23,7 +27,7 @@ export function normalizeProduct(p) {
     const url = safeImage(path);
     if (remote.includes(url) && colors.includes(color)) imageColors[url] = color;
   }
-  return { ...p, id: Number(p.id), price: Number(p.price), colors, sizes: csv(p.sizes), images: remote.length ? remote : [fallback], imageColors };
+  return { ...p, id: Number(p.id), price: Number(p.price), colors, sizes: csv(p.sizes), images: remote.length ? remote : [fallback], imageColors, videoUrl: safeVideo(p.videoUrl), colorOptions: safeColorOptions(p.colorOptions), sizeChartUrl: safeImage(p.sizeChartUrl) };
 }
 export function imagesForColor(product, color) {
   const images = product?.images || [], assignments = product?.imageColors || {};

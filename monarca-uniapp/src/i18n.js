@@ -1,3 +1,4 @@
+import { defaultColorOptions } from './core/product-options.js';
 import { state } from './store.js';
 const dictionary = {
   women: ['للنساء', 'Women'], men: ['للرجال', 'Men'], chooseDepartment: ['اختيار المجموعة', 'Choose a department'],
@@ -48,6 +49,17 @@ const dictionary = {
 };
 export function t(key) { return dictionary[key]?.[state.language === 'en' ? 1 : 0] || key; }
 export const text = (ar, en) => state.language === 'en' ? en : ar;
+function findColor(code, product) {
+  return product?.colorOptions?.find(o => o.key === code)
+    || state.products.flatMap(p => p.colorOptions || []).find(o => o.key === code)
+    || defaultColorOptions.find(o => o.key === code);
+}
+export function colorName(code, product) {
+  const option = findColor(code, product);
+  return option ? (state.language === 'en' ? option.nameEn : option.nameAr) : code || '—';
+}
+export function colorSwatch(code, product) { return findColor(code, product)?.hex || '#b0a090'; }
+
 export const productName = product => state.language === 'en' ? product.enName || product.name : product.name;
 export const money = (amount, currency = 'USD') => `${new Intl.NumberFormat(state.language === 'ar' ? 'ar-IQ' : 'en-US', { maximumFractionDigits: 2 }).format(Number(amount || 0))} ${currency}`;
 export function errorText(error) {

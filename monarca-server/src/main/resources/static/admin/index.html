@@ -867,16 +867,37 @@
                 </div>
                 <fieldset class="product-colors" id="prod-colors" aria-describedby="prod-color-error">
                     <legend data-i18n="lbl_prod_colors">Available colors</legend>
-                    <div class="product-color-options">
-                        <label><input type="checkbox" name="product-color" value="black" checked><span class="product-color-swatch" style="background:#2f2c2a" aria-hidden="true"></span><span data-i18n="opt_color_black">Black</span></label>
-                        <label><input type="checkbox" name="product-color" value="brown"><span class="product-color-swatch" style="background:#9b6b43" aria-hidden="true"></span><span data-i18n="opt_color_brown">Brown</span></label>
-                        <label><input type="checkbox" name="product-color" value="cream"><span class="product-color-swatch" style="background:#e7ddc9" aria-hidden="true"></span><span data-i18n="opt_color_cream">Ivory</span></label>
-                        <label><input type="checkbox" name="product-color" value="olive"><span class="product-color-swatch" style="background:#666a4f" aria-hidden="true"></span><span data-i18n="opt_color_olive">Olive</span></label>
-                        <label><input type="checkbox" name="product-color" value="taupe"><span class="product-color-swatch" style="background:#9b8e7b" aria-hidden="true"></span><span data-i18n="opt_color_taupe">Warm taupe</span></label>
-                        <label><input type="checkbox" name="product-color" value="gold"><span class="product-color-swatch" style="background:#c3a365" aria-hidden="true"></span><span data-i18n="opt_color_gold">Gold</span></label>
-                    </div>
+                    <div class="product-color-options" id="prod-color-options"></div>
                     <p id="prod-color-error" role="alert" hidden></p>
+                    <details><summary data-i18n="prod_custom_color">Add a custom color</summary>
+                        <div class="grid-2" style="margin-top:12px">
+                            <label><span data-i18n="prod_custom_name_ar">Arabic name</span><input id="prod-custom-ar" class="form-control" maxlength="40" dir="auto"></label>
+                            <label><span data-i18n="prod_custom_name_en">English name (optional)</span><input id="prod-custom-en" class="form-control" maxlength="40" dir="auto"></label>
+                        </div>
+                        <input id="prod-custom-hex" type="color" value="#c5353d" aria-label="Color">
+                        <button id="prod-add-color" class="btn btn-secondary btn-sm" type="button" data-i18n="prod_add_color">Add color</button>
+                    </details>
                 </fieldset>
+                <div class="form-row">
+                    <label for="prod-sizes" data-i18n="prod_sizes">Available sizes *</label>
+                    <input id="prod-sizes" class="form-control" maxlength="512" dir="auto" required placeholder="XS,S,M,L,XL,2XL,3XL,4XL">
+                    <small data-i18n="prod_sizes_hint">Choose a preset or enter your model's sizes separated by commas. Only these sizes appear in the store.</small>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px" id="prod-size-presets">
+                        <button type="button" class="btn btn-secondary btn-sm" data-sizes="XS,S,M,L,XL,2XL,3XL,4XL">XS–4XL</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-sizes="M,L,XL,2XL,3XL,4XL">M–4XL</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-sizes="36,37,38,39,40,41,42">36–42</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-sizes="مقاس موحّد" data-i18n="prod_one_size">One size</button>
+                    </div>
+                </div>
+                <div class="form-row"><label for="prod-unavailable-size" data-i18n="prod_size_unavailable">Temporarily unavailable size (optional)</label><select id="prod-unavailable-size" class="form-control"></select></div>
+                <div class="form-row">
+                    <label data-i18n="prod_chart_title">Size chart for this model (optional)</label>
+                    <input type="file" id="prod-size-chart" accept="image/jpeg,image/png,.jpg,.jpeg,.png" hidden>
+                    <button type="button" id="prod-chart-choose" class="btn btn-secondary" data-i18n="prod_chart_choose">Upload size chart</button>
+                    <small data-i18n="prod_chart_hint">JPG or PNG, up to 5 MB. Upload the actual chart for this model, including its measurement units.</small>
+                    <div id="prod-chart-preview" hidden><img id="prod-chart-image" alt="Size chart" style="display:block;max-width:100%;max-height:280px;object-fit:contain;margin:10px 0"><button id="prod-chart-remove" type="button" class="btn btn-secondary btn-sm" data-i18n="prod_chart_remove">Remove chart</button></div>
+                    <label for="prod-measure" data-i18n="prod_measure">Measurement notes / units (optional)</label><textarea id="prod-measure" class="form-control" maxlength="2000" rows="4" dir="auto"></textarea>
+                </div>
                 <div class="grid-2">
                     <div class="form-row">
                         <label data-i18n="lbl_prod_price">Selling Price (USD) *</label>
@@ -907,6 +928,17 @@
                     <small id="prod-image-hint" data-i18n="hint_prod_image">Up to 6 JPG or PNG images, 5 MB each. The first image is the cover.</small>
                     <p class="product-image-color" data-i18n="hint_prod_image_color">Assign a color to each photo. Choosing that color in the store shows its photos first, followed by general photos.</p>
                     <div id="prod-image-gallery" class="product-image-gallery"></div>
+                </div>
+                <div class="form-row">
+                    <label data-i18n="prod_video_title">Product video (optional)</label>
+                    <input id="prod-video" type="file" accept="video/mp4,.mp4" hidden>
+                    <button id="prod-video-button" type="button" class="btn btn-secondary" data-i18n="prod_video_choose">Choose MP4 video</button>
+                    <p class="field-note" data-i18n="prod_video_help">One MP4 up to 20 MB. H.264, vertical, 6–15 seconds recommended. Customers see a muted, closable preview.</p>
+                    <div id="prod-video-preview" hidden>
+                        <video id="prod-video-player" controls muted playsinline preload="metadata" style="display:block;width:180px;max-width:100%;max-height:260px;background:#eee7de;border-radius:10px"></video>
+                        <small id="prod-video-name" dir="auto"></small>
+                        <button id="prod-video-remove" type="button" class="btn btn-secondary btn-sm" data-i18n="prod_video_remove">Remove video</button>
+                    </div>
                 </div>
                 <div class="form-row">
                     <label for="prod-token" data-i18n="lbl_prod_token">Product management token</label>
@@ -1075,6 +1107,30 @@
                 lbl_prod_token: 'Product management token',
                 prod_image_invalid: 'Choose a valid JPG or PNG image up to 5 MB and 6,000 pixels per side (20 megapixels max).',
                 prod_token_invalid: 'Enter the correct product management token.',
+                prod_custom_color: "Add a custom color",
+                prod_custom_name_ar: "Color name (Arabic)",
+                prod_custom_name_en: "English name (optional)",
+                prod_add_color: "Add color",
+                prod_sizes: "Available sizes *",
+                prod_sizes_hint: "Choose a preset or enter this model’s sizes separated by commas. Only these sizes appear in the store.",
+                prod_one_size: "One size",
+                prod_size_unavailable: "Temporarily unavailable size (optional)",
+                prod_size_all: "All selected sizes available",
+                prod_chart_title: "Size chart for this model (optional)",
+                prod_chart_choose: "Upload size chart",
+                prod_chart_hint: "JPG or PNG, up to 5 MB. Upload the actual chart for this model, including its units.",
+                prod_chart_remove: "Remove chart",
+                prod_measure: "Measurement notes / units (optional)",
+                prod_sizes_invalid: "Enter 1–24 sizes, up to 16 characters each, separated by commas.",
+                prod_measure_invalid: "Measurement notes must not exceed 2,000 characters.",
+                prod_chart_invalid: "Choose a valid JPG or PNG size chart up to 5 MB.",
+                prod_custom_invalid: "Enter a color name and choose its swatch.",
+                prod_palette_limit: "Choose at least one and no more than 20 colors.",
+                prod_video_title: 'Product video (optional)',
+                prod_video_choose: 'Choose MP4 video',
+                prod_video_help: 'One MP4 up to 20 MB. H.264, vertical, 6–15 seconds recommended. Customers see a muted, closable preview.',
+                prod_video_remove: 'Remove video',
+                prod_video_invalid: 'Choose a valid MP4 video up to 20 MB. For phone playback, export with H.264.',
                 prod_save_failed: 'Could not save the product. Check the fields and try again.',
                 btn_edit: 'Edit',
                 btn_delete: 'Delete',
@@ -1239,6 +1295,30 @@
                 lbl_prod_token: 'رمز إدارة المنتجات',
                 prod_image_invalid: 'اختر صورة JPG أو PNG صالحة لا تتجاوز 5 ميغابايت و6000 بكسل لكل ضلع (20 ميغابكسل كحد أقصى).',
                 prod_token_invalid: 'أدخل رمز إدارة المنتجات الصحيح.',
+                prod_custom_color: "إضافة لون مخصص",
+                prod_custom_name_ar: "اسم اللون بالعربية",
+                prod_custom_name_en: "الاسم بالإنجليزية (اختياري)",
+                prod_add_color: "إضافة اللون",
+                prod_sizes: "المقاسات المتاحة *",
+                prod_sizes_hint: "اختر مجموعة جاهزة أو اكتب مقاسات الموديل مفصولة بفواصل. تظهر هذه المقاسات فقط للزبون.",
+                prod_one_size: "مقاس موحّد",
+                prod_size_unavailable: "مقاس غير متوفر مؤقتاً (اختياري)",
+                prod_size_all: "كل المقاسات المحددة متوفرة",
+                prod_chart_title: "جدول قياسات هذا الموديل (اختياري)",
+                prod_chart_choose: "رفع جدول القياسات",
+                prod_chart_hint: "صورة JPG أو PNG حتى 5 ميغابايت. ارفع الجدول الفعلي لهذا الموديل مع وحدات القياس.",
+                prod_chart_remove: "إزالة الجدول",
+                prod_measure: "ملاحظات القياس والوحدات (اختياري)",
+                prod_sizes_invalid: "أدخل من مقاس واحد إلى 24 مقاساً، بحد أقصى 16 حرفاً للمقاس، وافصلها بفواصل.",
+                prod_measure_invalid: "ملاحظات القياس لا تتجاوز 2000 حرف.",
+                prod_chart_invalid: "اختر جدول قياسات بصيغة JPG أو PNG حتى 5 ميغابايت.",
+                prod_custom_invalid: "أدخل اسم اللون واختر درجته.",
+                prod_palette_limit: "اختر لوناً واحداً على الأقل وحتى 20 لوناً.",
+                prod_video_title: 'فيديو المنتج (اختياري)',
+                prod_video_choose: 'اختيار فيديو MP4',
+                prod_video_help: 'فيديو MP4 واحد حتى 20 ميغابايت. يُنصح بفيديو عمودي بترميز H.264 ومدته 6–15 ثانية. يظهر للعميل بصمت ويمكن إغلاقه.',
+                prod_video_remove: 'إزالة الفيديو',
+                prod_video_invalid: 'اختر فيديو MP4 صالحاً حتى 20 ميغابايت. للتشغيل على الهاتف، صدّره بترميز H.264.',
                 prod_save_failed: 'تعذّر حفظ المنتج. تحقق من الحقول وحاول مجدداً.',
                 btn_edit: 'تعديل',
                 btn_delete: 'حذف',
@@ -1318,6 +1398,8 @@
                     el.innerText = t[k];
                 }
             });
+            renderProductPalette();
+            refreshUnavailableSize();
             renderProductImages();
 
             // Update current tab title
@@ -1500,9 +1582,113 @@
         const productImagePattern = /^\/api\/v1\/product-images\/[0-9a-f-]{36}\.(?:jpg|png)$/;
         const escapeProductText = value => String(value ?? '').replace(/[&<>"']/g, ch =>
             ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'})[ch]);
+
+        const defaultProductPalette = [{"key": "black", "nameAr": "أسود", "nameEn": "Black", "hex": "#2f2c2a"}, {"key": "brown", "nameAr": "بني", "nameEn": "Brown", "hex": "#9b6b43"}, {"key": "cream", "nameAr": "عاجي", "nameEn": "Ivory", "hex": "#e7ddc9"}, {"key": "olive", "nameAr": "زيتي", "nameEn": "Olive", "hex": "#666a4f"}, {"key": "taupe", "nameAr": "رمادي دافئ", "nameEn": "Warm taupe", "hex": "#9b8e7b"}, {"key": "gold", "nameAr": "ذهبي", "nameEn": "Gold", "hex": "#c3a365"}, {"key": "red", "nameAr": "أحمر", "nameEn": "Red", "hex": "#c5353d"}, {"key": "white", "nameAr": "أبيض", "nameEn": "White", "hex": "#ffffff"}, {"key": "beige", "nameAr": "بيج", "nameEn": "Beige", "hex": "#d8c3a5"}, {"key": "gray", "nameAr": "رمادي", "nameEn": "Gray", "hex": "#8b8b8b"}, {"key": "navy", "nameAr": "كحلي", "nameEn": "Navy", "hex": "#25364f"}, {"key": "blue", "nameAr": "أزرق", "nameEn": "Blue", "hex": "#3569b0"}, {"key": "green", "nameAr": "أخضر", "nameEn": "Green", "hex": "#36744c"}, {"key": "pink", "nameAr": "وردي", "nameEn": "Pink", "hex": "#e7a3b1"}, {"key": "purple", "nameAr": "بنفسجي", "nameEn": "Purple", "hex": "#805b97"}, {"key": "orange", "nameAr": "برتقالي", "nameEn": "Orange", "hex": "#dc843b"}, {"key": "yellow", "nameAr": "أصفر", "nameEn": "Yellow", "hex": "#e7c94f"}, {"key": "burgundy", "nameAr": "خمري", "nameEn": "Burgundy", "hex": "#773143"}, {"key": "silver", "nameAr": "فضي", "nameEn": "Silver", "hex": "#b7bac0"}, {"key": "denim", "nameAr": "جينز أزرق", "nameEn": "Denim blue", "hex": "#52748c"}];
+        let productPalette = [...defaultProductPalette];
+        let sizeChart = null, removeSizeChart = false;
+        const productColorLabel = key => {
+            const o = productPalette.find(o => o.key === key);
+            return o ? (adminLang === 'ar' ? o.nameAr : o.nameEn) : key;
+        };
+        function renderProductPalette(selected = new Set(productColorInputs.filter(i => i.checked).map(i => i.value))) {
+            document.getElementById('prod-color-options').innerHTML = productPalette.map(o => `<label><input type="checkbox" name="product-color" value="${escapeProductText(o.key)}" ${selected.has(o.key) ? 'checked' : ''}><span class="product-color-swatch" style="background:${o.hex}" aria-hidden="true"></span><span>${escapeProductText(adminLang === 'ar' ? o.nameAr : o.nameEn)}</span></label>`).join('');
+            productColorInputs = Array.from(document.querySelectorAll('#prod-color-options input[name="product-color"]'));
+        }
+        function refreshUnavailableSize(value = document.getElementById('prod-unavailable-size').value) {
+            const sizes = [...new Set(document.getElementById('prod-sizes').value.split(/[,،]/).map(s => s.trim()).filter(Boolean))];
+            const t = i18nDict[adminLang] || i18nDict.en;
+            document.getElementById('prod-unavailable-size').innerHTML = `<option value="">${t.prod_size_all}</option>` + sizes.map(s => `<option value="${escapeProductText(s)}" ${s === value ? 'selected' : ''}>${escapeProductText(s)}</option>`).join('');
+        }
+        function renderSizeChart() {
+            const image = document.getElementById('prod-chart-image');
+            document.getElementById('prod-chart-preview').hidden = !sizeChart;
+            if (sizeChart) image.src = sizeChart.url; else image.removeAttribute('src');
+        }
+        function resetProductOptions(product) {
+            productPalette = [...defaultProductPalette];
+            for (const o of product?.colorOptions || []) {
+                if (o && typeof o.key === 'string' && /^#[0-9a-f]{6}$/i.test(o.hex) && !productPalette.some(p => p.key === o.key)) productPalette.push(o);
+            }
+            renderProductPalette(new Set((product?.colors || 'black').split(',')));
+            const category = document.getElementById('prod-cat').value;
+            document.getElementById('prod-sizes').value = product?.sizes || (category === 'clothes' ? 'S,M,L,XL' : category === 'shoes' ? '37,38,39,40,41' : 'مقاس موحّد');
+            refreshUnavailableSize(product?.unavailableSize || '');
+            document.getElementById('prod-measure').value = product?.measure || '';
+            if (sizeChart?.file) URL.revokeObjectURL(sizeChart.url);
+            sizeChart = productImagePattern.test(product?.sizeChartUrl || '') ? { url: product.sizeChartUrl } : null;
+            removeSizeChart = false; document.getElementById('prod-size-chart').value = ''; renderSizeChart();
+            document.getElementById('prod-custom-ar').value = ''; document.getElementById('prod-custom-en').value = '';
+        }
+        document.getElementById('prod-add-color').addEventListener('click', () => {
+            const ar = document.getElementById('prod-custom-ar').value.trim();
+            const en = document.getElementById('prod-custom-en').value.trim() || ar;
+            const hex = document.getElementById('prod-custom-hex').value;
+            const t = i18nDict[adminLang] || i18nDict.en, error = document.getElementById('prod-save-error');
+            if (!ar || /[<>&"']/.test(ar + en) || productPalette.length >= 40) { error.textContent = t.prod_custom_invalid; return; }
+            const selected = new Set(productColorInputs.filter(i => i.checked).map(i => i.value));
+            if (selected.size >= 20) { error.textContent = t.prod_palette_limit; return; }
+            const base = (en || ar).toLowerCase().replace(/[^\p{L}\p{M}\p{N} _-]/gu, '-').replace(/\s+/g, '-').slice(0, 20);
+            let key = base, suffix = 2; while (productPalette.some(o => o.key === key)) key = base + '-' + suffix++;
+            productPalette.push({ key, nameAr: ar, nameEn: en, hex }); selected.add(key);
+            renderProductPalette(selected); renderProductImages(); error.textContent = '';
+            document.getElementById('prod-custom-ar').value = ''; document.getElementById('prod-custom-en').value = '';
+        });
+        document.getElementById('prod-sizes').addEventListener('input', () => refreshUnavailableSize());
+        document.getElementById('prod-size-presets').addEventListener('click', e => {
+            const button = e.target.closest('[data-sizes]'); if (!button) return;
+            document.getElementById('prod-sizes').value = button.dataset.sizes; refreshUnavailableSize();
+        });
+        document.getElementById('prod-chart-choose').addEventListener('click', () => document.getElementById('prod-size-chart').click());
+        document.getElementById('prod-size-chart').addEventListener('change', e => {
+            const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+            const error = document.getElementById('prod-save-error'), t = i18nDict[adminLang] || i18nDict.en;
+            if (!file.size || file.size > 5 * 1024 * 1024 || !/\.(jpe?g|png)$/i.test(file.name)) { error.textContent = t.prod_chart_invalid; return; }
+            if (sizeChart?.file) URL.revokeObjectURL(sizeChart.url);
+            sizeChart = { file, url: URL.createObjectURL(file) }; removeSizeChart = false; renderSizeChart(); error.textContent = '';
+        });
+        document.getElementById('prod-chart-remove').addEventListener('click', () => {
+            if (sizeChart?.file) URL.revokeObjectURL(sizeChart.url);
+            sizeChart = null; removeSizeChart = true; renderSizeChart();
+        });
+
         const MAX_PRODUCT_IMAGES = 6;
         let productToken = '';
         let productGallery = [];
+        const productVideoPattern = /^\/api\/v1\/product-videos\/[0-9a-f-]{36}\.mp4$/;
+        let productVideo = null, removeProductVideo = false;
+
+        function resetProductVideo(product) {
+            if (productVideo?.file) URL.revokeObjectURL(productVideo.url);
+            productVideo = productVideoPattern.test(product?.videoUrl || '') ? { url: product.videoUrl } : null;
+            removeProductVideo = false;
+            document.getElementById('prod-video').value = '';
+            renderProductVideo();
+        }
+        function renderProductVideo() {
+            const player = document.getElementById('prod-video-player');
+            player.pause();
+            document.getElementById('prod-video-preview').hidden = !productVideo;
+            document.getElementById('prod-video-name').textContent = productVideo?.file?.name || '';
+            if (productVideo) player.src = productVideo.url;
+            else { player.removeAttribute('src'); player.load(); }
+        }
+        document.getElementById('prod-video-button').addEventListener('click', () => document.getElementById('prod-video').click());
+        document.getElementById('prod-video').addEventListener('change', event => {
+            const file = event.target.files[0]; event.target.value = '';
+            if (!file) return;
+            const error = document.getElementById('prod-save-error');
+            if (!/\.mp4$/i.test(file.name) || !file.size || file.size > 20 * 1024 * 1024) {
+                error.textContent = (i18nDict[adminLang] || i18nDict.en).prod_video_invalid;
+                return;
+            }
+            if (productVideo?.file) URL.revokeObjectURL(productVideo.url);
+            productVideo = { file, url: URL.createObjectURL(file) }; removeProductVideo = false;
+            error.textContent = ''; renderProductVideo();
+        });
+        document.getElementById('prod-video-remove').addEventListener('click', () => {
+            if (productVideo?.file) URL.revokeObjectURL(productVideo.url);
+            productVideo = null; removeProductVideo = true; renderProductVideo();
+        });
 
         function renderProductImages() {
             const t = i18nDict[adminLang] || i18nDict.en;
@@ -1518,7 +1704,7 @@
                     <label class="product-image-color">${t.prod_image_color}
                         <select class="form-control" data-image-color="${index}" aria-label="${t.prod_image_color} ${count.format(index + 1)}">
                             <option value="" ${!item.color ? 'selected' : ''}>${t.prod_image_general}</option>
-                            ${productColorInputs.filter(input => input.checked || input.value === item.color).map(input => `<option value="${input.value}" ${item.color === input.value ? 'selected' : ''}>${t['opt_color_' + input.value]} ${input.checked ? '' : t.prod_image_color_unavailable}</option>`).join('')}
+                            ${productColorInputs.filter(input => input.checked || input.value === item.color).map(input => `<option value="${input.value}" ${item.color === input.value ? 'selected' : ''}>${escapeProductText(productColorLabel(input.value))} ${input.checked ? '' : t.prod_image_color_unavailable}</option>`).join('')}
                         </select>
                     </label>
                     <div class="product-image-actions">
@@ -1535,6 +1721,8 @@
         });
 
         function resetProductImage(product) {
+            resetProductOptions(product);
+            resetProductVideo(product);
             productGallery.forEach(item => { if (item.file) URL.revokeObjectURL(item.url); });
             const urls = Array.isArray(product?.imageUrls) ? product.imageUrls : [product?.imageUrl];
             productGallery = urls.filter(url => productImagePattern.test(url)).map(url => ({ url, color: product?.imageColors?.[url] || '' }));
@@ -1701,7 +1889,7 @@
             }
         });
 
-        const productColorInputs = Array.from(document.querySelectorAll('#prod-colors input'));
+        let productColorInputs = [];
         const productColorError = document.getElementById('prod-color-error');
         document.getElementById('prod-colors').addEventListener('change', () => {
             productColorError.hidden = true;
@@ -1721,8 +1909,6 @@
             document.getElementById('prod-source').value = p.fulfillmentSource;
             document.getElementById('prod-weight').value = p.shippingWeightGrams ?? '';
             updateProductWeightField();
-            const colors = (p.colors || 'black').split(',').map(color => color.trim());
-            productColorInputs.forEach(input => { input.checked = colors.includes(input.value); });
             productColorError.hidden = true;
             document.getElementById('prod-price').value = p.price;
             document.getElementById('prod-old-price').value = p.oldPrice || '';
@@ -1748,8 +1934,8 @@
             const weight = document.getElementById('prod-weight');
             const t = i18nDict[adminLang] || i18nDict.en;
             const selectedColors = productColorInputs.filter(input => input.checked).map(input => input.value);
-            if (!selectedColors.length) {
-                productColorError.textContent = t.prod_color_invalid;
+            if (!selectedColors.length || selectedColors.length > 20) {
+                productColorError.textContent = t.prod_palette_limit;
                 productColorError.hidden = false;
                 productColorInputs[0].focus();
                 return;
@@ -1763,6 +1949,10 @@
                 fulfillmentSource: document.getElementById('prod-source').value,
                 shippingWeightGrams: weight.disabled || !weight.value ? null : Number(weight.value),
                 colors: selectedColors.join(','),
+                colorOptions: selectedColors.map(key => productPalette.find(o => o.key === key)),
+                sizes: document.getElementById('prod-sizes').value.replace(/،/g, ','),
+                unavailableSize: document.getElementById('prod-unavailable-size').value,
+                measure: document.getElementById('prod-measure').value,
                 price: Number(document.getElementById('prod-price').value),
                 oldPrice: document.getElementById('prod-old-price').value ? Number(document.getElementById('prod-old-price').value) : null,
                 stock: Number(document.getElementById('prod-stock').value),
@@ -1778,6 +1968,10 @@
             }
             const form = new FormData();
             form.append('product', new Blob([JSON.stringify(body)], { type: 'application/json' }));
+            if (sizeChart?.file) form.append('sizeChart', sizeChart.file);
+            else if (removeSizeChart) form.append('removeSizeChart', 'true');
+            if (productVideo?.file) form.append('video', productVideo.file);
+            else if (removeProductVideo) form.append('removeVideo', 'true');
             const imageOrder = productGallery.map(item => item.file ? 'new' : item.url);
             form.append('imageOrder', new Blob([JSON.stringify(imageOrder)], { type: 'application/json' }));
             form.append('imageColors', new Blob([JSON.stringify(productGallery.map(item => item.color || ''))], { type: 'application/json' }));
@@ -1788,6 +1982,8 @@
             save.disabled = true;
             const picker = document.getElementById('prod-image-button');
             picker.disabled = true;
+            document.getElementById('prod-video-button').disabled = true;
+            document.getElementById('prod-video-remove').disabled = true;
             try {
                 const response = await fetch(`${API_BASE}/products`, {
                     method: 'POST',
@@ -1802,6 +1998,10 @@
                         : result.message === 'INVALID_PRODUCT_COLORS' ? t.prod_color_invalid
                         : result.message === 'INVALID_PRODUCT_GENDER' ? t.prod_gender_invalid
                         : result.message === 'INVALID_IMAGE_COLORS' ? t.prod_image_color_invalid
+                        : result.message === 'INVALID_PRODUCT_VIDEO' ? t.prod_video_invalid
+                        : result.message === 'INVALID_PRODUCT_SIZES' ? t.prod_sizes_invalid
+                        : result.message === 'INVALID_PRODUCT_MEASUREMENTS' ? t.prod_measure_invalid
+                        : result.message === 'INVALID_SIZE_CHART' ? t.prod_chart_invalid
                         : response.status === 413 || result.message?.includes('image') || result.message?.includes('Image')
                             ? t.prod_image_invalid : t.prod_save_failed;
                     return;
@@ -1815,6 +2015,8 @@
             } finally {
                 save.disabled = false;
                 picker.disabled = false;
+                document.getElementById('prod-video-button').disabled = false;
+                document.getElementById('prod-video-remove').disabled = false;
             }
         }
 
@@ -1884,6 +2086,7 @@
 
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) {
+            if (id === 'product-modal') document.getElementById('prod-video-player').pause();
             if (id === 'product-modal') {
                 if (document.getElementById('prod-save').disabled) return;
                 resetProductImage();

@@ -188,6 +188,11 @@
       };
       store.products.push(product);
     }
+    const colorOptions = (Array.isArray(remote.colorOptions) ? remote.colorOptions : []).slice(0, 20).filter(o =>
+      o && typeof o.key === 'string' && !['__proto__', 'constructor', 'prototype'].includes(o.key)
+      && /^[\p{L}\p{M}\p{N} _-]{1,24}$/u.test(o.key) && /^#[0-9a-f]{6}$/i.test(o.hex || '')
+      && ['nameAr', 'nameEn'].every(k => typeof o[k] === 'string' && o[k].trim() && o[k].length <= 40 && !/[<>&"'\x00-\x1f]/.test(o[k])));
+    for (const o of colorOptions) store.colors[o.key] = [o.nameAr, o.hex, o.nameEn];
     const colors = csv(remote.colors).filter(color => Object.hasOwn(store.colors, color));
     const sizes = csv(remote.sizes);
     const paths = Array.isArray(remote.imageUrls) ? remote.imageUrls : [remote.imageUrl];
@@ -208,6 +213,12 @@
       imageUrl: imageUrls[0] || '',
       imageUrls,
       imageColors,
+      colorOptions,
+      measure: typeof remote.measure === 'string' ? remote.measure : '',
+      sizeChartUrl: productImagePattern.test(remote.sizeChartUrl || '') ? 'https://itsmonarca.com' + remote.sizeChartUrl : '',
+
+      videoUrl: /^\/api\/v1\/product-videos\/[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\.mp4$/.test(remote.videoUrl || '')
+        ? 'https://itsmonarca.com' + remote.videoUrl : '',
       catalogUnavailable: false,
       price: Number(remote.price),
       old: remote.oldPrice == null ? null : Number(remote.oldPrice),
@@ -218,7 +229,7 @@
       badge: remote.badge || '',
       colors: colors.length ? colors : product.colors,
       sizes: sizes.length ? sizes : product.sizes,
-      unavailable: remote.unavailableSize ?? product.unavailable
+      unavailable: Object.hasOwn(remote, 'unavailableSize') ? remote.unavailableSize || '' : product.unavailable
     });
   }
 

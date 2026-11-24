@@ -1,6 +1,7 @@
 package com.monarca.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -39,7 +40,7 @@ public class Product {
     @Column(length = 500)
     private String care;
 
-    @Column(length = 500)
+    @Column(length = 2000)
     private String measure;
 
     @Column(nullable = false, precision = 10, scale = 2)
@@ -53,6 +54,18 @@ public class Product {
     @Column(length = 100)
     private String imageUrl;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(length = 100)
+    private String videoUrl;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(length = 100)
+    private String sizeChartUrl;
+
+    @Convert(converter = ProductColorOptionsConverter.class)
+    @Column(length = 8000)
+    private List<ProductColorOption> colorOptions;
+
     @Column(length = 768)
     private String galleryImagePaths;
 
@@ -64,10 +77,10 @@ public class Product {
     @Column(updatable = false)
     private LocalDateTime deletedAt;
 
-    @Column(length = 100)
+    @Column(length = 512)
     private String colors; // Comma separated: brown,black
 
-    @Column(length = 100)
+    @Column(length = 512)
     private String sizes; // Comma separated: S,M,L,XL or 37,38,39,40,41
 
     @Column(length = 20)
@@ -131,6 +144,14 @@ public class Product {
     public void setImgIndex(Integer imgIndex) { this.imgIndex = imgIndex; }
 
     public String getImageUrl() { return imageUrl; }
+
+    public String getVideoUrl() { return videoUrl; }
+    public void setVideoUrl(String videoUrl) { this.videoUrl = videoUrl; }
+
+    public String getSizeChartUrl() { return sizeChartUrl; }
+    public void setSizeChartUrl(String sizeChartUrl) { this.sizeChartUrl = sizeChartUrl; }
+    public List<ProductColorOption> getColorOptions() { return colorOptions; }
+    public void setColorOptions(List<ProductColorOption> options) { colorOptions = options == null ? null : new java.util.ArrayList<>(options); }
 
     public List<String> getImageUrls() {
         if (galleryImagePaths != null && !galleryImagePaths.isEmpty()) {

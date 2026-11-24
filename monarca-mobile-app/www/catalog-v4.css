@@ -87,3 +87,6 @@ html[dir=ltr] .department-men-cover{inset:0 0 0 auto}
 .department-empty{padding:32px 18px;text-align:center;color:var(--muted);line-height:1.9}
 .department-empty h3{font-size:20px;margin:0 0 8px;color:var(--brown)}
 @media(min-width:768px){.department-tabs{max-width:480px;margin:auto}.department-men-hero{height:340px}.department-men-copy{padding:40px}.department-men-copy h1{font-size:44px}}
+
+/* Model-specific measurements supplied by the store. */
+.pd-size-chart{display:block;width:100%;height:auto;margin:16px 0;background:#eee7de;border-radius:8px}.pd-measure-notes{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:2;margin:18px 0}

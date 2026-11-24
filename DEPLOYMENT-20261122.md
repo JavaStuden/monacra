@@ -6,7 +6,9 @@
 | --- | --- | --- | --- |
 | 女装 / 男装 / 通用款 | 已发布 | 已包含 | 已实现 |
 | 后台每张照片关联颜色、选色换图 | 已发布，需店家配置商品 | 已包含 | 已实现 |
-| 点击图片纵向查看全部原图 | 待发布 | 已包含 | 已实现 |
+| 点击图片纵向查看全部原图 | 2026-11-23 已发布 | 已包含 | 已实现 |
+| 商品悬浮短视频、后台 MP4 上传 | 2026-11-23 已发布，需上传实际视频 | 未包含，需重打包 | 已实现，需原生打包验证 |
+| 每款自定义尺码、红色等 20 色及自定义色、专属尺码表 | 2026-11-24 已发布，需商家按款配置 | 未包含，需重打包 | 已实现，需原生打包验证 |
 | 国际按重量计费与金额变化确认 | 待发布，线上沿用原计费 | 沿用线上原计费 | 使用服务器报价 |
 | 原生安装包 | 不适用 | Capacitor 调试签名预览 APK | 资源构建通过，待原生云打包 |
 
@@ -21,7 +23,7 @@ APK 文件 `Monarca-4.7.27-preview-20261122.apk` 未提交 Git。SHA-256：`5551
 
 ## 当前正式部署
 
-- 网站：`/var/www/itsmonarca/current` 指向 `/var/www/itsmonarca/releases/v4.7.0-colorphotos-20261122-111637`。
+- 网站：`/var/www/itsmonarca/current` 当前指向 `/var/www/itsmonarca/releases/v4.7.0-product-options-final-20261124-005319`。之前的图片颜色、图库、视频和初次规格发布目录均保留。
 - 后端：`/opt/monarca-server/monarca-server-4.7.0.jar`，服务 `monarca-server.service`。
 - 数据库与旧 JAR 备份：`/opt/monarca-server/backups/colorphotos-20261122-111637`；上一版网页目录保留。
 - 本次图片颜色发布仅改动后端图片映射、商品编辑器和三个网页文件，支付、订单和配送类与上一版逐字节一致；三组结账报价发布前后一致。
@@ -29,14 +31,18 @@ APK 文件 `Monarca-4.7.27-preview-20261122.apk` 未提交 Git。SHA-256：`5551
 - Stripe 配置仍由 `/etc/monarca-stripe.env` 加载，密钥不进入源码或安装包。
 - 20:47（北京时间）追加独立测试模式回调签名配置，保留正式 API key 与签名密钥。测试事件验签成功后返回 200，禁止修改正式订单或库存；Stripe Dashboard 重发完成/过期事件均返回 200。当前后端备份为 `/opt/monarca-server/backups/webhook-modes-20261122-124709`。
 
+2026-11-23 追加商品短视频：最新后端/数据库/Nginx 备份为 `/opt/monarca-server/backups/product-video-20261123-150912`，新 JAR SHA-256 为 `869562767029229f259092bfdd7dcef60b1d63a1b0b30748e444194e7dbc6172`。新增可空视频字段、后台 MP4 上传和范围播放接口；支付、订单和配送类保持一致，商品、订单快照及三组报价发布前后相同。隔离发布源码、构建日志和验证记录保存在仓库外 `交付/商品短视频-20261123/`，详见 [商品视频说明](monarca-server/PRODUCT-VIDEO-GUIDE.md)。
+
 不要用旧数据库直接覆盖已有新订单的数据库。上线前备份数据库、JAR 和网页；新增可空字段回退程序时可以保留。
 
 ## 验证
 
-- 完整后端源码：Maven 23 项测试通过，其中新增 Stripe webhook 验证 11 项。
-- uni-app：15 项测试通过，H5 与 App 资源构建通过。
+- 2026-11-24 隔离发布版后端：Maven 36 项测试通过，含 Stripe webhook 11 项、商品视频 6 项、规格和尺码表 7 项。
+- uni-app：19 项测试通过，H5 与 App 资源构建通过。
 - 网站与管理页 JavaScript 语法检查通过。
 - 公网已检查男女切换、图片颜色选择框、资源哈希与服务状态；公开订单列表匿名及只带手机号仍为 401。
 - 尚未执行 iOS 真机、App Store 提交或本次真实付款验证。
 
 操作说明见 [商品颜色图片](monarca-server/COLOR-PHOTO-GUIDE.md)、[男女专区](monarca-server/DEPARTMENTS-GUIDE.md)和[纵向图库](monarca-uniapp/VERTICAL-PHOTO-GALLERY.md)。
+
+2026-11-24 追加规格与尺码表：最新后端/数据库/Nginx 备份为 `/opt/monarca-server/backups/product-options-20261124-004738`，JAR SHA-256 为 `952df6f4f06fa520a85bf0b6bc756566381c93452b96fd47f10968062a13dbb3`。尺码、红色及自定义色、独立图表已发布，未改真实商品数据。实际操作和版本对应关系见 [规格与尺码表说明](monarca-server/PRODUCT-OPTIONS-GUIDE.md)。

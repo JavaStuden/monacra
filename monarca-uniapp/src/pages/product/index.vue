@@ -3,12 +3,12 @@
     <view v-if="state.catalogError" class="error">{{ t('network') }}<button @click="refresh">{{ t('retry') }}</button></view>
     <text v-if="state.loading && !product" class="muted">{{ t('loading') }}</text>
     <template v-else-if="product">
-      <view class="product-stage"><swiper class="detail-gallery" :current="galleryIndex" @change="galleryIndex = $event.detail.current"><swiper-item v-for="(photo, index) in gallery" :key="index"><image class="detail-image" :class="{ 'zoomed-detail': photo.crop }" :src="photo.url" mode="aspectFit" :alt="productName(product)" @click="uniPreview" /></swiper-item></swiper><button class="wish-button" :class="{ saved: state.wish.includes(product.id) }" :aria-label="t('wishlist')" @click="saveWish"><LineIcon name="heart" :size="23" /></button><text class="photo-count ltr">{{ galleryIndex + 1 }} / {{ gallery.length }}</text><button class="zoom-hint" @click="uniPreview"><LineIcon name="eye" :size="15" />{{ t('zoom') }}</button></view>
+      <view class="product-stage"><swiper class="detail-gallery" :current="galleryIndex" @change="galleryIndex = $event.detail.current"><swiper-item v-for="(photo, index) in gallery" :key="index"><image class="detail-image" :class="{ 'zoomed-detail': photo.crop }" :src="photo.url" mode="aspectFit" :alt="productName(product)" @click="uniPreview" /></swiper-item></swiper><button class="wish-button" :class="{ saved: state.wish.includes(product.id) }" :aria-label="t('wishlist')" @click="saveWish"><LineIcon name="heart" :size="23" /></button><ProductVideo :src="product.videoUrl" :poster="product.images[0]" :product-id="product.id" :suspended="galleryOpen" /><text class="photo-count ltr">{{ galleryIndex + 1 }} / {{ gallery.length }}</text><button class="zoom-hint" @click="uniPreview"><LineIcon name="eye" :size="15" />{{ t('zoom') }}</button></view>
       <view class="product-thumbnails"><button v-for="(photo, index) in gallery" :key="index" :class="{ selected: galleryIndex === index }" @click="galleryIndex = index"><view class="thumbnail-image"><image :src="photo.url" :class="{ 'zoomed-detail': photo.crop }" mode="aspectFill" /></view><text>{{ photo.crop ? t('detailPhoto') : t('fullPhoto') }}</text></button><text class="muted">{{ colorImages.length === 1 ? t('photoNote') : text('صور القطعة', 'Product gallery') }}</text></view>
       <view class="product-content">
         <template v-if="product.colors && product.colors.length">
-          <view class="option-title"><text>{{ t('color') }}: {{ t(color) }}</text><text class="muted">{{ product.colors.length }}</text></view>
-          <view class="product-colors"><button v-for="c in product.colors" :key="c" :class="{ selected: color === c }" @click="color = c"><view class="color-swatch" :style="{ backgroundColor: colorHex[c] || '#ddd2be' }" /><text>{{ t(c) }}</text></button></view>
+          <view class="option-title"><text>{{ t('color') }}: {{ colorName(color, product) }}</text><text class="muted">{{ product.colors.length }}</text></view>
+          <view class="product-colors"><button v-for="c in product.colors" :key="c" :class="{ selected: color === c }" @click="color = c"><view class="color-swatch" :style="{ backgroundColor: colorSwatch(c, product) }" /><text>{{ colorName(c, product) }}</text></button></view>
           <text v-if="colorPhotoMissing" class="muted body-copy">{{ text('لا توجد صور مخصصة لهذا اللون؛ الصور المعروضة مرجعية.', 'No photos are assigned to this colour; showing reference images.') }}</text>
           <view class="product-rule" />
         </template>
@@ -25,13 +25,14 @@
       <view class="related-products"><view class="section-head"><text class="section-title">{{ t('completeLook') }}</text><button class="text-button" @click="go('catalog')">{{ t('viewAll') }}</button></view><view class="product-grid"><ProductCard v-for="p in related" :key="p.id" :product="p" /></view></view>
     </template>
     <EmptyState v-else-if="!state.loading" :title="t('unavailable')" />
-    <ProductGallery :open="galleryOpen" :images="product?.images || []" :image-colors="product?.imageColors || {}" :name="product ? productName(product) : ''" @close="galleryOpen = false" />
+    <ProductGallery :open="galleryOpen" :images="product?.images || []" :image-colors="product?.imageColors || {}" :color-options="product?.colorOptions || []" :name="product ? productName(product) : ''" @close="galleryOpen = false" />
   </AppShell>
 </template>
 <script setup>
 import { computed, ref, watch } from 'vue'; import { onLoad, onBackPress, onHide } from '@dcloudio/uni-app'; import AppShell from '../../components/AppShell.vue'; import EmptyState from '../../components/EmptyState.vue';
 import ProductGallery from '../../components/ProductGallery.vue';
-import { state, addCart, toggleWish, go, toast, refreshProducts } from '../../store.js'; import { t, text, productName, money, errorText } from '../../i18n.js'; import { validateVariant, lineKey, sizeName, imagesForColor, matchesDepartment } from '../../core/commerce.js'; import LineIcon from '../../components/LineIcon.vue'; import ProductCard from '../../components/ProductCard.vue';
+import ProductVideo from '../../components/ProductVideo.vue';
+import { state, addCart, toggleWish, go, toast, refreshProducts } from '../../store.js'; import { t, text, productName, money, errorText, colorName, colorSwatch } from '../../i18n.js'; import { validateVariant, lineKey, sizeName, imagesForColor, matchesDepartment } from '../../core/commerce.js'; import LineIcon from '../../components/LineIcon.vue'; import ProductCard from '../../components/ProductCard.vue';
 const id = ref(0), color = ref(''), size = ref(''), qty = ref(1); const product = computed(() => state.products.find(p => p.id === id.value)); const maxQty = computed(() => Math.min(99, product.value?.stock ?? 99));
 const galleryIndex = ref(0), expanded = ref({}), colorHex = { brown: '#9b6b43', cream: '#e7ddc9', black: '#2f2c2a', gold: '#c3a365', olive: '#666a4f', taupe: '#9b8e7b' };
 const galleryOpen = ref(false);
@@ -43,7 +44,7 @@ const colorPhotoMissing = computed(() => product.value?.colors.length > 1 && !ha
 const gallery = computed(() => { const photos = colorImages.value.map(url => ({ url })); return photos.length === 1 ? [...photos, { url: photos[0].url, crop: true }] : photos; });
 watch([color, colorImages], () => { galleryIndex.value = 0; });
 const related = computed(() => state.products.filter(p => p.id !== id.value && p.category !== product.value?.category && matchesDepartment(p, product.value?.gender === 'men' ? 'men' : product.value?.gender === 'women' ? 'women' : state.department)).slice(0, 2));
-function showSizeGuide() { uni.showModal({ title: t('sizeGuide'), content: product.value?.measure || text('تواصلي مع المتجر لمعلومات المقاس.', 'Contact the store for measurements.'), showCancel: false, confirmText: t('confirm') }); }
+function showSizeGuide() { if (product.value) go('size-guide', { id: product.value.id }); }
 async function refresh() { try { await refreshProducts(); if (!color.value) color.value = product.value?.colors[0] || ''; } catch {} }
 onLoad(options => { id.value = Number(options.id); refresh(); });
 function saveWish() { try { toggleWish(id.value); } catch (e) { toast(errorText(e)); } }
