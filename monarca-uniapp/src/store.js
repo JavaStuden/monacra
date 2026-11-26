@@ -4,13 +4,19 @@ import { normalizeProduct, lineKey, consumePurchasedLines, matchesDepartment } f
 const STORAGE_KEY = 'monarca-uniapp-v1';
 function restore() { try { const s = uni.getStorageSync(STORAGE_KEY); return s && typeof s === 'object' ? s : {}; } catch { return {}; } }
 const saved = restore();
+const defaultCategories = [
+  { id: 'clothes', nameAr: 'ملابس', nameEn: 'Clothing', active: true },
+  { id: 'shoes', nameAr: 'أحذية', nameEn: 'Shoes', active: true },
+  { id: 'bags', nameAr: 'حقائب', nameEn: 'Bags', active: true },
+  { id: 'accessories', nameAr: 'إكسسوارات', nameEn: 'Accessories', active: true }
+];
 export const state = reactive({
   language: saved.language === 'en' ? 'en' : 'ar',
   department: saved.department === 'men' ? 'men' : 'women',
   cart: Array.isArray(saved.cart) ? saved.cart : [], wish: Array.isArray(saved.wish) ? saved.wish : [],
   addresses: Array.isArray(saved.addresses) ? saved.addresses : [], selectedAddressId: saved.selectedAddressId || '',
   orders: Array.isArray(saved.orders) ? saved.orders : [], pending: saved.pending || {},
-  returns: Array.isArray(saved.returns) ? saved.returns : [], products: [], loading: false, catalogError: '',
+  returns: Array.isArray(saved.returns) ? saved.returns : [], products: [], categories: defaultCategories.map(category => ({ ...category })), loading: false, catalogError: '',
   storageError: ''
 });
 export function persist() {
@@ -24,8 +30,9 @@ let catalogPromise;
 export function refreshProducts() {
   if (catalogPromise) return catalogPromise;
   state.loading = true;
-  catalogPromise = api.products().then(rows => {
+  catalogPromise = Promise.all([api.products(), api.categories().catch(() => null)]).then(([rows, categories]) => {
     if (!Array.isArray(rows)) throw new Error('Invalid catalogue response');
+    if (Array.isArray(categories) && categories.length) state.categories = categories.filter(category => category && category.active !== false && typeof category.id === 'string');
     state.products = rows.map(normalizeProduct); state.catalogError = '';
   }).catch(error => { state.catalogError = error.message; throw error; }).finally(() => { state.loading = false; catalogPromise = null; });
   return catalogPromise;

@@ -16,6 +16,10 @@ Monarca 是面向伊拉克消费者的实物购物 App，提供女装、男装�
 
 苹果说明：下载可用地区由顾客的 Apple 账号地区决定。[管理上架地区](https://developer.apple.com/help/app-store-connect/manage-your-apps-availability/manage-availability-for-your-app-on-the-app-store/)
 
+## iOS 标识
+
+当前准备上架的 uni-app iOS 和 Android 包统一使用：`com.itsmonarca.shopping`。Apple Developer 的 iOS App ID、App Store Connect 应用记录、App Store 分发描述文件和 HBuilderX 云打包配置必须全部使用同一个 iOS 值。旧 Capacitor 工程及其 GitHub Actions 工作流仍使用 `com.monarca.boutique`，不要混用；新 Android 包名与旧 APK 不同，安装时不能覆盖旧包。
+
 ## 隐私政策网址
 
 - Privacy Policy URL：**https://itsmonarca.com/privacy.html**

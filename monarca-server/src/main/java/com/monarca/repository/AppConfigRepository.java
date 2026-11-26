@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface AppConfigRepository extends JpaRepository<AppConfig, String> {
     Optional<AppConfig> findByKey(String key);
+    java.util.List<AppConfig> findByKeyStartingWith(String prefix);
 }

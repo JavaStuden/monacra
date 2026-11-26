@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -109,8 +110,68 @@ class ProductOptionsTest {
         var result=save(update);assertTrue(result.path("unavailableSize").isNull());assertEquals("",result.path("measure").asText());
     }
     @Test void maintainsLegacyDefaultsForNewOldClientProductsAndSupportsShoeAndOneSizeModels() throws Exception {
-        assertEquals("S,M,L,XL",save(fields(null)).path("sizes").asText());
+        assertEquals("XS,S,M,L,XL,2XL,3XL,4XL",save(fields(null)).path("sizes").asText());
         var p=fields(null);p.put("category","shoes");p.put("sizes","35,36,37,38,39,40,41,42,43");assertEquals(p.get("sizes"),save(p).path("sizes").asText());
         p=fields(null);p.put("category","bags");assertEquals("مقاس موحّد",save(p).path("sizes").asText());
+    }
+
+    @Test @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    void categoryTemplatesAreEditableProtectedAndApplyOnlyToNewProducts() throws Exception {
+        mvc.perform(get("/api/admin/category-size-templates")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.clothes").value("XS,S,M,L,XL,2XL,3XL,4XL"))
+                .andExpect(jsonPath("$.data.shoes").value("36,37,38,39,40,41,42,43"));
+        Map<String,String> templates=Map.of("clothes","S,M,L,XL,2XL,4XL", "shoes","35,36,37,38,39,40,41,42,43,44", "bags","Small,Medium,Large", "accessories","One size,Adjustable");
+        mvc.perform(post("/api/admin/category-size-templates").contentType("application/json").content(json.writeValueAsBytes(templates)))
+                .andExpect(status().isForbidden());
+        mvc.perform(post("/api/admin/category-size-templates").contentType("application/json").content(json.writeValueAsBytes(templates))
+                .header("X-Product-Admin-Token","local-options-test")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.shoes").value("35,36,37,38,39,40,41,42,43,44"));
+        var product=fields(null);product.put("category","shoes");
+        assertEquals(templates.get("shoes"),save(product).path("sizes").asText());
+        var existing=save(fields(null));long id=existing.path("id").asLong();
+        var update=fields(id);update.put("sizes","XXS,4XL");save(update);
+        var later=fields(null);later.put("category","clothes");assertEquals(templates.get("clothes"),save(later).path("sizes").asText());
+        assertEquals("XXS,4XL",products.findById(id).orElseThrow().getSizes());
+    }
+
+    @Test void categoryTemplatesRejectInvalidSizeListsWithoutSavingAnyCategory() throws Exception {
+        var defaults = Map.of("clothes","XS,S,M,L,XL,2XL,3XL,4XL", "shoes","36,37,38,39,40,41,42,43", "bags","مقاس موحّد", "accessories","مقاس موحّد");
+        mvc.perform(post("/api/admin/category-size-templates").contentType("application/json").content(json.writeValueAsBytes(defaults))
+                .header("X-Product-Admin-Token","local-options-test")).andExpect(status().isOk());
+        var invalid=new LinkedHashMap<String,String>(Map.of("clothes","S,,XL","shoes","35,36","bags","One size","accessories","One size"));
+        mvc.perform(post("/api/admin/category-size-templates").contentType("application/json").content(json.writeValueAsBytes(invalid))
+                .header("X-Product-Admin-Token","local-options-test")).andExpect(jsonPath("$.message").value("INVALID_CATEGORY_SIZE_TEMPLATES"));
+        mvc.perform(get("/api/admin/category-size-templates")).andExpect(jsonPath("$.data.clothes").value("XS,S,M,L,XL,2XL,3XL,4XL"));
+    }
+
+    @Test @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    void customCategoriesAreLocalizedPublicAndSupplyDefaultsToNewProducts() throws Exception {
+        var custom = Map.of("id", "abayas", "nameAr", "عبايات", "nameEn", "Abayas", "sizes", "S,M,L,XL,2XL", "active", true);
+        mvc.perform(post("/api/admin/categories").contentType("application/json").content(json.writeValueAsBytes(List.of(custom))))
+                .andExpect(status().isForbidden());
+        mvc.perform(post("/api/admin/categories").contentType("application/json").content(json.writeValueAsBytes(List.of(custom)))
+                .header("X-Product-Admin-Token", "local-options-test"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data[0].id").value("abayas"));
+        mvc.perform(get("/api/v1/categories")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[?(@.id == 'abayas')].nameEn").value("Abayas"));
+        var product = fields(null); product.put("category", "abayas");
+        var saved = save(product);
+        assertEquals("S,M,L,XL,2XL", saved.path("sizes").asText());
+
+        var inactive = Map.of("id", "abayas", "nameAr", "عبايات", "nameEn", "Abayas", "sizes", "S,M,L,XL,2XL", "active", false);
+        mvc.perform(post("/api/admin/categories").contentType("application/json").content(json.writeValueAsBytes(List.of(inactive)))
+                .header("X-Product-Admin-Token", "local-options-test")).andExpect(status().isOk());
+        mvc.perform(get("/api/v1/categories")).andExpect(status().isOk()).andExpect(jsonPath("$.data[?(@.id == 'abayas')]").isEmpty());
+        var update = fields(saved.path("id").asLong()); update.put("category", "abayas");
+        assertEquals("S,M,L,XL,2XL", save(update).path("sizes").asText());
+        mvc.perform(delete("/api/admin/categories/abayas").header("X-Product-Admin-Token", "local-options-test"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.code").value(409)).andExpect(jsonPath("$.message").value("CATEGORY_IN_USE"));
+    }
+
+    @Test void categoryNamesSizesAndIdsAreValidated() throws Exception {
+        var invalid = Map.of("id", "../unsafe", "nameAr", "<script>", "nameEn", "Test", "sizes", "M,,L", "active", true);
+        mvc.perform(post("/api/admin/categories").contentType("application/json").content(json.writeValueAsBytes(List.of(invalid)))
+                .header("X-Product-Admin-Token", "local-options-test"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.code").value(400)).andExpect(jsonPath("$.message").value("INVALID_PRODUCT_CATEGORY"));
     }
 }

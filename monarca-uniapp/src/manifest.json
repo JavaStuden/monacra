@@ -21,16 +21,17 @@
         },
         "distribute" : {
             "ios" : {
-                "appid" : "com.monarca.boutique",
+                "appid" : "com.itsmonarca.shopping",
                 "deploymentTarget" : "13.0",
                 "idfa" : false,
                 "privacyDescription" : {
                     "NSCameraUsageDescription" : "Take a photo of a piece you want to find. Photos stay on your device.",
                     "NSPhotoLibraryUsageDescription" : "Choose a photo for shopping inspiration. Photos stay on your device."
-                }
+                },
+                "dSYMs" : false
             },
             "android" : {
-                "packagename" : "com.monarca.boutique",
+                "packagename" : "com.itsmonarca.shopping",
                 "permissions" : []
             },
             "icons" : {

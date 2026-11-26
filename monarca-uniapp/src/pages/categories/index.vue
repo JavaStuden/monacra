@@ -9,11 +9,11 @@
 </template>
 <script setup>
 import { computed, ref } from 'vue'; import { onLoad, onShow } from '@dcloudio/uni-app'; import AppShell from '../../components/AppShell.vue'; import LineIcon from '../../components/LineIcon.vue'; import { state, go, refreshProducts, browseProducts, setDepartment } from '../../store.js'; import { t, text, productName } from '../../i18n.js';
-const active = ref('clothes'); const categories = [{ id: 'clothes', icon: 'clothes' }, { id: 'bags', icon: 'bag' }, { id: 'shoes', icon: 'shoes' }, { id: 'accessories', icon: 'accessories' }];
+const active = ref('clothes'); const categories = computed(() => state.categories.map(category => ({ id: category.id, icon: ({ clothes: 'clothes', bags: 'bag', shoes: 'shoes', accessories: 'accessories' })[category.id] || 'tag' })));
 const counts = id => browseProducts().filter(p => p.category === id).length;
 const subcategories = computed(() => { const order = ['shirts', 'jackets', 'trousers', 'hoodies']; return [...new Map(browseProducts().filter(p => p.category === active.value).map(p => [p.subCategory || p.id, p])).values()].sort((a, b) => (order.indexOf(a.subCategory) < 0 ? 99 : order.indexOf(a.subCategory)) - (order.indexOf(b.subCategory) < 0 ? 99 : order.indexOf(b.subCategory))).slice(0, 6); });
 const labels = { shirts: ['قمصان وبلوزات', 'Shirts & blouses'], jackets: ['جاكيتات', 'Jackets'], trousers: ['بناطيل', 'Trousers'], hoodies: ['ملابس مريحة', 'Relaxed pieces'], heels: ['أحذية بكعب', 'Heels'], sneakers: ['أحذية رياضية', 'Sneakers'], tophandle: ['حقائب يد', 'Top-handle bags'], shoulder: ['حقائب كتف', 'Shoulder bags'], earrings: ['أقراط', 'Earrings'], jewelry: ['مجوهرات', 'Jewellery'] };
 const subName = id => labels[id] ? text(...labels[id]) : '';
 onLoad(options => { if (['women', 'men'].includes(options.gender) && options.gender !== state.department) setDepartment(options.gender); });
-onShow(() => refreshProducts().catch(() => {}));
+onShow(() => refreshProducts().then(() => { if (!state.categories.some(category => category.id === active.value)) active.value = state.categories[0]?.id || 'clothes'; }).catch(() => {}));
 </script>

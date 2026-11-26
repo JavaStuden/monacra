@@ -18,6 +18,7 @@ export function request(path, method = 'GET', data) {
 const orderPath = id => { if (!validOrderId(id)) throw new Error('Invalid order number'); return encodeURIComponent(id); };
 export const api = {
   products: () => request('/products'),
+  categories: () => request('/categories'),
   quote: (items, couponCode) => request('/checkout/quote', 'POST', { items, couponCode }),
   checkout: payload => request('/payments/stripe/checkout-session', 'POST', payload),
   retry: (id, currency) => request(`/payments/stripe/orders/${orderPath(id)}/checkout-session?chargeCurrency=${currency}`, 'POST'),

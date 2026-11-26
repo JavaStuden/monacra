@@ -28,6 +28,15 @@ public final class ProductOptions {
             new ProductColorOption("silver","فضي","Silver","#b7bac0"),
             new ProductColorOption("denim","جينز أزرق","Denim blue","#52748c"));
 
+    public static String defaultSizes(String category) {
+        return switch (category == null ? "" : category) {
+            case "clothes" -> "XS,S,M,L,XL,2XL,3XL,4XL";
+            case "shoes" -> "36,37,38,39,40,41,42,43";
+            case "bags", "accessories" -> "مقاس موحّد";
+            default -> "";
+        };
+    }
+
     public static void apply(Product product, Product fields) {
         Map<String,ProductColorOption> palette = new LinkedHashMap<>();
         DEFAULT_COLORS.forEach(option -> palette.put(option.key(), option));
@@ -55,9 +64,7 @@ public final class ProductOptions {
         }
         if (selected.isEmpty() || selected.size() > 20) throw new IllegalArgumentException("INVALID_PRODUCT_COLORS");
         String sizes = fields.getSizes() != null ? fields.getSizes() : product.getSizes();
-        if (sizes == null) sizes = switch (fields.getCategory()) {
-            case "clothes" -> "S,M,L,XL"; case "shoes" -> "37,38,39,40,41"; default -> "مقاس موحّد";
-        };
+        if (sizes == null) sizes = defaultSizes(fields.getCategory());
         var selectedSizes = new LinkedHashSet<String>();
         for (String entry : sizes.replace('،', ',').split(",", -1)) {
             String size = entry.trim();

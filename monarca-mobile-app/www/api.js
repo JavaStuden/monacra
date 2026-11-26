@@ -60,6 +60,18 @@
       }
     },
 
+    async getCategories() {
+      try {
+        const res = await fetch(`${API_BASE}/categories`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const json = await res.json();
+        return json.code === 200 && Array.isArray(json.data) ? json.data : null;
+      } catch (e) {
+        console.warn('[MonarcaAPI] getCategories fallback to defaults:', e.message);
+        return null;
+      }
+    },
+
     // 2. Fetch checkout quote with server dual-sourcing & COD rules
     async calculateQuote(items, couponCode = '') {
       try {
@@ -236,8 +248,9 @@
   // Automatically sync products from server when app loads
   async function initServerSync() {
     try {
-      const serverProducts = await window.MonarcaAPI.getProducts();
+      const [serverProducts, serverCategories] = await Promise.all([window.MonarcaAPI.getProducts(), window.MonarcaAPI.getCategories()]);
       const store = window.Monarca;
+      if (Array.isArray(serverCategories) && typeof store?.setCategories === 'function') store.setCategories(serverCategories);
       if (Array.isArray(serverProducts) && store) {
         const listedIds = new Set(serverProducts.map(product => Number(product.id)));
         serverProducts.forEach(product => syncProduct(store, product));

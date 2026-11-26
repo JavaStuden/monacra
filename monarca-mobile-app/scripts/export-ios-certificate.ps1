@@ -25,7 +25,18 @@ function Invoke-SigningOpenSsl {
     $startInfo.CreateNoWindow = $true
     $startInfo.RedirectStandardOutput = $true
     $startInfo.RedirectStandardError = $true
-    foreach ($argument in $Arguments) { $startInfo.ArgumentList.Add($argument) }
+    # Git for Windows ships OpenSSL 3, while the locally protected RSA key may
+    # use a legacy PKCS#12/PBE cipher. Load both providers for compatibility;
+    # this does not weaken the key or expose its password.
+    if ($Arguments.Count -gt 0) {
+        # The first argument is the OpenSSL subcommand (x509/pkey/pkcs12).
+        # Global provider flags must follow that subcommand.
+        $startInfo.ArgumentList.Add($Arguments[0])
+        foreach ($argument in @('-provider', 'default', '-provider', 'legacy')) { $startInfo.ArgumentList.Add($argument) }
+        if ($Arguments.Count -gt 1) {
+            foreach ($argument in $Arguments[1..($Arguments.Count - 1)]) { $startInfo.ArgumentList.Add($argument) }
+        }
+    }
     foreach ($name in $PrivateEnvironment.Keys) { $startInfo.Environment[$name] = $PrivateEnvironment[$name] }
     $process = [Diagnostics.Process]::new()
     $process.StartInfo = $startInfo
@@ -40,7 +51,9 @@ function Invoke-SigningOpenSsl {
             Error = $errorTask.GetAwaiter().GetResult()
         }
         if ($result.ExitCode -ne 0 -and -not $AllowFailure) {
-            throw 'OpenSSL validation/export failed. Check the certificate, private key and DPAPI password file.'
+            $detail = $result.Error.Trim()
+            if ($detail.Length -gt 500) { $detail = $detail.Substring(0, 500) }
+            throw "OpenSSL validation/export failed. $detail"
         }
         return $result
     } finally {
@@ -89,7 +102,7 @@ try {
     }
     $null = Invoke-SigningOpenSsl -Arguments @('x509', '-in', $temporaryPem, '-checkend', '0', '-noout')
     $subject = Invoke-SigningOpenSsl -Arguments @('x509', '-in', $temporaryPem, '-noout', '-subject', '-nameopt', 'RFC2253')
-    if ($subject.Output -notmatch '(?:^|,)CN=Apple Distribution:') {
+    if ($subject.Output -notmatch '(?:^|,\s*)CN=Apple Distribution:') {
         # OpenSSL prefixes the first attribute with "subject=".
         if ($subject.Output -notmatch '^subject=\s*CN=Apple Distribution:') {
             throw 'Select an Apple Distribution certificate downloaded from your Apple Developer account.'

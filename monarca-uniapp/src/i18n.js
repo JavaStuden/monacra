@@ -47,7 +47,11 @@ const dictionary = {
   brown: ['بني', 'Brown'], black: ['أسود', 'Black'], cream: ['عاجي', 'Ivory'], gold: ['ذهبي', 'Gold'], olive: ['زيتي', 'Olive'], taupe: ['رمادي دافئ', 'Taupe'],
   storage: ['تعذّر حفظ البيانات. وفّري مساحة على الجهاز قبل الدفع.', 'Could not save data. Free up device storage before paying.'], changeTotal: ['تغير مبلغ الطلب. راجعي الإجمالي الجديد.', 'Your total changed. Please review the updated quote.'], copy: ['نسخ رقم الطلب', 'Copy order number'], receipt: ['ملخص الدفع', 'Payment summary']
 };
-export function t(key) { return dictionary[key]?.[state.language === 'en' ? 1 : 0] || key; }
+export function t(key) {
+  const category = state.categories.find(item => item.id === key);
+  if (category) return state.language === 'en' ? category.nameEn || category.nameAr : category.nameAr || category.nameEn;
+  return dictionary[key]?.[state.language === 'en' ? 1 : 0] || key;
+}
 export const text = (ar, en) => state.language === 'en' ? en : ar;
 function findColor(code, product) {
   return product?.colorOptions?.find(o => o.key === code)

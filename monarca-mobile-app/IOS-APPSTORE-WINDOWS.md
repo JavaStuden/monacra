@@ -28,7 +28,7 @@ CSR 的 SHA-256 为 `7D62D9DC90F4BA118171AC01F7D813D96C552FC01A85EFECBF573102013
 
 1. 打开 [Apple Developer](https://developer.apple.com/account/)，亲自登录并完成双重验证。
 2. 进入 **Certificates, Identifiers & Profiles → Certificates → +**，选择 **Apple Distribution**，继续并上传现成的 `Monarca-Apple-Distribution.certSigningRequest`。生成后下载 `.cer`，保存为仓库根目录 `.ios-signing/distribution.cer`。申请页面若显示协议或证书数量限制，先处理实际提示，不撤销其他 App 的证书。
-3. 在 **Identifiers → + → App IDs → App** 注册应用。Description 填 `Monarca`，Bundle ID 选择 **Explicit** 并填 `com.monarca.boutique`，仅启用实际需要的 capabilities。若这个 ID 已属于你的账号，直接复用；若被其他账号占用，需要先统一修改项目中的 ID。
+3. 在 **Identifiers → + → App IDs → App** 注册应用。Description 填 `Monarca`，Bundle ID 选择 **Explicit** 并填 `com.monarca.boutique`，仅启用实际需要的 capabilities。此步骤对应本文件介绍的 Capacitor 工程；uni-app 请按 `monarca-uniapp/README.md` 中单独说明的 Bundle ID 操作。
 4. 在 **Profiles → + → Distribution** 选择 **App Store Connect**，选择上述 App ID 和第 2 步生成的分发证书，命名 `Monarca App Store`，生成并下载为 `.ios-signing/Monarca.mobileprovision`。这一步不选择测试设备。[Apple 官方说明](https://developer.apple.com/help/account/provisioning-profiles/create-an-app-store-provisioning-profile/)
 5. 打开 [App Store Connect](https://appstoreconnect.apple.com/)，在 **My Apps → + → New App** 新建 iOS 应用。名称可填 `Monarca`（取决于名称是否可用），Bundle ID 选同一个 ID，SKU 可用 `MONARCA-IOS-001`。主要语言按实际商店文案选择。个人账号的开发者/卖家名称使用个人法定姓名，App 名称仍可以是 Monarca。
 6. 在本机用下方脚本导出 P12，配置前三项 GitHub Secrets；此时可先生成正式签名 IPA，无需上传 API Key。
@@ -62,7 +62,7 @@ Set-Clipboard -Value ''
 ## 准备 Apple 账号和应用记录
 
 1. 可继续使用你已有的有效个人付费 Apple Developer 账号；商店开发者/卖家名称显示个人法定姓名。若将来需要公司名称作为卖家，再办理组织账号相关手续。
-2. 在 Apple Developer 网站注册显式 App ID：`com.monarca.boutique`。若已有上架记录，必须使用原记录的 Bundle ID，并同步修改工程、Capacitor 配置和发布工作流。
+2. 在 Apple Developer 网站注册显式 App ID：`com.monarca.boutique`。若已有上架记录，必须使用原记录的 Bundle ID，并同步修改对应 Capacitor 工程和发布工作流。
 3. 在 App Store Connect 网页创建对应的 iOS 应用记录，填写名称、SKU 和主要语言。创建应用记录不需要本地 Mac。
 4. 准备 Apple Distribution 证书及其私钥，导出带密码的 `.p12`；创建关联该证书和 App ID 的 **App Store Connect** 分发描述文件 `.mobileprovision`。开发、Ad Hoc、企业分发文件不能用于此流程。
 5. 如需自动上传，在 App Store Connect 的“用户和访问 / 集成”中创建可管理此 App 的团队 API Key，记录 Key ID、Issuer ID，并保存仅能下载一次的 `.p8` 私钥。

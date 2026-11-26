@@ -1,4 +1,4 @@
-package com.monarca.boutique;
+package com.itsmonarca.shopping;
 
 import android.graphics.Color;
 import android.os.Bundle;

@@ -4,7 +4,7 @@
 <script setup>
 import RoundCategories from '../../components/RoundCategories.vue';
 import { computed, ref } from 'vue'; import { onLoad } from '@dcloudio/uni-app'; import AppShell from '../../components/AppShell.vue'; import LineIcon from '../../components/LineIcon.vue'; import { state, go, setDepartment } from '../../store.js'; import { t } from '../../i18n.js';
-const query = ref(''), categories = ['clothes', 'bags', 'shoes', 'accessories']; const terms = computed(() => categories.map(t));
+const query = ref(''); const terms = computed(() => state.categories.map(category => t(category.id)));
 function search() { go('catalog', { q: query.value.trim() }); }
 onLoad(options => { if (['women', 'men'].includes(options.gender) && options.gender !== state.department) setDepartment(options.gender); });
 </script>

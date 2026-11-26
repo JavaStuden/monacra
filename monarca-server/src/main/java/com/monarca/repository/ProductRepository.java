@@ -24,6 +24,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     void markDeleted(@Param("id") Long id, @Param("deletedAt") LocalDateTime deletedAt);
 
     List<Product> findByCategory(String category);
+    long countByCategory(String category);
     List<Product> findByFulfillmentSource(String fulfillmentSource);
     List<Product> findByCategoryAndFulfillmentSource(String category, String fulfillmentSource);
 }

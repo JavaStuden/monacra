@@ -535,6 +535,14 @@
             .grid-2 { grid-template-columns: 1fr; }
             .content-body { padding: 16px; }
         }
+        .category-config-row { border: 1px solid var(--border, #e4ddd4); border-radius: 8px; padding: 14px; margin: 12px 0; background: #fff; }
+        .category-config-row .category-row-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .category-config-row .category-row-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 8px; }
+        .category-config-row .category-row-meta label { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+        .category-config-row .category-row-meta input[type="checkbox"] { width: 17px; height: 17px; }
+        .category-create-box { border-top: 1px solid #e8e1d8; padding-top: 16px; margin-top: 18px; }
+        .category-create-box h4 { margin: 0 0 12px; font-weight: 500; }
+        @media (max-width: 700px) { .category-config-row .category-row-fields { grid-template-columns: 1fr; gap: 0; } }
     </style>
 </head>
 <body>
@@ -809,6 +817,23 @@
                         <button class="btn btn-primary" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> <span data-i18n="btn_save_settings">Save Settings</span></button>
                     </div>
                 </div>
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title"><i class="fa-solid fa-tags"></i> <span data-i18n="category_manager_title">Product categories</span></div></div>
+                    <p class="field-note" data-i18n="category_manager_hint">Add categories, set their Arabic and English names, choose default sizes and control which categories are available for new products. Existing products keep their category and sizes.</p>
+                    <div id="category-settings-list"></div>
+                    <div class="category-create-box">
+                        <h4 data-i18n="category_add_title">Add a category</h4>
+                        <div class="grid-2">
+                            <div class="form-row"><label for="category-new-ar" data-i18n="category_name_ar">Arabic name</label><input id="category-new-ar" class="form-control" maxlength="60" dir="auto"></div>
+                            <div class="form-row"><label for="category-new-en" data-i18n="category_name_en">English name</label><input id="category-new-en" class="form-control" maxlength="60" dir="auto"></div>
+                        </div>
+                        <div class="form-row"><label for="category-new-sizes" data-i18n="category_sizes">Default sizes, separated by commas</label><input id="category-new-sizes" class="form-control" maxlength="512" dir="auto" placeholder="One size"></div>
+                        <button class="btn btn-secondary" type="button" onclick="addCategoryDraft()"><i class="fa-solid fa-plus"></i> <span data-i18n="category_add">Add category</span></button>
+                    </div>
+                    <div class="form-row"><label for="size-template-token" data-i18n="lbl_prod_token">Product management token</label><input id="size-template-token" class="form-control" type="password" autocomplete="off" dir="ltr"></div>
+                    <p id="size-template-error" role="alert" style="color:#a0382f"></p>
+                    <button id="size-template-save" class="btn btn-primary" type="button" onclick="saveCategories()"><i class="fa-solid fa-floppy-disk"></i> <span data-i18n="category_save">Save category settings</span></button>
+                </div>
             </div>
 
         </div>
@@ -883,6 +908,7 @@
                     <input id="prod-sizes" class="form-control" maxlength="512" dir="auto" required placeholder="XS,S,M,L,XL,2XL,3XL,4XL">
                     <small data-i18n="prod_sizes_hint">Choose a preset or enter your model's sizes separated by commas. Only these sizes appear in the store.</small>
                     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px" id="prod-size-presets">
+                        <button type="button" class="btn btn-secondary btn-sm" id="prod-use-category-template" data-i18n="prod_use_category_template">Use category template</button>
                         <button type="button" class="btn btn-secondary btn-sm" data-sizes="XS,S,M,L,XL,2XL,3XL,4XL">XS–4XL</button>
                         <button type="button" class="btn btn-secondary btn-sm" data-sizes="M,L,XL,2XL,3XL,4XL">M–4XL</button>
                         <button type="button" class="btn btn-secondary btn-sm" data-sizes="36,37,38,39,40,41,42">36–42</button>
@@ -1107,6 +1133,16 @@
                 lbl_prod_token: 'Product management token',
                 prod_image_invalid: 'Choose a valid JPG or PNG image up to 5 MB and 6,000 pixels per side (20 megapixels max).',
                 prod_token_invalid: 'Enter the correct product management token.',
+                size_template_title: 'Category size templates',
+                size_template_hint: 'Set reusable presets for new products. Product sizes stay editable, and existing products are not changed.',
+                size_template_clothes: 'Clothing sizes', size_template_shoes: 'Shoe sizes', size_template_bags: 'Bag sizes', size_template_accessories: 'Accessory sizes',
+                size_template_save: 'Save category size templates', size_template_saved: 'Category size templates saved.',
+                size_template_invalid: 'Use 1–24 comma-separated sizes per category (up to 16 characters each).',
+                category_manager_title: 'Product category settings',
+                category_manager_hint: 'Add categories, set their Arabic and English names, choose default sizes and control which categories are available for new products. Existing products keep their category and sizes.',
+                category_name_ar: 'Arabic name', category_name_en: 'English name', category_sizes: 'Default sizes · comma-separated', category_active: 'Available for new products',
+                category_add_title: 'Add a category', category_add: 'Add category', category_save: 'Save category settings', category_saved: 'Category settings saved.',
+                category_invalid: 'Enter both category names and 1–24 valid sizes (up to 16 characters each).', category_delete: 'Delete', category_in_use: 'This category is assigned to products. Turn it off instead of deleting it.', category_delete_failed: 'Could not delete this category.', category_id_exists: 'A category with this name already exists.',
                 prod_custom_color: "Add a custom color",
                 prod_custom_name_ar: "Color name (Arabic)",
                 prod_custom_name_en: "English name (optional)",
@@ -1295,13 +1331,23 @@
                 lbl_prod_token: 'رمز إدارة المنتجات',
                 prod_image_invalid: 'اختر صورة JPG أو PNG صالحة لا تتجاوز 5 ميغابايت و6000 بكسل لكل ضلع (20 ميغابكسل كحد أقصى).',
                 prod_token_invalid: 'أدخل رمز إدارة المنتجات الصحيح.',
+                size_template_title: 'قوالب المقاسات حسب الفئة',
+                size_template_hint: 'أنشئ مقاسات جاهزة للمنتجات الجديدة. تبقى مقاسات كل منتج قابلة للتعديل، ولا تتغير المنتجات الموجودة.',
+                size_template_clothes: 'مقاسات الملابس', size_template_shoes: 'مقاسات الأحذية', size_template_bags: 'مقاسات الحقائب', size_template_accessories: 'مقاسات الإكسسوارات',
+                size_template_save: 'حفظ قوالب المقاسات', size_template_saved: 'تم حفظ قوالب المقاسات.',
+                size_template_invalid: 'أدخل من مقاس واحد إلى 24 مقاساً لكل فئة، مفصولة بفواصل وبحد أقصى 16 حرفاً للمقاس.',
+                category_manager_title: 'إعدادات فئات المنتجات',
+                category_manager_hint: 'أضف فئات، وحدد أسماءها بالعربية والإنجليزية ومقاساتها الافتراضية، واختر الفئات المتاحة للمنتجات الجديدة. تبقى الفئة والمقاسات الحالية للمنتجات الموجودة كما هي.',
+                category_name_ar: 'الاسم بالعربية', category_name_en: 'الاسم بالإنجليزية', category_sizes: 'المقاسات الافتراضية · مفصولة بفواصل', category_active: 'متاحة للمنتجات الجديدة',
+                category_add_title: 'إضافة فئة', category_add: 'إضافة فئة', category_save: 'حفظ إعدادات الفئات', category_saved: 'تم حفظ إعدادات الفئات.',
+                category_invalid: 'أدخل اسمي الفئة ومقاساً واحداً إلى 24 مقاساً صالحاً (حتى 16 حرفاً لكل مقاس).', category_delete: 'حذف', category_in_use: 'هذه الفئة مرتبطة بمنتجات. أوقفها بدلاً من حذفها.', category_delete_failed: 'تعذر حذف هذه الفئة.', category_id_exists: 'توجد فئة بهذا الاسم بالفعل.',
                 prod_custom_color: "إضافة لون مخصص",
                 prod_custom_name_ar: "اسم اللون بالعربية",
                 prod_custom_name_en: "الاسم بالإنجليزية (اختياري)",
                 prod_add_color: "إضافة اللون",
                 prod_sizes: "المقاسات المتاحة *",
                 prod_sizes_hint: "اختر مجموعة جاهزة أو اكتب مقاسات الموديل مفصولة بفواصل. تظهر هذه المقاسات فقط للزبون.",
-                prod_one_size: "مقاس موحّد",
+                prod_one_size: "مقاس موحّد", prod_use_category_template: "استخدام قالب الفئة",
                 prod_size_unavailable: "مقاس غير متوفر مؤقتاً (اختياري)",
                 prod_size_all: "كل المقاسات المحددة متوفرة",
                 prod_chart_title: "جدول قياسات هذا الموديل (اختياري)",
@@ -1401,6 +1447,8 @@
             renderProductPalette();
             refreshUnavailableSize();
             renderProductImages();
+            if (typeof renderCategorySettings === 'function') renderCategorySettings();
+            if (typeof renderProductCategoryOptions === 'function') renderProductCategoryOptions();
 
             // Update current tab title
             const pageTitleEl = document.getElementById('page-title');
@@ -1611,7 +1659,7 @@
             }
             renderProductPalette(new Set((product?.colors || 'black').split(',')));
             const category = document.getElementById('prod-cat').value;
-            document.getElementById('prod-sizes').value = product?.sizes || (category === 'clothes' ? 'S,M,L,XL' : category === 'shoes' ? '37,38,39,40,41' : 'مقاس موحّد');
+            document.getElementById('prod-sizes').value = product?.sizes || categoryTemplate(category);
             refreshUnavailableSize(product?.unavailableSize || '');
             document.getElementById('prod-measure').value = product?.measure || '';
             if (sizeChart?.file) URL.revokeObjectURL(sizeChart.url);
@@ -1634,7 +1682,14 @@
             document.getElementById('prod-custom-ar').value = ''; document.getElementById('prod-custom-en').value = '';
         });
         document.getElementById('prod-sizes').addEventListener('input', () => refreshUnavailableSize());
+        document.getElementById('prod-cat').addEventListener('change', () => {
+            if (!document.getElementById('prod-id').value) {
+                document.getElementById('prod-sizes').value = categoryTemplate(document.getElementById('prod-cat').value);
+                refreshUnavailableSize();
+            }
+        });
         document.getElementById('prod-size-presets').addEventListener('click', e => {
+            if (e.target.closest('#prod-use-category-template')) { const category = document.getElementById('prod-cat').value; document.getElementById('prod-sizes').value = categoryTemplate(category); refreshUnavailableSize(); return; }
             const button = e.target.closest('[data-sizes]'); if (!button) return;
             document.getElementById('prod-sizes').value = button.dataset.sizes; refreshUnavailableSize();
         });
@@ -1656,6 +1711,87 @@
         let productGallery = [];
         const productVideoPattern = /^\/api\/v1\/product-videos\/[0-9a-f-]{36}\.mp4$/;
         let productVideo = null, removeProductVideo = false;
+        const defaultCategories = [
+            { id: 'clothes', nameAr: 'ملابس', nameEn: 'Clothes', sizes: 'XS,S,M,L,XL,2XL,3XL,4XL', active: true },
+            { id: 'shoes', nameAr: 'أحذية', nameEn: 'Shoes', sizes: '36,37,38,39,40,41,42,43', active: true },
+            { id: 'bags', nameAr: 'حقائب', nameEn: 'Bags', sizes: 'مقاس موحّد', active: true },
+            { id: 'accessories', nameAr: 'إكسسوارات', nameEn: 'Accessories', sizes: 'مقاس موحّد', active: true }
+        ];
+        let categoryDefinitions = defaultCategories.map(category => ({ ...category }));
+        let categorySizeTemplates = Object.fromEntries(categoryDefinitions.map(category => [category.id, category.sizes]));
+        function categoryTemplate(category) { return categorySizeTemplates[category] || 'مقاس موحّد'; }
+        function renderProductCategoryOptions(selected = document.getElementById('prod-cat').value) {
+            const select = document.getElementById('prod-cat');
+            const choices = categoryDefinitions.filter(category => category.active || category.id === selected);
+            select.innerHTML = choices.map(category => `<option value="${escapeProductText(category.id)}">${escapeProductText(adminLang === 'ar' ? category.nameAr : category.nameEn)}${category.active ? '' : adminLang === 'ar' ? ' · غير مفعّلة' : ' · inactive'}</option>`).join('');
+            if (choices.some(category => category.id === selected)) select.value = selected;
+        }
+        function renderCategorySettings() {
+            const t = i18nDict[adminLang] || i18nDict.en;
+            document.getElementById('category-settings-list').innerHTML = categoryDefinitions.map(category => `
+                <section class="category-config-row" data-category-row data-category-id="${escapeProductText(category.id)}">
+                    <div class="category-row-fields">
+                        <div class="form-row"><label>${escapeProductText(t.category_name_ar)}</label><input class="form-control" data-cat-field="nameAr" maxlength="60" value="${escapeProductText(category.nameAr)}" dir="auto"></div>
+                        <div class="form-row"><label>${escapeProductText(t.category_name_en)}</label><input class="form-control" data-cat-field="nameEn" maxlength="60" value="${escapeProductText(category.nameEn)}" dir="auto"></div>
+                        <div class="form-row" style="grid-column:1/-1"><label>${escapeProductText(t.category_sizes)}</label><input class="form-control" data-cat-field="sizes" maxlength="512" value="${escapeProductText(category.sizes)}" dir="auto"></div>
+                    </div>
+                    <div class="category-row-meta"><label><input type="checkbox" data-cat-field="active" ${category.active ? 'checked' : ''}> ${escapeProductText(t.category_active)}</label>
+                    ${defaultCategories.some(item => item.id === category.id) ? '' : `<button class="btn btn-secondary" type="button" data-category-delete="${escapeProductText(category.id)}">${escapeProductText(t.category_delete)}</button>`}</div>
+                </section>`).join('');
+        }
+        async function loadCategorySizeTemplates() {
+            try {
+                const response = await fetch(`${API_BASE}/categories`, { cache: 'no-store' }), result = await response.json();
+                if (result.code === 200 && Array.isArray(result.data)) categoryDefinitions = result.data.map(category => ({ ...category }));
+            } catch (_) { }
+            categorySizeTemplates = Object.fromEntries(categoryDefinitions.map(category => [category.id, category.sizes]));
+            renderCategorySettings(); renderProductCategoryOptions();
+        }
+        function addCategoryDraft() {
+            const t = i18nDict[adminLang] || i18nDict.en, error = document.getElementById('size-template-error');
+            const nameAr = document.getElementById('category-new-ar').value.trim(), nameEn = document.getElementById('category-new-en').value.trim();
+            const sizes = document.getElementById('category-new-sizes').value.replace(/،/g, ',').trim();
+            const validSizes = value => { const parts = value.split(',').map(item => item.trim()); return parts.length >= 1 && parts.length <= 24 && parts.every(item => /^[\p{L}\p{M}\p{N} ._+/-]{1,16}$/u.test(item)) && new Set(parts.map(item => item.toLowerCase())).size === parts.length; };
+            if (!nameAr || !nameEn || /[<>&"']/.test(nameAr + nameEn) || !validSizes(sizes)) { error.textContent = t.category_invalid; return; }
+            const base = nameEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || `category-${categoryDefinitions.length + 1}`;
+            let id = base, suffix = 2; while (categoryDefinitions.some(category => category.id === id)) id = `${base.slice(0, 27)}-${suffix++}`;
+            categoryDefinitions.push({ id, nameAr, nameEn, sizes, active: true });
+            categorySizeTemplates[id] = sizes; renderCategorySettings(); renderProductCategoryOptions(); error.textContent = '';
+            document.getElementById('category-new-ar').value = ''; document.getElementById('category-new-en').value = ''; document.getElementById('category-new-sizes').value = '';
+        }
+        document.getElementById('category-settings-list').addEventListener('click', async event => {
+            const button = event.target.closest('[data-category-delete]'); if (!button) return;
+            const t = i18nDict[adminLang] || i18nDict.en, token = document.getElementById('size-template-token').value.trim();
+            const error = document.getElementById('size-template-error');
+            if (!token) { error.textContent = t.prod_token_invalid; return; }
+            try {
+                const response = await fetch(`${API_BASE}/categories/${encodeURIComponent(button.dataset.categoryDelete)}`, { method: 'DELETE', headers: { 'X-Product-Admin-Token': token } });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok || result.code !== 200) { error.textContent = response.status === 403 ? t.prod_token_invalid : result.code === 409 ? t.category_in_use : t.category_delete_failed; return; }
+                productToken = token; await loadCategorySizeTemplates(); error.textContent = '';
+            } catch (_) { error.textContent = t.category_delete_failed; }
+        });
+        async function saveCategories() {
+            const button = document.getElementById('size-template-save'), error = document.getElementById('size-template-error'), t = i18nDict[adminLang] || i18nDict.en;
+            const validSizes = value => { const parts = value.replace(/،/g, ',').split(',').map(item => item.trim()); return parts.length >= 1 && parts.length <= 24 && parts.every(item => /^[\p{L}\p{M}\p{N} ._+/-]{1,16}$/u.test(item)) && new Set(parts.map(item => item.toLowerCase())).size === parts.length; };
+            const values = [...document.querySelectorAll('[data-category-row]')].map(row => ({
+                id: row.dataset.categoryId,
+                nameAr: row.querySelector('[data-cat-field="nameAr"]').value.trim(),
+                nameEn: row.querySelector('[data-cat-field="nameEn"]').value.trim(),
+                sizes: row.querySelector('[data-cat-field="sizes"]').value.replace(/،/g, ',').trim(),
+                active: row.querySelector('[data-cat-field="active"]').checked
+            }));
+            if (!values.length || values.some(category => !category.nameAr || !category.nameEn || /[<>&"']/.test(category.nameAr + category.nameEn) || !validSizes(category.sizes))) { error.textContent = t.category_invalid; return; }
+            const token = document.getElementById('size-template-token').value.trim(); if (!token) { error.textContent = t.prod_token_invalid; return; }
+            error.textContent = ''; button.disabled = true;
+            try {
+                const response = await fetch(`${API_BASE}/categories`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Product-Admin-Token': token }, body: JSON.stringify(values) });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok || result.code !== 200) { if (response.status === 403) productToken = ''; error.textContent = response.status === 403 ? t.prod_token_invalid : t.category_invalid; return; }
+                categoryDefinitions = result.data; categorySizeTemplates = Object.fromEntries(categoryDefinitions.map(category => [category.id, category.sizes]));
+                productToken = token; renderCategorySettings(); renderProductCategoryOptions(); error.textContent = ''; alert(t.category_saved);
+            } catch (_) { error.textContent = t.prod_save_failed; } finally { button.disabled = false; }
+        }
 
         function resetProductVideo(product) {
             if (productVideo?.file) URL.revokeObjectURL(productVideo.url);
@@ -1896,7 +2032,8 @@
             renderProductImages();
         });
 
-        function editProduct(id) {
+        async function editProduct(id) {
+            await loadCategorySizeTemplates();
             const t = i18nDict[adminLang] || i18nDict.en;
             const p = allProducts.find(x => x.id === id);
             if (!p) return;
@@ -1904,6 +2041,7 @@
             document.getElementById('prod-id').value = p.id;
             document.getElementById('prod-name').value = p.name;
             document.getElementById('prod-en').value = p.enName || '';
+            renderProductCategoryOptions(p.category);
             document.getElementById('prod-cat').value = p.category;
             document.getElementById('prod-gender').value = p.gender || 'women';
             document.getElementById('prod-source').value = p.fulfillmentSource;
@@ -1918,7 +2056,8 @@
             openModal('product-modal');
         }
 
-        function openNewProductModal() {
+        async function openNewProductModal() {
+            await loadCategorySizeTemplates();
             document.getElementById('modal-product-title').innerText = adminLang === 'ar' ? 'إضافة منتج جديد' : 'Add New Product';
             document.getElementById('product-form').reset();
             document.getElementById('prod-id').value = '';
@@ -2096,6 +2235,7 @@
 
         // Initial Boot
         switchAdminLang(adminLang);
+        loadCategorySizeTemplates();
     </script>
 </body>
 </html>

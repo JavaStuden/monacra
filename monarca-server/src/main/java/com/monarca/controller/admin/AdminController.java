@@ -2,6 +2,7 @@ package com.monarca.controller.admin;
 
 import com.monarca.common.R;
 import com.monarca.dto.AdminDashboardDTO;
+import com.monarca.dto.ProductCategoryDTO;
 import com.monarca.entity.AppConfig;
 import com.monarca.entity.Order;
 import com.monarca.entity.Product;
@@ -14,6 +15,7 @@ import com.monarca.service.ProductImageStorage;
 import com.monarca.service.ProductVideoStorage;
 import com.monarca.service.ProductService;
 import com.monarca.service.ProductOptions;
+import com.monarca.service.CatalogCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -46,6 +49,7 @@ public class AdminController {
     private static final String NEW_IMAGE = "new";
     private final ProductRepository productRepository;
     private final ProductService productService;
+    private final CatalogCategoryService categoryService;
     private final OrderRepository orderRepository;
     private final ReturnRequestRepository returnRequestRepository;
     private final AppConfigRepository appConfigRepository;
@@ -55,6 +59,7 @@ public class AdminController {
 
     public AdminController(ProductRepository productRepository,
                            ProductService productService,
+                           CatalogCategoryService categoryService,
                            OrderRepository orderRepository,
                            ReturnRequestRepository returnRequestRepository,
                            AppConfigRepository appConfigRepository,
@@ -63,6 +68,7 @@ public class AdminController {
                            @Value("${monarca.security.product-admin-token}") String productAdminToken) {
         this.productRepository = productRepository;
         this.productService = productService;
+        this.categoryService = categoryService;
         this.orderRepository = orderRepository;
         this.returnRequestRepository = returnRequestRepository;
         this.appConfigRepository = appConfigRepository;
@@ -145,14 +151,21 @@ public class AdminController {
                 || (fields.getBadge() != null && fields.getBadge().length() > 50)
                 || fields.getPrice() == null || fields.getPrice().signum() <= 0
                 || fields.getStock() == null || fields.getStock() < 0
-                || fields.getCategory() == null
-                || !Set.of("clothes", "shoes", "bags", "accessories").contains(fields.getCategory())) {
+                || fields.getCategory() == null || fields.getCategory().isBlank()) {
             return R.fail(400, "Check the product name, category, price and stock.");
         }
         Product product = fields.getId() == null ? new Product()
                 : productRepository.findByIdAndDeletedAtIsNull(fields.getId()).orElse(null);
         if (product == null) {
             return R.fail(404, "Product not found.");
+        }
+        ProductCategoryDTO category = categoryService.get(fields.getCategory());
+        if (category == null || (!category.active() && (product.getId() == null || !fields.getCategory().equals(product.getCategory())))) {
+            return R.fail(400, "INVALID_PRODUCT_CATEGORY");
+        }
+        if (product.getId() == null && fields.getSizes() == null) {
+            String categoryTemplate = categoryService.sizeTemplate(fields.getCategory());
+            fields.setSizes(categoryTemplate == null ? ProductOptions.defaultSizes(fields.getCategory()) : categoryTemplate);
         }
         boolean international = "china".equalsIgnoreCase(fields.getFulfillmentSource());
         Integer weight = fields.getShippingWeightGrams();
@@ -390,5 +403,77 @@ public class AdminController {
         config.setValue(value);
         appConfigRepository.save(config);
         return R.ok("Configuration updated", null);
+    }
+
+    @GetMapping("/categories")
+    @Operation(summary = "List product categories and size presets")
+    public R<List<ProductCategoryDTO>> getCategories() {
+        return R.ok(categoryService.getAll());
+    }
+
+    @PostMapping("/categories")
+    @Operation(summary = "Create or update a product category")
+    public R<List<ProductCategoryDTO>> saveCategory(@RequestBody List<ProductCategoryDTO> categories,
+            @RequestHeader(value = "X-Product-Admin-Token", required = false) String token) {
+        requireProductAdmin(token);
+        if (categories == null || categories.isEmpty() || categories.size() > 40 || categories.stream().anyMatch(java.util.Objects::isNull)
+                || categories.stream().map(ProductCategoryDTO::id).distinct().count() != categories.size()
+                || categories.stream().anyMatch(category -> category == null || !CatalogCategoryService.validId(category.id())
+                || category.nameAr() == null || category.nameAr().isBlank() || category.nameEn() == null || category.nameEn().isBlank()
+                || category.nameAr().length() > 60 || category.nameEn().length() > 60
+                || category.nameAr().matches(".*[<>&\"'].*") || category.nameEn().matches(".*[<>&\"'].*")
+                || !CatalogCategoryService.validSizes(category.sizes()))) {
+            return R.fail(400, "INVALID_PRODUCT_CATEGORY");
+        }
+        try { return R.ok(categories.stream().map(categoryService::save).toList()); }
+        catch (IllegalArgumentException exception) { return R.fail(400, exception.getMessage()); }
+    }
+
+    @DeleteMapping("/categories/{id}")
+    @Operation(summary = "Delete an unused custom product category")
+    public R<String> deleteCategory(@PathVariable String id,
+            @RequestHeader(value = "X-Product-Admin-Token", required = false) String token) {
+        requireProductAdmin(token);
+        try { categoryService.delete(id); return R.ok("Category deleted", null); }
+        catch (IllegalArgumentException exception) { return R.fail(400, exception.getMessage()); }
+        catch (IllegalStateException exception) { return R.fail(409, exception.getMessage()); }
+    }
+
+    @GetMapping("/category-size-templates")
+    @Operation(summary = "Get reusable size presets for product categories")
+    public R<Map<String, String>> getCategorySizeTemplates() {
+        Map<String, String> templates = new LinkedHashMap<>();
+        categoryService.getAll().forEach(category -> templates.put(category.id(), category.sizes()));
+        return R.ok(templates);
+    }
+
+    @PostMapping("/category-size-templates")
+    @Operation(summary = "Save reusable size presets for product categories")
+    @org.springframework.transaction.annotation.Transactional
+    public R<Map<String, String>> saveCategorySizeTemplates(@RequestBody Map<String, String> submitted,
+            @RequestHeader(value = "X-Product-Admin-Token", required = false) String token) {
+        requireProductAdmin(token);
+        Set<String> categoryIds = categoryService.getAll().stream().map(ProductCategoryDTO::id).collect(java.util.stream.Collectors.toSet());
+        if (submitted == null || !categoryIds.equals(submitted.keySet())) return R.fail(400, "INVALID_CATEGORY_SIZE_TEMPLATES");
+        Map<String, String> clean = new LinkedHashMap<>();
+        for (String category : categoryIds) {
+            String raw = submitted.get(category);
+            if (raw == null || raw.length() > 512) return R.fail(400, "INVALID_CATEGORY_SIZE_TEMPLATES");
+            Set<String> unique = new LinkedHashSet<>();
+            for (String part : raw.replace('،', ',').split(",", -1)) {
+                String size = part.trim();
+                if (!size.matches("[\\p{L}\\p{M}\\p{N} ._+/-]{1,16}")) return R.fail(400, "INVALID_CATEGORY_SIZE_TEMPLATES");
+                if (Set.of("xs", "s", "m", "l", "xl", "xxl", "xxxl", "xxxxl", "2xl", "3xl", "4xl", "5xl").contains(size.toLowerCase(Locale.ROOT))) size = size.toUpperCase(Locale.ROOT);
+                unique.add(size);
+            }
+            if (unique.isEmpty() || unique.size() > 24) return R.fail(400, "INVALID_CATEGORY_SIZE_TEMPLATES");
+            clean.put(category, String.join(",", unique));
+        }
+        for (var entry : clean.entrySet()) {
+            String key = "catalog.sizes." + entry.getKey();
+            AppConfig config = appConfigRepository.findByKey(key).orElse(new AppConfig(key, entry.getValue(), "Category size template"));
+            config.setValue(entry.getValue()); appConfigRepository.save(config);
+        }
+        return R.ok(clean);
     }
 }

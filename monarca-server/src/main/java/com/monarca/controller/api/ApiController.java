@@ -5,6 +5,7 @@ import com.monarca.dto.CartLineDTO;
 import com.monarca.dto.CustomerOrderResponse;
 import com.monarca.dto.LoginRequest;
 import com.monarca.dto.PlaceOrderRequest;
+import com.monarca.dto.ProductCategoryDTO;
 import com.monarca.dto.QuoteRequest;
 import com.monarca.dto.QuoteResponse;
 import com.monarca.entity.AppConfig;
@@ -15,6 +16,7 @@ import com.monarca.repository.AppConfigRepository;
 import com.monarca.service.FulfillmentService;
 import com.monarca.service.OrderService;
 import com.monarca.service.ProductService;
+import com.monarca.service.CatalogCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -33,15 +35,18 @@ import java.util.UUID;
 public class ApiController {
 
     private final ProductService productService;
+    private final CatalogCategoryService categoryService;
     private final FulfillmentService fulfillmentService;
     private final OrderService orderService;
     private final AppConfigRepository appConfigRepository;
 
     public ApiController(ProductService productService,
+                         CatalogCategoryService categoryService,
                          FulfillmentService fulfillmentService,
                          OrderService orderService,
                          AppConfigRepository appConfigRepository) {
         this.productService = productService;
+        this.categoryService = categoryService;
         this.fulfillmentService = fulfillmentService;
         this.orderService = orderService;
         this.appConfigRepository = appConfigRepository;
@@ -62,6 +67,12 @@ public class ApiController {
         } catch (IllegalArgumentException e) {
             return R.fail(400, e.getMessage());
         }
+    }
+
+    @GetMapping("/categories")
+    @Operation(summary = "List active storefront product categories")
+    public R<List<ProductCategoryDTO>> getCategories() {
+        return R.ok(categoryService.getActive());
     }
 
     @GetMapping("/products/{id}")

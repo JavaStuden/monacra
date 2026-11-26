@@ -25,8 +25,8 @@ npm run build:app
 ## HBuilderX 和 iOS 云打包
 
 1. 在 HBuilderX 中导入本工程目录 `monarca-uniapp`，不要导入旧的 `monarca-mobile-app`。如果项目尚未安装依赖，先运行 `npm ci`。
-2. 打开 `src/manifest.json`。根级 `appid` 已填入店家的 **DCloud AppID**，继续使用与该 AppID 对应的 DCloud 账号。它与 Apple Bundle ID 不同，不能填写 `com.monarca.boutique` 代替。
-3. iOS Bundle ID 已预填 `com.monarca.boutique`，须与 Apple Developer 中的 App ID、描述文件及 App Store Connect 应用记录一致。
+2. 打开 `src/manifest.json`。根级 `appid` 已填入店家的 **DCloud AppID**，继续使用与该 AppID 对应的 DCloud 账号。它与 Apple Bundle ID 不同，不能把 Apple Bundle ID 填到根级 `appid`。
+3. iOS Bundle ID 已预填 `com.itsmonarca.shopping`，须与 Apple Developer 中的 App ID、描述文件及 App Store Connect 应用记录一致。Android 包名也已统一为 `com.itsmonarca.shopping`；重新打包后的 Android 应用会被系统视为新包名，不能直接覆盖旧 `com.monarca.boutique` APK。
    相机/相册入口已配置 `Camera` 模块和 iOS 用途说明；只在用户主动拍照或选图时调用，当前图片仅作本机参考，没有上传或匹配服务。云打包后仍须在 iPhone 上核对授权和拒绝授权行为。
 4. 从“发行 → 原生 App 云打包”进入 iOS 正式打包；按当前 HBuilderX 的提示提供 Apple Distribution P12、其密码和 **App Store Connect** 分发描述文件。现有 `.ios-signing/` 中的 CSR 和私钥可继续用于申请同一开发者账号的证书。
 5. P12 生成方式见旧工程的 [Windows 签名说明](../monarca-mobile-app/IOS-APPSTORE-WINDOWS.md)。取得 Apple `.cer` 后可在仓库根目录运行：

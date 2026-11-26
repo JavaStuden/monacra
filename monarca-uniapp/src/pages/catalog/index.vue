@@ -14,10 +14,10 @@
 import { computed, ref, watch } from 'vue'; import { onLoad, onShow } from '@dcloudio/uni-app';
 import AppShell from '../../components/AppShell.vue'; import ProductCard from '../../components/ProductCard.vue'; import EmptyState from '../../components/EmptyState.vue';
 import { state, refreshProducts, browseProducts, setDepartment } from '../../store.js'; import { t } from '../../i18n.js'; import LineIcon from '../../components/LineIcon.vue';
-const query = ref(''), category = ref('all'), sort = ref(0), source = ref(''), sub = ref(''), offers = ref(false); const categories = ['all', 'clothes', 'shoes', 'bags', 'accessories'];
+const query = ref(''), category = ref('all'), sort = ref(0), source = ref(''), sub = ref(''), offers = ref(false); const categories = computed(() => ['all', ...state.categories.map(item => item.id)]);
 watch(() => state.department, () => { sub.value = ''; });
 const sortLabels = computed(() => [t('newest'), t('priceLow'), t('priceHigh')]);
 const products = computed(() => browseProducts().filter(p => (category.value === 'all' || p.category === category.value) && (!source.value || p.fulfillmentSource === source.value) && (!sub.value || p.subCategory === sub.value) && (!offers.value || p.oldPrice > p.price) && `${p.name} ${p.enName} ${p.keywords || ''} ${t(p.category)}`.toLowerCase().includes(query.value.toLowerCase().trim())).sort((a, b) => sort.value === 1 ? a.price - b.price : sort.value === 2 ? b.price - a.price : b.id - a.id));
-onLoad(options => { if (['women', 'men'].includes(options.gender) && options.gender !== state.department) setDepartment(options.gender); if (categories.includes(options.category)) category.value = options.category; if (['iraq', 'china'].includes(options.source)) source.value = options.source; sub.value = options.sub || ''; offers.value = options.offers === '1'; query.value = options.q || ''; });
+onLoad(options => { if (['women', 'men'].includes(options.gender) && options.gender !== state.department) setDepartment(options.gender); if (typeof options.category === 'string' && options.category) category.value = options.category; if (['iraq', 'china'].includes(options.source)) source.value = options.source; sub.value = options.sub || ''; offers.value = options.offers === '1'; query.value = options.q || ''; });
 function refresh() { refreshProducts().catch(() => {}); } onShow(refresh);
 </script>

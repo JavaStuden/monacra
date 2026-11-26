@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.monarca.boutique"
+    namespace "com.itsmonarca.shopping"
     compileSdk rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        applicationId "com.monarca.boutique"
+        applicationId "com.itsmonarca.shopping"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
